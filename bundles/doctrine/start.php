@@ -46,6 +46,8 @@ Laravel\Event::listen('laravel.started: doctrine', function()
 
 	$config->setQueryCacheImpl($cache);
 
+	$config->setResultCacheImpl($cache);
+
 	/**
 	 * Resolve and register the meta-data driver.
 	 */
