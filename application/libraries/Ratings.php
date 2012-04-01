@@ -1,4 +1,4 @@
-<?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 
 /**
  * Ratings Class
@@ -45,7 +45,7 @@ class Ratings {
 			$this->temporary_ratings = $temporary_ratings;
 		}
 	}
-	
+
 	/**
 	 * See if the User has a temporary rating for the given Entry
 	 *
