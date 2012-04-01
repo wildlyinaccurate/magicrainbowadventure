@@ -1,6 +1,6 @@
 <?php
 
-class Entry extends Front_controller {
+class Entry_Controller extends Base_Controller {
 
 	/**
 	 * Keep track of any errors that occurred during a file upload

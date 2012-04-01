@@ -1,6 +1,6 @@
 <?php
 
-class Rate extends Front_controller {
+class Rate_Controller extends Base_Controller {
 
     /**
      * @var array

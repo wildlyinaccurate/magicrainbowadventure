@@ -1,6 +1,6 @@
 <?php
 
-class Home extends Front_controller {
+class Home_Controller extends Base_Controller {
 
 	/** @var int */
 	private $page;

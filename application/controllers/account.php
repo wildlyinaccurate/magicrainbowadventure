@@ -1,6 +1,6 @@
 <?php
 
-class Account extends Front_controller {
+class Account_Controller extends Base_Controller {
 
 	/**
 	 * Constructor

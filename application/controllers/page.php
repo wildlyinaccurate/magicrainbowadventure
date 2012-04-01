@@ -5,7 +5,7 @@
  *
  * Delivers the more plain, 'static' pages
  */
-class Page extends Front_controller {
+class Page_Controller extends Base_Controller {
 
     public function __construct()
     {

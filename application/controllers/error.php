@@ -1,6 +1,6 @@
 <?php
 
-class Error extends Front_controller {
+class Error_Controller extends Base_Controller {
 
 	public function not_found()
 	{
