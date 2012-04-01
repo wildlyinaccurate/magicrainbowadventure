@@ -67,12 +67,12 @@ class Account_Controller extends Base_Controller {
 		if ($this->form_validation->run())
 		{
 			// Update the user's settings
-			$this->user->setEmail($this->input->post('email'));
-			$this->user->setDisplayName($this->input->post('display_name'));
-			$this->user->setLanguage($this->input->post('language'));
+			$this->user->setEmail(Input::get('email'));
+			$this->user->setDisplayName(Input::get('display_name'));
+			$this->user->setLanguage(Input::get('language'));
 
 			// Find the selected country
-			$country = $this->em->getRepository('\Entity\Country')->find($this->input->post('country'));
+			$country = $this->em->getRepository('\Entity\Country')->find(Input::get('country'));
 			$this->user->setCountry($country);
 
 			$this->em->persist($this->user);
@@ -105,7 +105,7 @@ class Account_Controller extends Base_Controller {
 		if ($this->form_validation->run())
 		{
 			// Update the user's settings
-			$this->user->setPassword($this->input->post('new_password'));
+			$this->user->setPassword(Input::get('new_password'));
 			$this->em->persist($this->user);
 			$this->em->flush();
 
@@ -131,14 +131,14 @@ class Account_Controller extends Base_Controller {
 		$validate = $this->form_validation->run();
 
 		// Attempt to log in
-		$identifier = $this->input->post('identifier');
-		$password = $this->input->post('password');
+		$identifier = Input::get('identifier');
+		$password = Input::get('password');
 		$login = FALSE; //Initial value
 
 		if ( ! $this->auth->authenticated() && ($validate === FALSE || ! $login = $this->auth->login($identifier, $password)))
 		{
 			// The page title changes if the user has been redirected to the login page
-			if ($this->input->get('return'))
+			if (Input::get('return'))
 			{
 				$this->template->longTitle(lang('log_in_required'));
 			}
@@ -153,7 +153,7 @@ class Account_Controller extends Base_Controller {
 		else
 		{
 			// Successful login - redirect to the previous page (if it is set)
-			if ($return = $this->input->get('return'))
+			if ($return = Input::get('return'))
 			{
 				redirect($return);
 			}
@@ -195,7 +195,7 @@ class Account_Controller extends Base_Controller {
 			$this->template
 				 ->title(lang('sign_up'))
 				 ->build('account/signup', array(
-				 	'selected_country' => ! $this->input->post('country') ? $this->config->item('default_country') : $this->input->post('country'),
+				 	'selected_country' => ! Input::get('country') ? $this->config->item('default_country') : Input::get('country'),
 				 	'countries' => $this->em->getRepository('\Entity\Country')->getAllCountries()
 				 ));
 		}
@@ -203,10 +203,10 @@ class Account_Controller extends Base_Controller {
 		{
 			// Create the new user
 			$user = new \Entity\User;
-			$user->setUsername($this->input->post('username'));
-			$user->setPassword($this->input->post('password'));
-			$user->setEmail($this->input->post('email'));
-			$user->setDisplayName($this->input->post('display_name'));
+			$user->setUsername(Input::get('username'));
+			$user->setPassword(Input::get('password'));
+			$user->setEmail(Input::get('email'));
+			$user->setDisplayName(Input::get('display_name'));
 
 			// Set the user's language
 			$language_cookie = $this->input->cookie($this->config->item('language_cookie'));
@@ -214,7 +214,7 @@ class Account_Controller extends Base_Controller {
 			$user->setLanguage($language_cookie ? $language_cookie : $default_language);
 
 			// Set the User's country
-			$country = $this->em->getRepository('\Entity\Country')->find($this->input->post('country'));
+			$country = $this->em->getRepository('\Entity\Country')->find(Input::get('country'));
 			$user->setCountry($country);
 
 			// Create the User's default settings

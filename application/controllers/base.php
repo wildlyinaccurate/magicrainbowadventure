@@ -1,6 +1,19 @@
 <?php
 
-class Base_Controller extends Controller {
+class Base_Controller extends Controller
+{
+
+	protected $em;
+
+	/**
+	 * Constructor ahoy!
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+
+		$this->em = IoC::resolve('doctrine::manager');
+	}
 
 	/**
 	 * Catch-all method for requests that can't be matched.

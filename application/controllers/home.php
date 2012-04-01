@@ -1,14 +1,24 @@
 <?php
 
-class Home_Controller extends Base_Controller {
+class Home_Controller extends Base_Controller
+{
 
-	/** @var int */
+	/**
+	 * The current page of entries
+	 * @var int
+	 */
 	private $page;
 
-	/** @var int */
-	private $entries_per_page;
+	/**
+	 * The number of entries to display per page
+	 * @var int
+	 */
+	private $entries_per_page = 10;
 
-	/** @var int */
+	/**
+	 * The query limit offset based on the current page and entries per page
+	 * @var int
+	 */
 	private $offset;
 
 	/**
@@ -18,8 +28,7 @@ class Home_Controller extends Base_Controller {
 	{
 		parent::__construct();
 
-		$this->page = $this->input->get('page') ?: 1;
-		$this->entries_per_page = $this->config->item('entries_per_page');
+		$this->page = Input::get('page') ?: 1;
 		$this->offset = $this->entries_per_page * ($this->page - 1);
 	}
 
@@ -55,7 +64,7 @@ class Home_Controller extends Base_Controller {
 	 *
 	 * @return	void
 	 */
-	public function index()
+	public function action_index()
 	{
 		// Load the latest entries
 		$entries = $this->em->getRepository('\Entity\Entry')->getLatestEntries($this->offset, $this->entries_per_page);

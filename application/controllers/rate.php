@@ -34,7 +34,7 @@ class Rate_Controller extends Base_Controller {
 	{
 		// We expect the URI to be something like /rate/type/entry_id (e.g. /rate/funny/123)
 		$entry_id = $this->uri->segment(3);
-		$rating_value = $this->input->get('value');
+		$rating_value = Input::get('value');
 
 		// Make sure the method provided is valid
 		if ( ! in_array($method, $this->valid_methods))

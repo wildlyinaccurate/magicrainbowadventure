@@ -42,8 +42,8 @@ class Entry_Controller extends Base_Controller {
 		{
 			// Create the new Entry
 			$entry = new \Entity\Entry;
-			$entry->setTitle($this->input->post('title'))
-				->setDescription($this->input->post('description'))
+			$entry->setTitle(Input::get('title'))
+				->setDescription(Input::get('description'))
 				->setUser($this->user)
 				->setFilePath($entry_file_path);
 
@@ -247,7 +247,7 @@ class Entry_Controller extends Base_Controller {
 
 			// Create a unique filename
 			// Easy_curl is already loaded from _valid_image_url()
-			if ( ! $this->easy_curl->url_to_file($this->input->post('image_url'), $file_path))
+			if ( ! $this->easy_curl->url_to_file(Input::get('image_url'), $file_path))
 			{
 				$this->upload_error = lang('url_to_file_error');
 				return FALSE;
