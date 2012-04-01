@@ -3,7 +3,6 @@
 use Doctrine\ORM\EntityManager,
 	Laravel\Autoloader,
 	Laravel\Config,
-	Laravel\Event,
 	Laravel\IoC;
 
 require __DIR__.'/lib/Doctrine/ORM/Tools/Setup.php';
@@ -11,11 +10,19 @@ require __DIR__.'/lib/Doctrine/ORM/Tools/Setup.php';
 Doctrine\ORM\Tools\Setup::registerAutoloadGit(__DIR__);
 
 /**
+ * Laravel Configuration Loader
+ */
+Laravel\Event::listen(Laravel\Config::loader, function($bundle, $file)
+{
+	return Laravel\Config::file($bundle, $file);
+});
+
+/**
  * Delegate the starting to an event so we can start *after* the application bundle.
  *
  * This gives the application time to override configs before we boot Doctrine.
  */
-Event::listen('laravel.started: doctrine', function()
+Laravel\Event::listen('laravel.started: doctrine', function()
 {
 
 	/**
@@ -48,7 +55,7 @@ Event::listen('laravel.started: doctrine', function()
 	}
 	else
 	{
-		$driverImpl = $config->newDefaultAnnotationDriver(Config::get('doctrine::config.models'));
+		$driverImpl = $config->newDefaultAnnotationDriver(Config::get('doctrine::config.models.directory'));
 	}
 
 	$config->setMetadataDriverImpl($driverImpl);
@@ -61,6 +68,13 @@ Event::listen('laravel.started: doctrine', function()
 	$config->setProxyNamespace(Config::get('doctrine::config.proxy.namespace'));
 
 	$config->setAutoGenerateProxyClasses(Config::get('doctrine::config.proxy.auto_generate'));
+
+	/**
+	 * Register an autoloader for the model classes
+	 */
+	$loader = new Doctrine\Common\ClassLoader(Config::get('doctrine::config.models.namespace'), Config::get('doctrine::config.models.directory'));
+
+	$loader->register();
 
 	/**
 	 * Register an EntityManager in the IoC container as an instance.
