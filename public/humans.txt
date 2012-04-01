@@ -1,0 +1,46 @@
+/* the humans responsible & colophon */
+/* humanstxt.org */
+
+
+/* TEAM */
+  Wildly Inaccurate: Joseph Wynn
+  Site: http://wildlyinaccurate.com/
+  Twitter: @joseph_wynn
+  Location: London, United Kingdom
+
+/* THANKS */
+  Paul Irish & the HTML5 Boilerplate team: http://html5boilerplate.com/
+  Tijs Verkoyen for his Dropbox library: http://classes.verkoyen.eu/dropbox
+  Yusuke Kamiyamane for his Fugue Icons set: http://p.yusukekamiyamane.com/
+
+
+/* SITE */
+  Standards: HTML5, CSS3
+  Components: Modernizr, jQuery, Fugue Icons
+  Software: Apache, PHP, CodeIgniter framework, Doctrine ORM, Dropbox (for storage)
+
+
+
+                               -o/-
+                               +oo//-
+                              :ooo+//:
+                             -ooooo///-
+                             /oooooo//:
+                            :ooooooo+//-
+                           -+oooooooo///-
+           -://////////////+oooooooooo++////////////::
+            :+ooooooooooooooooooooooooooooooooooooo+:::-
+              -/+ooooooooooooooooooooooooooooooo+/::////:-
+                -:+oooooooooooooooooooooooooooo/::///////:-
+                  --/+ooooooooooooooooooooo+::://////:-
+                     -:+ooooooooooooooooo+:://////:--
+                       /ooooooooooooooooo+//////:-
+                      -ooooooooooooooooooo////-
+                      /ooooooooo+oooooooooo//:
+                     :ooooooo+/::/+oooooooo+//-
+                    -oooooo/::///////+oooooo///-
+                    /ooo+::://////:---:/+oooo//:
+                   -o+/::///////:-      -:/+o+//-
+                   :-:///////:-            -:/://
+                     -////:-                 --//:
+                       --                       -:
