@@ -200,6 +200,11 @@ class YamlDriver extends AbstractFileDriver
                 // Check for SequenceGenerator/TableGenerator definition
                 if (isset($idElement['sequenceGenerator'])) {
                     $metadata->setSequenceGeneratorDefinition($idElement['sequenceGenerator']);
+                } else if (isset($idElement['customIdGenerator'])) {
+                    $customGenerator = $idElement['customIdGenerator'];
+                    $metadata->setCustomGeneratorDefinition(array(
+                        'class' => (string) $customGenerator['class']
+                    ));
                 } else if (isset($idElement['tableGenerator'])) {
                     throw MappingException::tableIdGeneratorNotImplemented($className);
                 }
@@ -407,9 +412,6 @@ class YamlDriver extends AbstractFileDriver
                 if (isset($manyToManyElement['mappedBy'])) {
                     $mapping['mappedBy'] = $manyToManyElement['mappedBy'];
                 } else if (isset($manyToManyElement['joinTable'])) {
-                    if (isset($manyToManyElement['inversedBy'])) {
-                        $mapping['inversedBy'] = $manyToManyElement['inversedBy'];
-                    }
 
                     $joinTableElement = $manyToManyElement['joinTable'];
                     $joinTable = array(
@@ -437,6 +439,10 @@ class YamlDriver extends AbstractFileDriver
                     }
 
                     $mapping['joinTable'] = $joinTable;
+                }
+
+                if (isset($manyToManyElement['inversedBy'])) {
+                    $mapping['inversedBy'] = $manyToManyElement['inversedBy'];
                 }
 
                 if (isset($manyToManyElement['cascade'])) {

@@ -108,7 +108,8 @@ use Doctrine\ORM\Mapping as ORM;
 <entityClassName>
 {
 <entityBody>
-}';
+}
+';
 
     private static $_getMethodTemplate =
 '/**
@@ -429,7 +430,7 @@ public function <methodName>()
 
         $collections = array();
 
-        foreach ($metadata->associationMappings AS $mapping) {
+        foreach ($metadata->associationMappings as $mapping) {
             if ($mapping['type'] & ClassMetadataInfo::TO_MANY) {
                 $collections[] = '$this->'.$mapping['fieldName'].' = new \Doctrine\Common\Collections\ArrayCollection();';
             }
@@ -888,6 +889,14 @@ public function <methodName>()
 
         if ($this->_generateAnnotations) {
             $lines[] = $this->_spaces . ' *';
+            
+            if (isset($associationMapping['id']) && $associationMapping['id']) {
+                $lines[] = $this->_spaces . ' * @' . $this->_annotationsPrefix . 'Id';
+            
+                if ($generatorType = $this->_getIdGeneratorTypeString($metadata->generatorType)) {
+                    $lines[] = $this->_spaces . ' * @' . $this->_annotationsPrefix . 'GeneratedValue(strategy="' . $generatorType . '")';
+                }
+            }
 
             $type = null;
             switch ($associationMapping['type']) {

@@ -43,8 +43,12 @@ class CountWalker extends TreeWalkerAdapter
      */
     public function walkSelectStatement(SelectStatement $AST)
     {
+        if ($AST->havingClause) {
+            throw new \RuntimeException('Cannot count query that uses a HAVING clause. Use the output walkers for pagination');
+        }
+
         $rootComponents = array();
-        foreach ($this->_getQueryComponents() AS $dqlAlias => $qComp) {
+        foreach ($this->_getQueryComponents() as $dqlAlias => $qComp) {
             $isParent = array_key_exists('parent', $qComp)
                 && $qComp['parent'] === null
                 && $qComp['nestingLevel'] == 0

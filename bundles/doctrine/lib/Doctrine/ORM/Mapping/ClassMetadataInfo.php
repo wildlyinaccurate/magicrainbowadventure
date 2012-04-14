@@ -95,6 +95,15 @@ class ClassMetadataInfo implements ClassMetadata
      */
     const GENERATOR_TYPE_NONE = 5;
     /**
+     * UUID means that a UUID/GUID expression is used for id generation. Full
+     * portability is currently not guaranteed.
+     */
+    const GENERATOR_TYPE_UUID = 6;
+    /**
+     * CUSTOM means that customer will use own ID generator that supposedly work
+     */
+    const GENERATOR_TYPE_CUSTOM = 7;
+    /**
      * DEFERRED_IMPLICIT means that changes of entities are calculated at commit-time
      * by doing a property-by-property comparison with the original data. This will
      * be done for all entities that are in MANAGED state at commit-time.
@@ -175,6 +184,22 @@ class ClassMetadataInfo implements ClassMetadata
      * @var string
      */
     public $rootEntityName;
+
+    /**
+     * READ-ONLY: The definition of custom generator. Only used for CUSTOM
+     * generator type
+     *
+     * The definition has the following structure:
+     * <code>
+     * array(
+     *     'class' => 'ClassName',
+     * )
+     * </code>
+     *
+     * @var array
+     * @todo Merge with tableGeneratorDefinition into generic generatorDefinition
+     */
+    public $customGeneratorDefinition;
 
     /**
      * The name of the custom repository class used for the entity class.
@@ -727,6 +752,10 @@ class ClassMetadataInfo implements ClassMetadata
             $serialized[] = 'isReadOnly';
         }
 
+        if ($this->customGeneratorDefinition) {
+            $serialized[] = "customGeneratorDefinition";
+        }
+
         return $serialized;
     }
 
@@ -809,7 +838,7 @@ class ClassMetadataInfo implements ClassMetadata
      */
     public function validateAssocations()
     {
-        foreach ($this->associationMappings as $field => $mapping) {
+        foreach ($this->associationMappings as $mapping) {
             if ( ! \Doctrine\Common\ClassLoader::classExists($mapping['targetEntity']) ) {
                 throw MappingException::invalidTargetEntityClass($mapping['targetEntity'], $this->name, $mapping['fieldName']);
             }
@@ -1181,6 +1210,12 @@ class ClassMetadataInfo implements ClassMetadata
             $cascades = array('remove', 'persist', 'refresh', 'merge', 'detach');
         }
 
+        if (count($cascades) !== count(array_intersect($cascades, array('remove', 'persist', 'refresh', 'merge', 'detach')))) {
+            throw MappingException::invalidCascadeOption(
+                array_diff($cascades, array_intersect($cascades, array('remove', 'persist', 'refresh', 'merge', 'detach')))
+            );
+        }
+
         $mapping['cascade'] = $cascades;
         $mapping['isCascadeRemove'] = in_array('remove',  $cascades);
         $mapping['isCascadePersist'] = in_array('persist',  $cascades);
@@ -1219,7 +1254,9 @@ class ClassMetadataInfo implements ClassMetadata
             foreach ($mapping['joinColumns'] as $key => &$joinColumn) {
                 if ($mapping['type'] === self::ONE_TO_ONE && ! $this->isInheritanceTypeSingleTable()) {
                     if (count($mapping['joinColumns']) == 1) {
-                        $joinColumn['unique'] = true;
+                        if (! isset($mapping['id']) || ! $mapping['id']) {
+                            $joinColumn['unique'] = true;
+                        }
                     } else {
                         $uniqueContraintColumns[] = $joinColumn['name'];
                     }
@@ -1558,6 +1595,16 @@ class ClassMetadataInfo implements ClassMetadata
     public function isIdentifierNatural()
     {
         return $this->generatorType == self::GENERATOR_TYPE_NONE;
+    }
+    
+    /**
+     * Checks whether the class use a UUID for id generation
+     *
+     * @return boolean
+     */
+    public function isIdentifierUuid()
+    {
+        return $this->generatorType == self::GENERATOR_TYPE_UUID;
     }
 
     /**
@@ -1997,7 +2044,7 @@ class ClassMetadataInfo implements ClassMetadata
             if ( ! class_exists($className)) {
                 throw MappingException::invalidClassInDiscriminatorMap($className, $this->name);
             }
-            if (is_subclass_of($className, $this->name)) {
+            if (is_subclass_of($className, $this->name) && ! in_array($className, $this->subClasses)) {
                 $this->subClasses[] = $className;
             }
         }
@@ -2107,7 +2154,7 @@ class ClassMetadataInfo implements ClassMetadata
         if (isset($this->fieldNames[$columnName])) {
             return $this->fieldNames[$columnName];
         } else {
-            foreach ($this->associationMappings AS $assocName => $mapping) {
+            foreach ($this->associationMappings as $assocName => $mapping) {
                 if ($this->isAssociationWithSingleJoinColumn($assocName) &&
                     $this->associationMappings[$assocName]['joinColumns'][0]['name'] == $columnName) {
 
@@ -2127,6 +2174,15 @@ class ClassMetadataInfo implements ClassMetadata
     public function setIdGenerator($generator)
     {
         $this->idGenerator = $generator;
+    }
+
+    /**
+     * Sets definition
+     * @param array $definition
+     */
+    public function setCustomGeneratorDefinition(array $definition)
+    {
+        $this->customGeneratorDefinition = $definition;
     }
 
     /**
