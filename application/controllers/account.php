@@ -19,7 +19,7 @@ class Account_Controller extends Base_Controller {
 	{
 		$this->auth->require_login();
 
-		$this->template->title(lang('account'))
+		$this->layout->title(lang('account'))
 			->build('account/index', array(
 				'user' => $this->user
 			));
@@ -44,7 +44,7 @@ class Account_Controller extends Base_Controller {
 			});
 		}
 
-		$this->template->title(lang('my_entries'))
+		$this->layout->title(lang('my_entries'))
 			->build('account/my-entries', array(
 				'entries' => $entries,
 				'thumb_width' => $this->config->item('thumb_width'),
@@ -72,7 +72,7 @@ class Account_Controller extends Base_Controller {
 			$this->user->setLanguage(Input::get('language'));
 
 			// Find the selected country
-			$country = $this->em->getRepository('\Entity\Country')->find(Input::get('country'));
+			$country = $this->em->getRepository('Entity\Country')->find(Input::get('country'));
 			$this->user->setCountry($country);
 
 			$this->em->persist($this->user);
@@ -83,10 +83,10 @@ class Account_Controller extends Base_Controller {
 			redirect('account/settings');
 		}
 
-		$this->template->title(lang('settings'))
+		$this->layout->title(lang('settings'))
 			->build('account/settings', array(
 				'user' => $this->user,
-				'countries' => $this->em->getRepository('\Entity\Country')->getAllCountries(),
+				'countries' => $this->em->getRepository('Entity\Country')->getAllCountries(),
 				'languages' => $this->config->item('available_languages')
 			));
 	}
@@ -114,7 +114,7 @@ class Account_Controller extends Base_Controller {
 			redirect('account');
 		}
 
-		$this->template->title(lang('change_password'))
+		$this->layout->title(lang('change_password'))
 			->build('account/change-password', array(
 				'user' => $this->user
 			));
@@ -140,10 +140,10 @@ class Account_Controller extends Base_Controller {
 			// The page title changes if the user has been redirected to the login page
 			if (Input::get('return'))
 			{
-				$this->template->longTitle(lang('log_in_required'));
+				$this->layout->longTitle(lang('log_in_required'));
 			}
 
-			$this->template
+			$this->layout
 				 ->title(lang('log_in'))
 				 ->build('account/login', array(
 				 	'login' => $login,
@@ -192,11 +192,11 @@ class Account_Controller extends Base_Controller {
 
 		if ($this->form_validation->run() === FALSE)
 		{
-			$this->template
+			$this->layout
 				 ->title(lang('sign_up'))
 				 ->build('account/signup', array(
 				 	'selected_country' => ! Input::get('country') ? $this->config->item('default_country') : Input::get('country'),
-				 	'countries' => $this->em->getRepository('\Entity\Country')->getAllCountries()
+				 	'countries' => $this->em->getRepository('Entity\Country')->getAllCountries()
 				 ));
 		}
 		else
@@ -214,7 +214,7 @@ class Account_Controller extends Base_Controller {
 			$user->setLanguage($language_cookie ? $language_cookie : $default_language);
 
 			// Set the User's country
-			$country = $this->em->getRepository('\Entity\Country')->find(Input::get('country'));
+			$country = $this->em->getRepository('Entity\Country')->find(Input::get('country'));
 			$user->setCountry($country);
 
 			// Create the User's default settings
@@ -254,7 +254,7 @@ class Account_Controller extends Base_Controller {
 	 */
 	public function _unique_username($username)
 	{
-		$user = $this->em->getRepository('\Entity\User')->findOneByUsername($username);
+		$user = $this->em->getRepository('Entity\User')->findOneByUsername($username);
 
 		if ( ! $user)
 		{
@@ -277,7 +277,7 @@ class Account_Controller extends Base_Controller {
 	 */
 	public function _unique_email($email)
 	{
-		$user = $this->em->getRepository('\Entity\User')->findOneByEmail($email);
+		$user = $this->em->getRepository('Entity\User')->findOneByEmail($email);
 
 		if ( ! $user || $this->authenticated && $this->user->getEmail() == $user->getEmail())
 		{
@@ -317,7 +317,7 @@ class Account_Controller extends Base_Controller {
 	 */
 	public function _valid_country($country)
 	{
-		$country = $this->em->getRepository('\Entity\Country')->find($country);
+		$country = $this->em->getRepository('Entity\Country')->find($country);
 
 		if ( ! $country)
 		{

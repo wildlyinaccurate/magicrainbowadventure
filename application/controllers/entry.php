@@ -64,7 +64,7 @@ class Entry_Controller extends Base_Controller {
 			// We need the number helper for its byte_format function
 			$this->load->helper('number');
 
-			$this->template->title('Submit an Entry')
+			$this->layout->title('Submit an Entry')
 			->build('entry/submit', array(
 			  	'upload_error' => $this->upload_error,
 			    'max_upload_size' => $this->config->item('max_upload_size') * 1024 // Max upload size in bytes
@@ -92,7 +92,7 @@ class Entry_Controller extends Base_Controller {
 			$entry = FALSE;
 		}
 
-		$this->template->title('Thanks!')
+		$this->layout->title('Thanks!')
 			->build('entry/thank-you', array(
 				 'entry' => $entry
 			 ));
@@ -119,19 +119,19 @@ class Entry_Controller extends Base_Controller {
 		if ($entry)
 		{
 			$this->load->library('ratings');
-			$this->template->setVar('entry_rating', $this->ratings->find_by_entry($entry));
+			$this->layout->setVar('entry_rating', $this->ratings->find_by_entry($entry));
 		}
 
 		// Only show the entry if it has been approved, or if the user is the owner or an administrator
 		if ( ! $entry || ( ! $entry->isApproved() && ! $this->user->isAdmin() && $entry->getUser() != $this->user))
 		{
 			$this->output->set_status_header(404);
-			$this->template->title(lang('not_found'))
+			$this->layout->title(lang('not_found'))
 					->build('entry/not-found');
 		}
 		elseif ($entry->isApproved() || $this->user->isAdmin())
 		{
-			$this->template->title($entry->getTitle())
+			$this->layout->title($entry->getTitle())
 					->addScript('entry.js')
 					->build('entry/view', array(
 						'entry' => $entry
@@ -139,7 +139,7 @@ class Entry_Controller extends Base_Controller {
 		}
         else
         {
-			$this->template->title($entry->getTitle())
+			$this->layout->title($entry->getTitle())
 				->build('entry/view-preview', array(
 					'entry' => $entry
 				));

@@ -17,7 +17,7 @@ class EntryRepository extends EntityRepository
 	 * Result cache TTL for entry queries (latest, by rating, etc)
 	 * @var int
 	 */
-	private static $ENTRY_RESULTS_CACHE_TTL = 600;
+	const ENTRY_RESULTS_CACHE_TTL = 600;
 
 	/**
 	 * Total number of query results (for pagination)
@@ -173,7 +173,7 @@ class EntryRepository extends EntityRepository
 	protected function countTotalEntries()
 	{
 		$query = $this->_em->createQuery('SELECT COUNT(e.id) FROM Entity\Entry e WHERE e.approved = 1');
-		$query->useResultCache(true, self::$ENTRY_RESULTS_CACHE_TTL);
+
 		return $query->getSingleScalarResult();
 	}
 

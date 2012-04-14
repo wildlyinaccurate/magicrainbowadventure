@@ -1,6 +1,6 @@
 <ul>
-	<li><?=anchor('/', 'Latest Entries')?></li>
-	<li><?=anchor('cutest', 'Cutest')?></li>
-	<li><?=anchor('funniest', 'Funniest')?></li>
-	<li><?=anchor('submit', 'Submit an Entry')?></li>
+	<li><?=HTML::link('/', 'Latest Entries')?></li>
+	<li><?=HTML::link('cutest', 'Cutest')?></li>
+	<li><?=HTML::link('funniest', 'Funniest')?></li>
+	<li><?=HTML::link('submit', 'Submit an Entry')?></li>
 </ul>

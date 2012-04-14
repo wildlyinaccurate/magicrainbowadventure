@@ -6,6 +6,6 @@
 <?php else: ?>
 	<p>
 		Your entry has been submitted and is awaiting moderation.
-		You can view the status of your entry <?=anchor("{$entry->getId()}/{$entry->getUrlTitle()}", 'here')?>.
+		You can view the status of your entry <?=HTML::link("{$entry->getId()}/{$entry->getUrlTitle()}", 'here')?>.
 	</p>
 <?php endif; ?>

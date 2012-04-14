@@ -2,15 +2,15 @@
 
 <?php foreach ($entries as $index => $entry): ?>
 	<div class="entry">
-		<h3><?=anchor("{$entry->getId()}/{$entry->getUrlTitle()}", $entry->getTitle())?></h3>
+		<h3><?=HTML::link("{$entry->getId()}/{$entry->getUrlTitle()}", $entry->getTitle())?></h3>
 
-		<a href="<?=site_url("{$entry->getId()}/{$entry->getUrlTitle()}")?>">
+		<a href="<?=URL::to("{$entry->getId()}/{$entry->getUrlTitle()}")?>">
 			<img class="entry-image" src="<?=dropbox_public_url($entry)?>" alt="" />
 		</a>
 
 		<div class="entry-rating">
-			<a href="<?=site_url("rate/cute/{$entry->getId()}?value=" . (int) ! $entry_ratings[$index]->getCute())?>" class="rate-button cute <?=($entry_ratings[$index]->getCute()) ? 'active' : ''?>">Cute!</a>
-			<a href="<?=site_url("rate/funny/{$entry->getId()}?value=" . (int) ! $entry_ratings[$index]->getFunny())?>" class="rate-button funny <?=($entry_ratings[$index]->getFunny()) ? 'active' : ''?>">Funny!</a>
+			<a href="<?=URL::to("rate/cute/{$entry->getId()}?value=" . (int) ! $entry_ratings[$index]->getCute())?>" class="rate-button cute <?=($entry_ratings[$index]->getCute()) ? 'active' : ''?>">Cute!</a>
+			<a href="<?=URL::to("rate/funny/{$entry->getId()}?value=" . (int) ! $entry_ratings[$index]->getFunny())?>" class="rate-button funny <?=($entry_ratings[$index]->getFunny()) ? 'active' : ''?>">Funny!</a>
 		</div>
 
 		<p class="description"><?=nl2br($entry->getDescription())?></p>
@@ -24,6 +24,5 @@
 	<h4>Continue the magic rainbow adventure!</h4>
 
 	<div class="pagination-links">
-		<?=$this->pagination->create_links()?>
 	</div>
 </div>

@@ -17,7 +17,7 @@ class Page_Controller extends Base_Controller {
      */
     public function about()
     {
-        $this->template->title('About Magic Rainbow Adventure')
+        $this->layout->title('About Magic Rainbow Adventure')
             ->build('page/about');
     }
 
@@ -26,7 +26,7 @@ class Page_Controller extends Base_Controller {
      */
     public function privacy()
     {
-        $this->template->title('Privacy Statement')
+        $this->layout->title('Privacy Statement')
             ->build('page/privacy');
     }
 

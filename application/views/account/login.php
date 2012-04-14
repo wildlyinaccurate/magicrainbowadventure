@@ -1,4 +1,4 @@
-<p>Don't have an account? <?=anchor('account/signup', lang('sign_up'))?></p>
+<p>Don't have an account? <?=HTML::link('account/signup', lang('sign_up'))?></p>
 
 <?php if ($validate && ! $login): ?>
 	<div class="error">The username / email and password you entered were incorrect.</div>

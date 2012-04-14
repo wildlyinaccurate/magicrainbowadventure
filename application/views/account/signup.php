@@ -1,4 +1,4 @@
-<p>Already have an account? <?=anchor('account/login', lang('log_in'))?></p>
+<p>Already have an account? <?=HTML::link('account/login', lang('log_in'))?></p>
 
 <?=form_open('account/signup', 'method="post" class="tabbed')?>
 <div>

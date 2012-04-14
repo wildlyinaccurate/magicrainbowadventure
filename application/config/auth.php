@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Doctrine Entity Manager
+ * @var \Doctrine\ORM\EntityManager
+ */
+$entity_manager = IoC::resolve('doctrine::manager');
+
 return array(
 
 	/*
@@ -18,11 +24,12 @@ return array(
 	|
 	*/
 
-	'user' => function($id)
+	'user' => function($id) use($entity_manager)
 	{
 		if (filter_var($id, FILTER_VALIDATE_INT) !== false)
 		{
-			return DB::table('users')->find($id);
+			die(get_class($entity_manager));
+			return $entity_manager;
 		} 
 	},
 

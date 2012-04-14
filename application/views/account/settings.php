@@ -40,7 +40,7 @@
 </div>
 
 <div id="controls">
-	<?=anchor('account', lang('cancel'), 'class="big negative button"')?>
+	<?=HTML::link('account', lang('cancel'), 'class="big negative button"')?>
 	<button type="submit" name="save_settings" id="save_settings" class="big button">Save Settings</button>
 </div>
 <?=form_close()?>

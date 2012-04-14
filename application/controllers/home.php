@@ -35,28 +35,16 @@ class Home_Controller extends Base_Controller
 	public function _display_entries($entries)
 	{
 		// Build an array of entry_ratings for each Entry
-		$this->load->library('ratings');
 		$entry_ratings = array();
 
 		foreach ($entries as $index => $entry)
 		{
-			$entry_ratings[$index] = $this->ratings->find_by_entry($entry);
+			$entry_ratings[$index] = array();
 		}
 
-		// Set up the pagination library
-		$config['base_url'] = base_url(uri_string());
-		$config['total_rows'] = $this->em->getRepository('\Entity\Entry')->getTotalQueryResults();
-		$config['per_page'] = $this->entries_per_page;
-
-		$this->load->library('pagination');
-		$this->pagination->initialize($config);
-
-		$this->template->addScript('entry.js')
-				->build('home/index', array(
-					'user' => $this->user,
-					'entries' => $entries,
-					'entry_ratings' => $entry_ratings
-				));
+		$this->layout->content = View::make('home/index')
+			->with('entries', $entries)
+			->with('entry_ratings', $entry_ratings);
 	}
 
 	/**
@@ -67,10 +55,10 @@ class Home_Controller extends Base_Controller
 	public function action_index()
 	{
 		// Load the latest entries
-		$entries = $this->em->getRepository('\Entity\Entry')->getLatestEntries($this->offset, $this->entries_per_page);
+		$entries = $this->em->getRepository('Entity\Entry')->getLatestEntries($this->offset, $this->entries_per_page);
 
 		// Set the template title
-		$this->template->title('Latest Entries');
+		$this->layout->title = 'Latest Entries';
 
 		// Display the Entries
 		$this->_display_entries($entries);
@@ -84,10 +72,10 @@ class Home_Controller extends Base_Controller
 	public function cutest()
 	{
 		// Load the latest entries
-		$entries = $this->em->getRepository('\Entity\Entry')->getByRating($this->offset, $this->entries_per_page, 'cute');
+		$entries = $this->em->getRepository('Entity\Entry')->getByRating($this->offset, $this->entries_per_page, 'cute');
 
 		// Set the template title
-		$this->template->title('Cutest Entries');
+		$this->layout->title = 'Cutest Entries';
 
 		// Display the Entries
 		$this->_display_entries($entries);
@@ -101,10 +89,10 @@ class Home_Controller extends Base_Controller
 	public function funniest()
 	{
 		// Load the latest entries
-		$entries = $this->em->getRepository('\Entity\Entry')->getByRating($this->offset, $this->entries_per_page, 'funny');
+		$entries = $this->em->getRepository('Entity\Entry')->getByRating($this->offset, $this->entries_per_page, 'funny');
 
 		// Set the template title
-		$this->template->title('Funniest Entries');
+		$this->layout->title = 'Funniest Entries';
 
 		// Display the Entries
 		$this->_display_entries($entries);

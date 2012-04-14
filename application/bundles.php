@@ -42,4 +42,8 @@ return array(
 			),
 		),
 	),
+	'basset' => array(
+		'handles' => 'basset',
+		'auto'    => true,
+	),
 );

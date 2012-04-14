@@ -25,8 +25,8 @@
     </div>
 
     <header id="heading">
-        <h1><?=anchor('/', 'Magic Rainbow Adventure!')?></h1>
-        <h2><?=anchor('admin', 'Admin Dashboard')?></h2>
+        <h1><?=HTML::link('/', 'Magic Rainbow Adventure!')?></h1>
+        <h2><?=HTML::link('admin', 'Admin Dashboard')?></h2>
     </header>
 
     <nav id="navigation">

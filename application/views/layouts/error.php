@@ -67,7 +67,7 @@
 <body>
 
     <header id="heading">
-        <h1><?=anchor('/', 'Magic Rainbow Adventure!')?></h1>
+        <h1><?=HTML::link('/', 'Magic Rainbow Adventure!')?></h1>
 
         <p class="site-description">A quest for the ultimate collection of everything cute and funny.</p>
     </header>
@@ -97,8 +97,8 @@
 
         <footer id="footer">
             <ul id="footer-links">
-                <li><?=anchor('about', 'About')?></li>
-                <li><?=anchor('privacy', 'Privacy')?></li>
+                <li><?=HTML::link('about', 'About')?></li>
+                <li><?=HTML::link('privacy', 'Privacy')?></li>
             </ul>
 
             <p id="copy-notice">Magic Rainbow Adventure! &copy; <?=date('Y')?>.</p>

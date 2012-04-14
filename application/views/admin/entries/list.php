@@ -21,8 +21,8 @@
 		<?php foreach ($entries as $entry): ?>
 			<tr id="entry-<?=$entry->getId()?>">
 				<td class="file">
-					<a href="<?=site_url("{$entry->getId()}/{$entry->getUrlTitle()}")?>">
-						<img class="thumbnail" src="<?=site_url("entry/thumbnail/{$entry->getId()}")?>" width="<?=$thumb_width?>" height="<?=$thumb_height?>" alt="" />
+					<a href="<?=URL::to("{$entry->getId()}/{$entry->getUrlTitle()}")?>">
+						<img class="thumbnail" src="<?=URL::to("entry/thumbnail/{$entry->getId()}")?>" width="<?=$thumb_width?>" height="<?=$thumb_height?>" alt="" />
 					</a>
 				</td>
 				<td class="title editable"><?=$entry->getTitle()?></td>
@@ -30,8 +30,8 @@
                 <td class="author"><?=$entry->getUser()->getUsername()?></td>
 				<td class="date"><?=$entry->getCreatedDate()->format('d M H:i')?></td>
 				<td class="actions">
-					<a class="positive moderate button" href="<?=site_url("admin/entries/approve/{$entry->getId()}")?>"><span class="check icon"></span>Approve</a>
-					<a class="negative moderate button" href="<?=site_url("admin/entries/decline/{$entry->getId()}")?>"><span class="cross icon"></span>Decline</a>
+					<a class="positive moderate button" href="<?=URL::to("admin/entries/approve/{$entry->getId()}")?>"><span class="check icon"></span>Approve</a>
+					<a class="negative moderate button" href="<?=URL::to("admin/entries/decline/{$entry->getId()}")?>"><span class="cross icon"></span>Decline</a>
 				</td>
 			</tr>
 		<?php endforeach; ?>

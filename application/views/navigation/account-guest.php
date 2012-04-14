@@ -1,4 +1,4 @@
 <ul>
-	<li><?=anchor('account/login?return=' . uri_string(), 'Login')?></li>
-	<li><?=anchor('account/signup', 'Sign Up')?></li>
+	<li><?=HTML::link('account/login?return=' . URI::current(), 'Login')?></li>
+	<li><?=HTML::link('account/signup', 'Sign Up')?></li>
 </ul>

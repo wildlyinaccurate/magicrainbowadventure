@@ -6,15 +6,15 @@
 <ul>
 	<?php if ($user->isAdmin()): ?>
 		<li>
-            <?=anchor('admin', 'Admin Dashboard')?>
+            <?=HTML::link('admin', 'Admin Dashboard')?>
     
             <?php if ($entries_to_moderate > 0): ?>
-                <span class="notification"><?=anchor('admin/entries/moderate', $entries_to_moderate)?></span>
+                <span class="notification"><?=HTML::link('admin/entries/moderate', $entries_to_moderate)?></span>
             <?php endif; ?>
         </li>
 	<?php endif; ?>
 
-	<li><?=anchor('account/my-entries', lang('my_entries'))?></li>
-	<li><?=anchor('account/settings', lang('settings'))?></li>
-	<li><?=anchor('account/change-password', lang('change_password'))?></li>
+	<li><?=HTML::link('account/my-entries', lang('my_entries'))?></li>
+	<li><?=HTML::link('account/settings', lang('settings'))?></li>
+	<li><?=HTML::link('account/change-password', lang('change_password'))?></li>
 </ul>

@@ -35,6 +35,26 @@
 
 Route::controller(Controller::detect());
 
+Bundle::start('basset');
+Basset::styles('magicrainbowadventure', function($basset)
+{
+	$basset->directory('public/assets/css', function($basset)
+	{
+		$basset->add('reset', 'reset.css')
+			->add('960gs', '960.css')
+			->add('default', 'default.css');
+	});
+});
+
+Basset::scripts('default', function($basset)
+{
+	$basset->directory('public/assets/js', function($basset)
+	{
+		$basset->add('jquery', 'jquery-1.7.2.min.js')
+			->add('modernizr', 'modernizr-2.5.3.min.js');
+	});
+});
+
 /*
 |--------------------------------------------------------------------------
 | Application 404 & 500 Error Handlers
