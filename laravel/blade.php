@@ -131,7 +131,7 @@ class Blade {
 
 		$lines[] = preg_replace($pattern, '$1@include$2', $lines[0]);
 
-		// We will add a "render" statement to the end of the templates and
+		// We will add a "render" statement to the end of the layouts and
 		// and then slice off the @layout shortcut from the start so the
 		// sections register before the parent template renders.
 		return implode(CRLF, array_slice($lines, 1));
@@ -264,7 +264,7 @@ class Blade {
 	{
 		$pattern = static::matcher('include');
 
-		return preg_replace($pattern, '$1<?php echo view$2->with(get_defined_vars()); ?>', $value);
+		return preg_replace($pattern, '$1<?php echo view$2->with(get_defined_vars())->render(); ?>', $value);
 	}
 
 	/**
