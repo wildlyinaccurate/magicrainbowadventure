@@ -56,6 +56,6 @@ return array(
 		 * Use the LessPHP compiler to compile .less files, handy if you do not have LESS installed
 		 * on your server and you still want the LESS functionality.
 		 */
-		'php' => false
+		'php' => true
 	)
 );

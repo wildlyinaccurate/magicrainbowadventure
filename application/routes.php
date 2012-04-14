@@ -42,7 +42,7 @@ Basset::styles('magicrainbowadventure', function($basset)
 	{
 		$basset->add('reset', 'reset.css')
 			->add('960gs', '960.css')
-			->add('default', 'default.css');
+			->add('default', 'default.less');
 	});
 });
 
@@ -50,8 +50,7 @@ Basset::scripts('default', function($basset)
 {
 	$basset->directory('public/assets/js', function($basset)
 	{
-		$basset->add('jquery', 'jquery-1.7.2.min.js')
-			->add('modernizr', 'modernizr-2.5.3.min.js');
+		$basset->add('jquery', 'jquery-1.7.2.min.js');
 	});
 });
 

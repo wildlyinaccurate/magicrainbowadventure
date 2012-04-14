@@ -9,9 +9,10 @@
     <meta name="description" content="">
     <meta name="author" content="Joseph Wynn / Magic Rainbow Adventure!">
 
-	<link href='http://fonts.googleapis.com/css?family=Titan+One|Open+Sans:400,700' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Coustard|Open+Sans:400,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" media="all" href="<?=URL::base();?>/basset/magicrainbowadventure.css">
 
+	<script src="<?=URL::base();?>/assets/js/modernizr-2.5.3.min.js"></script>
 	<script type="text/javascript">
 	  var _gaq = _gaq || [];
 	  _gaq.push(['_setAccount', 'UA-25125418-2']);
@@ -28,45 +29,34 @@
 
 <body>
 
-    <header id="heading">
-        <h1><?=HTML::link('/', 'Magic Rainbow Adventure!')?></h1>
+    <header>
+		<div class="container_12" id="heading">
+			<h1><?=HTML::link('/', 'Magic Rainbow Adventure!')?></h1>
 
-        <p class="site-description">A quest for the ultimate collection of everything cute and funny.</p>
-    </header>
+			<nav id="main-navigation"><?=$navigation?></nav>
+			<nav id="account-navigation"><?=$account_menu?></nav>
+		</div>
+	</header>
 
-    <nav id="navigation">
-        <?=$navigation?>
-
-        <div id="account-menu">
-            <?=$account_menu?>
-        </div>
-    </nav>
-
-    <div id="wrapper">
-
-        <div id="purplethang">
-            <a href="#happydays!"><img src="/img/purplethang-small.png" width="60" height="72" alt="" /></a>
-        </div>
-
-        <div id="main">
-
-            <div id="content">
-                <h2><?=$title?></h2>
-                <?=$content?>
-            </div> <!-- #content -->
-
+    <div id="content" class="container_12">
+        <div id="main" class="grid_8">
+			<h2><?=$title?></h2>
+			<?=$content?>
         </div> <!-- #main -->
 
-        <footer id="footer">
-            <ul id="footer-links">
-                <li><?=HTML::link('about', 'About')?></li>
-                <li><?=HTML::link('privacy', 'Privacy')?></li>
-            </ul>
+		<div id="sidebar" class="grid_4">
 
-            <p id="copy-notice">Magic Rainbow Adventure! &copy; <?=date('Y')?>.</p>
-        </footer>
+		</div>
+	</div> <!-- #content -->
 
-    </div> <!-- #wrapper -->
+	<footer class="container_12">
+		<ul id="footer-links">
+			<li><?=HTML::link('about', 'About')?></li>
+			<li><?=HTML::link('privacy', 'Privacy')?></li>
+		</ul>
+
+		<p id="copy-notice">Magic Rainbow Adventure! &copy; <?=date('Y')?>.</p>
+	</footer>
 
     <script src="<?=URL::base();?>/basset/default.js"></script>
 

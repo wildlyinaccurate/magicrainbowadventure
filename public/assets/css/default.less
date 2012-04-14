@@ -1,0 +1,164 @@
+@import "elements.less";
+
+/* HTML Elements */
+body {
+	color: #333;
+	font-family: 'Open Sans', sans-serif;
+	background: url(/assets/img/bg-texture.png);
+	overflow-x: hidden;
+}
+
+a, a:active, a:visited { color: #607890; }
+a:hover { color: #036; }
+
+h1 { font-size: 28px; }
+h2 { font-size: 18px; }
+h3 { font-size: 14px; }
+h4 { font-size: 13px; }
+
+h1, h2, h3, h4 {
+	color: #555;
+	font-family: 'Coustard', Verdana, sans-serif;
+    margin-top: 0;
+	margin-bottom: 0.4em;
+}
+
+h3, h4 {
+	margin-bottom: 0.1em;
+}
+
+h2 a, h3 a, h4 a {
+	text-decoration: none;
+}
+
+p {
+	margin: 8px 0 12px;
+}
+
+/* Common Classes */
+.note {
+	color: #555;
+	padding: 4px;
+	font-style: italic;
+	text-shadow: 1px 1px 1px #ccc;
+}
+
+.error {
+	color: #d00;
+	padding: 4px;
+	text-shadow: 1px 1px 1px #ccc;
+}
+
+/* Heading */
+header {
+	height: 60px;
+	background: #bbb;
+}
+
+#heading {
+	padding: 12px 0 38px;
+	background: url(/assets/img/cat-rainbow.png) no-repeat 280px 0
+}
+
+header h1 {
+	float: left;
+}
+
+header h1 a {
+	color: #665446 !important;
+	text-decoration: none;
+	text-shadow: 1px 1px 1px #ebfffe;
+}
+
+header h1 a:hover {
+	text-shadow: 2px 2px 3px #effffe;
+}
+
+header .site-description {
+	color: #444;
+	font-size: 1em;
+	margin: 2px auto 0;
+	text-indent: 4px;
+	text-shadow: 1px 1px 1px #fff;
+	width: 975px;
+}
+
+/* Navigation */
+nav {
+	float: left;
+}
+
+#main-navigation {
+	margin-left: 100px;
+}
+
+/* Content */
+#content {
+	margin-top: 40px;
+	padding: 12px 0;
+	background: #f5f5f5;
+	border: 1px solid #cecece;
+	.border-radius(6px, 6px, 6px, 6px);
+}
+
+/* Footer */
+footer {
+	font-size: 0.8em;
+	margin-top: 24px;
+	padding: 8px 0;
+	clear: left;
+}
+
+#footer-links {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+#footer-links li {
+    display: inline;
+    margin-right: 6px;
+}
+
+#copy-notice {
+    margin: 3px 0;
+}
+
+/* Entries */
+.entry {
+	margin-bottom: 16px;
+}
+
+.entry .description {
+	margin-top: 8px;
+}
+
+.entry .entry-status {
+	font-style: italic;
+}
+
+.entry h3 {
+	margin-bottom: 0.2em;
+}
+
+.entry-image {
+    margin-bottom: 4px;
+}
+
+.my-entries .thumbnail {
+	float: left;
+	margin: 0 8px 8px 0;
+}
+
+.my-entries .ratings {
+	margin-top: 16px;
+}
+
+.my-entries .description {
+	clear: left;
+}
+
+.submitted-by {
+	color: #999;
+	font-size: 11px;
+}
