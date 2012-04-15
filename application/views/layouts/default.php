@@ -39,13 +39,17 @@
 	</header>
 
     <div id="content" class="container_12">
-        <div id="main" class="grid_8">
-			<h2><?=$title?></h2>
-			<?=$content?>
-        </div> <!-- #main -->
+        <div class="grid_8 alpha">
+			<section id="main">
+				<h2><?=$title?></h2>
+				<?=$content?>
+			</section>
+		</div> <!-- #main -->
 
-		<div id="sidebar" class="grid_4">
+		<div class="grid_4 omega">
+			<section id="sidebar">
 
+			</section>
 		</div>
 	</div> <!-- #content -->
 
