@@ -450,6 +450,7 @@ class Basset_Container {
 		if($asset['less'] && $this->settings['less']['php'])
 		{
 			$less = new Basset\lessc;
+			$less->importDir = $asset['source'];
 
 			$contents = $less->parse($contents);
 		}

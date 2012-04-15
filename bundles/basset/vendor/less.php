@@ -329,7 +329,7 @@ class lessc {
 	function findImport($url) {
 		foreach ((array)$this->importDir as $dir) {
 			$full = $dir.(substr($dir, -1) != '/' ? '/' : '').$url;
-			if ($this->fileExists($file = $full.'.less') || $this->fileExists($file = $full)) {
+			if ($this->fileExists($file = $full.'.less') || $this->fileExists($file = $full) || $this->fileExists($file = $dir.'/'.basename($full))) {
 				return $file;
 			}
 		}
