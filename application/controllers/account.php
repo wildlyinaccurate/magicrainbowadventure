@@ -8,14 +8,12 @@ class Account_Controller extends Base_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-
-		$this->load->language('account');
 	}
 
 	/**
 	 * Account Index
 	 */
-	public function index()
+	public function action_index()
 	{
 		$this->auth->require_login();
 
@@ -28,7 +26,7 @@ class Account_Controller extends Base_Controller {
 	/**
 	 * List all User's Entries
 	 */
-	public function my_entries()
+	public function action_my_entries()
 	{
 		$entries = $this->user->getEntries();
 
@@ -55,7 +53,7 @@ class Account_Controller extends Base_Controller {
 	/**
 	 * Update Account Settings
 	 */
-	public function settings()
+	public function action_settings()
 	{
 		$this->auth->require_login();
 
@@ -94,7 +92,7 @@ class Account_Controller extends Base_Controller {
 	/**
 	 * Change the user's password
 	 */
-	public function change_password()
+	public function action_change_password()
 	{
 		$this->auth->require_login();
 
@@ -123,31 +121,25 @@ class Account_Controller extends Base_Controller {
 	/**
 	 * Log into the system
 	 */
-	public function login()
+	public function action_login()
 	{
-		// Set up form validation and run it
-		$this->form_validation->set_rules('identifier', lang('field_identifier'), 'required');
-		$this->form_validation->set_rules('password', lang('field_password_login'), 'required');
-		$validate = $this->form_validation->run();
-
 		// Attempt to log in
 		$identifier = Input::get('identifier');
 		$password = Input::get('password');
 		$login = FALSE; //Initial value
 
-		if ( ! $this->auth->authenticated() && ($validate === FALSE || ! $login = $this->auth->login($identifier, $password)))
+		if ( ! Auth::attempt($identifier, $password))
 		{
 			// The page title changes if the user has been redirected to the login page
 			if (Input::get('return'))
 			{
-				$this->layout->longTitle(lang('log_in_required'));
+				$this->layout->title(lang('log_in_required'));
 			}
 
 			$this->layout
 				 ->title(lang('log_in'))
 				 ->build('account/login', array(
 				 	'login' => $login,
-				 	'validate' => $validate
 				 ));
 		}
 		else
