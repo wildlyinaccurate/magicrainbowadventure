@@ -8,7 +8,7 @@ return array(
 		 * Globally enable compression for all assets, this is only recommended once an application
 		 * is live and when used in conjunction with caching.
 		 */
-		'enabled' => true,
+		'enabled' => false,
 
 		/**
 		 * Preserve Lines
