@@ -175,7 +175,7 @@ class Entry extends TimestampedModel implements \Serializable {
      * @param string $hash
      * @return  \Entity\Entry
      */
-    public function setUrlTitle($hash)
+    public function setHash($hash)
     {
         $this->hash = $hash;
         return $this;
@@ -186,7 +186,7 @@ class Entry extends TimestampedModel implements \Serializable {
      *
      * @return string
      */
-    public function getUrlTitle()
+    public function getHash()
     {
         return $this->hash;
     }
