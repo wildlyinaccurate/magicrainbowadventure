@@ -46,4 +46,7 @@ return array(
 		'handles' => 'basset',
 		'auto'    => true,
 	),
+	'dropbox' => array(
+		'auto'    => true,
+	),
 );

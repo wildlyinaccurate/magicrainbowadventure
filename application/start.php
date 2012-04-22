@@ -155,3 +155,18 @@ if ( ! Request::cli() and Config::get('session.driver') !== '')
 {
 	Session::load();
 }
+
+// Dropbox configuration
+Event::listen('laravel.started: dropbox', function()
+{
+	Config::set('dropbox::config.app_key', 'kp99xoktm9q0u0r');
+	Config::set('dropbox::config.app_secret', 'i9kkeiojpp15jv0');
+	Config::set('dropbox::config.encryption_key', '2f13cf3ed6872967f657df242e571893');
+	Config::set('dropbox::config.root', 'dropbox');
+
+	Config::set('dropbox::config.access_token', array(
+		'oauth_token_secret' => 'c1y0rnzuzhje17t',
+		'oauth_token' => 'lxr3zyvj2p8kxu3',
+		'uid' => '28552199',
+	));
+});

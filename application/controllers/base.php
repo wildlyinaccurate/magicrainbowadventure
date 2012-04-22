@@ -15,7 +15,6 @@ class Base_Controller extends Controller
 	 */
 	protected $em;
 
-
 	/**
 	 * Constructor ahoy!
 	 */
