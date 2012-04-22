@@ -171,12 +171,6 @@ class Administrator extends \Entity\Administrator implements \Doctrine\ORM\Proxy
         return parent::getSettings();
     }
 
-    public function getSetting($setting_name)
-    {
-        $this->__load();
-        return parent::getSetting($setting_name);
-    }
-
     public function addEntry(\Entity\Entry $entry)
     {
         $this->__load();
@@ -246,7 +240,7 @@ class Administrator extends \Entity\Administrator implements \Doctrine\ORM\Proxy
             if ($original === null) {
                 throw new \Doctrine\ORM\EntityNotFoundException();
             }
-            foreach ($class->reflFields AS $field => $reflProperty) {
+            foreach ($class->reflFields as $field => $reflProperty) {
                 $reflProperty->setValue($this, $reflProperty->getValue($original));
             }
             unset($this->_entityPersister, $this->_identifier);
