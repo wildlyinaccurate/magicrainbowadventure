@@ -1,4 +1,4 @@
-<?=form_open('account/settings', 'method="post" class="tabbed')?>
+<?=Form::open('account/settings', 'method="post" class="tabbed')?>
 
 <div>
 	<label for="username">Your username</label>
@@ -43,4 +43,4 @@
 	<?=HTML::link('account', lang('cancel'), 'class="big negative button"')?>
 	<button type="submit" name="save_settings" id="save_settings" class="big button">Save Settings</button>
 </div>
-<?=form_close()?>
+<?=Form::close()?>

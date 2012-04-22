@@ -42,9 +42,10 @@ class Home_Controller extends Base_Controller
 			$entry_ratings[$index] = array();
 		}
 
-		$this->layout->content = View::make('home/index')
-			->with('entries', $entries)
-			->with('entry_ratings', $entry_ratings);
+		$this->layout->content = View::make('home/index', array(
+			'entries' => $entries,
+			'entry_ratings' => $entry_ratings,
+		));
 	}
 
 	/**

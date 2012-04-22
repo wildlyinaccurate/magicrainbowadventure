@@ -1,4 +1,4 @@
-<?=form_open('account/change-password', 'method="post" class="tabbed')?>
+<?=Form::open('account/change-password', 'method="post" class="tabbed')?>
 <div>
 	<label for="password">Current Password</label>
 	<input type="password" name="password" id="password" />
@@ -20,4 +20,4 @@
 	<?=HTML::link('account', lang('cancel'), 'class="negative button"')?>
 	<button type="submit" name="change_password" id="change_password" class="button"><?=lang('change_password')?></button>
 </div>
-<?=form_close()?>
+<?=Form::close()?>

@@ -1,18 +1,16 @@
 <?php
 
-class Entry_Controller extends Base_Controller {
+/**
+ * Entry Controller
+ *
+ * View, submit and edit entries.
+ *
+ * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+ */
+class Entry_Controller extends Base_Controller
+{
 
-	/**
-	 * Keep track of any errors that occurred during a file upload
-	 * @var string
-	 */
-	private $upload_error;
-
-	/**
-	 * The content type of a remote image submitted by the user. This is set in _valid_image_url
-	 * @var string
-	 */
-	private $image_content_type;
+	public $restful = true;
 
 	/**
 	 * Constructor
@@ -23,53 +21,42 @@ class Entry_Controller extends Base_Controller {
 	}
 
 	/**
-	 * Submit a new entry
+	 * Show the entry submission form
+	 *
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function submit()
+	public function get_submit()
 	{
-		$this->auth->require_login();
+		$this->layout->title = 'Submit an Entry';
 
-		$this->form_validation->set_rules('title', 'a title', 'required|max_length[140]');
-		$this->form_validation->set_rules('description', 'a description', 'max_length[2000]');
+		$this->layout->content = View::make('entry/submit', array(
+			'upload_error' => '',
+			'max_upload_size' => '',
+		));
+	}
 
-		if ( ! $this->_uploaded_file())
+	/**
+	 * Save a new Entry
+	 *
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	public function post_submit()
+	{
+		// Create the new Entry
+		$entry = new \Entity\Entry;
+		$entry->setTitle(Input::get('title'))
+			->setDescription(Input::get('description'))
+			->setUser($this->user);
+
+		// Administrators don't need their entries approved
+		if ($this->user->isAdmin())
 		{
-			// No file was uploaded; check the remote image URL
-			$this->form_validation->set_rules('image_url', 'a link', 'callback__valid_image_url');
+			$entry->setApproved(TRUE);
+			$entry->setModeratedBy($this->user);
 		}
 
-		if ($this->form_validation->run() && $entry_file_path = $this->_process_file())
-		{
-			// Create the new Entry
-			$entry = new \Entity\Entry;
-			$entry->setTitle(Input::get('title'))
-				->setDescription(Input::get('description'))
-				->setUser($this->user)
-				->setFilePath($entry_file_path);
-
-			// Administrators don't need their entries approved
-			if ($this->user->isAdmin())
-			{
-				$entry->setApproved(TRUE);
-				$entry->setModeratedBy($this->user);
-			}
-
-			$this->em->persist($entry);
-			$this->em->flush();
-
-			redirect('entry/thank-you');
-		}
-		else
-		{
-			// We need the number helper for its byte_format function
-			$this->load->helper('number');
-
-			$this->layout->title('Submit an Entry')
-			->build('entry/submit', array(
-			  	'upload_error' => $this->upload_error,
-			    'max_upload_size' => $this->config->item('max_upload_size') * 1024 // Max upload size in bytes
-			));
-		}
+		$this->em->persist($entry);
+		$this->em->flush();
 	}
 
 	/**
@@ -92,10 +79,11 @@ class Entry_Controller extends Base_Controller {
 			$entry = FALSE;
 		}
 
-		$this->layout->title('Thanks!')
-			->build('entry/thank-you', array(
-				 'entry' => $entry
-			 ));
+		$this->layout->title = 'Thanks!';
+
+		View::make('entry/thank-you', array(
+			 'entry' => $entry
+		 ));
 	}
 
 	/**
@@ -126,21 +114,21 @@ class Entry_Controller extends Base_Controller {
 		if ( ! $entry || ( ! $entry->isApproved() && ! $this->user->isAdmin() && $entry->getUser() != $this->user))
 		{
 			$this->output->set_status_header(404);
-			$this->layout->title(lang('not_found'))
-					->build('entry/not-found');
+			$this->layout->title = lang('not_found');
+				View::make('entry/not-found');
 		}
 		elseif ($entry->isApproved() || $this->user->isAdmin())
 		{
-			$this->layout->title($entry->getTitle())
-					->addScript('entry.js')
-					->build('entry/view', array(
-						'entry' => $entry
-					));
+			$this->layout->title = $entry->getTitle();
+
+			View::make('entry/view', array(
+				'entry' => $entry
+			));
 		}
         else
         {
-			$this->layout->title($entry->getTitle())
-				->build('entry/view-preview', array(
+			$this->layout->title = $entry->getTitle();
+			View::make('entry/view-preview', array(
 					'entry' => $entry
 				));
         }
@@ -386,6 +374,3 @@ class Entry_Controller extends Base_Controller {
 	}
 
 }
-
-/* End of file entry.php */
-/* Location: ./application/controllers/entry.php */

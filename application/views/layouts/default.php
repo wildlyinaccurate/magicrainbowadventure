@@ -3,7 +3,6 @@
 <head>
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
 
 	<title><?=$title?> &ndash; Magic Rainbow Adventure!</title>
     <meta name="description" content="">
@@ -31,10 +30,10 @@
 
     <header>
 		<div class="container_12" id="heading">
-			<h1><?=HTML::link('/', 'Magic Rainbow Adventure!')?></h1>
+			<h1 class="grid_6"><?=HTML::link('/', 'Magic Rainbow Adventure!')?></h1>
 
-			<nav id="main-navigation"><?=$navigation?></nav>
-			<nav id="account-navigation"><?=$account_menu?></nav>
+			<nav id="main-navigation" class="grid_3"><?=$navigation?></nav>
+			<nav id="account-navigation" class="grid_3"><?=$account_menu?></nav>
 		</div>
 	</header>
 

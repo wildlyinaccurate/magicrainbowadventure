@@ -1,6 +1,6 @@
 <p>Already have an account? <?=HTML::link('account/login', lang('log_in'))?></p>
 
-<?=form_open('account/signup', 'method="post" class="tabbed')?>
+<?=Form::open('account/signup', 'method="post" class="tabbed')?>
 <div>
 	<label for="username">Pick a username</label>
 	<input type="text" name="username" id="username" maxlength="32" value="<?=set_value('username')?>" />
@@ -44,4 +44,4 @@
 <div class="controls">
 	<button type="submit" name="sign_up" id="sign_up" class="big">Sign Up</button>
 </div>
-<?=form_close()?>
+<?=Form::close()?>

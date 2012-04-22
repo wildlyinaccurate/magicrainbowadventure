@@ -26,11 +26,15 @@ return array(
 
 	'user' => function($id) use($entity_manager)
 	{
+		$user = false;
+
 		if (filter_var($id, FILTER_VALIDATE_INT) !== false)
 		{
-			die(get_class($entity_manager));
-			return $entity_manager;
-		} 
+			$user = $entity_manager->find('Entity\User', $id);
+		}
+
+		// Current user isn't logged in
+		return $user ? $user : new \Entity\User;
 	},
 
 	/*

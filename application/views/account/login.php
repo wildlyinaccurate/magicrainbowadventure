@@ -4,7 +4,7 @@
 	<div class="error">The username / email and password you entered were incorrect.</div>
 <?php endif; ?>
 
-<?=form_open(($return = $this->input->get('return')) ? "account/login?return={$return}" : 'account/login', 'class="tabbed"')?>
+<?=Form::open(($return = $this->input->get('return')) ? "account/login?return={$return}" : 'account/login', 'class="tabbed"')?>
 <div>
 		<label for="identifier">Username / Email</label>
 		<input type="text" name="identifier" id="identifier" value="<?=set_value('identifier')?>" />
@@ -20,4 +20,4 @@
 	<div class="controls">
 		<button type="submit" name="log-in" id="log-in" class="big">Log In</button>
 	</div>
-<?=form_close()?>
+<?=Form::close()?>

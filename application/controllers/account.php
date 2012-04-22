@@ -17,8 +17,8 @@ class Account_Controller extends Base_Controller {
 	{
 		$this->auth->require_login();
 
-		$this->layout->title(lang('account'))
-			->build('account/index', array(
+		$this->layout->title = lang('account');
+		View::make('account/index', array(
 				'user' => $this->user
 			));
 	}
@@ -42,8 +42,8 @@ class Account_Controller extends Base_Controller {
 			});
 		}
 
-		$this->layout->title(lang('my_entries'))
-			->build('account/my-entries', array(
+		$this->layout->title = lang('my_entries');
+		View::make('account/my-entries', array(
 				'entries' => $entries,
 				'thumb_width' => $this->config->item('thumb_width'),
 				'thumb_height' => $this->config->item('thumb_height')
@@ -81,8 +81,8 @@ class Account_Controller extends Base_Controller {
 			redirect('account/settings');
 		}
 
-		$this->layout->title(lang('settings'))
-			->build('account/settings', array(
+		$this->layout->title = lang('settings');
+		View::make('account/settings', array(
 				'user' => $this->user,
 				'countries' => $this->em->getRepository('Entity\Country')->getAllCountries(),
 				'languages' => $this->config->item('available_languages')
@@ -112,8 +112,8 @@ class Account_Controller extends Base_Controller {
 			redirect('account');
 		}
 
-		$this->layout->title(lang('change_password'))
-			->build('account/change-password', array(
+		$this->layout->title = lang('change_password');
+		View::make('account/change-password', array(
 				'user' => $this->user
 			));
 	}
@@ -133,7 +133,7 @@ class Account_Controller extends Base_Controller {
 			// The page title changes if the user has been redirected to the login page
 			if (Input::get('return'))
 			{
-				$this->layout->title(lang('log_in_required'));
+				$this->layout->title = lang('log_in_required');;
 			}
 
 			$this->layout

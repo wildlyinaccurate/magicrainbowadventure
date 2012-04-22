@@ -3,7 +3,7 @@
 namespace Entity;
 
 /**
- * Entry
+ * Entry Model
  *
  * @Entity(repositoryClass="Entity\EntryRepository")
  * @Table(name="entry", indexes={@index(name="entry_type_idx", columns={"type"})})
@@ -57,7 +57,7 @@ class Entry extends TimestampedModel implements \Serializable {
 	/**
 	 * @Column(type="boolean", nullable=false)
 	 */
-	protected $approved = FALSE;
+	protected $approved = false;
 
 	/**
 	 * @ManyToOne(targetEntity="Administrator", inversedBy="moderated_entries", fetch="EXTRA_LAZY")
@@ -128,31 +128,6 @@ class Entry extends TimestampedModel implements \Serializable {
 	 */
 	public function prePersist()
 	{
-		$CI =& get_instance();
-
-		$upload_tmp_path = $CI->config->item('upload_tmp_directory');
-		$upload_base_path = $CI->config->item('upload_directory');
-		$dropbox_directory = $CI->config->item('dropbox_upload_path');
-		$sub_directory = date('Y/m');
-
-		if ( ! file_exists("{$upload_base_path}/{$sub_directory}"))
-		{
-			$CI->load->helper('directory');
-			create_directory("{$upload_base_path}/{$sub_directory}");
-		}
-
-		// The new file will be stored in a sub-directory based on the current year and date
-		$new_file_path =  "{$sub_directory}/{$this->getFilePath()}";
-
-		// Move the file and set the new file path
-		rename("{$upload_tmp_path}/{$this->getFilePath()}", "{$upload_base_path}/{$new_file_path}");
-
-		// Set the new file path
-		$this->setFilePath($new_file_path);
-
-		// Upload the file to Dropbox
-		$CI->load->library('dropbox');
-		$CI->dropbox->filesPost("Public/{$dropbox_directory}/{$sub_directory}", "{$upload_base_path}/{$new_file_path}");
 	}
 
     /**
@@ -174,7 +149,8 @@ class Entry extends TimestampedModel implements \Serializable {
     public function setTitle($title)
     {
         $this->title = $title;
-		$this->setUrlTitle(url_title($title, 'dash', TRUE));
+		$this->setUrlTitle(\Str::slug($title));
+
 		return $this;
     }
 

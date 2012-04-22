@@ -10,6 +10,18 @@ class Base_Controller extends Controller
 	public $layout = 'layouts/default';
 
 	/**
+	 * The currently logged-in user
+	 * @var \Entity\User
+	 */
+	protected $user;
+
+	/**
+	 * Dropbox API
+	 * @var \Dropbox\API
+	 */
+	protected $dropbox;
+
+	/**
 	 * Doctrine Entity Manager
 	 * @var \Doctrine\ORM\EntityManager
 	 */
@@ -23,6 +35,10 @@ class Base_Controller extends Controller
 		parent::__construct();
 
 		$this->em = IoC::resolve('doctrine::manager');
+		$this->dropbox = IoC::resolve('dropbox::api');
+		$this->user = Auth::user();
+
+		print_r($this->dropbox->accountinfo()); exit;
 
 		if (Auth::check())
 		{

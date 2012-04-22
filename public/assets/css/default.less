@@ -56,11 +56,6 @@ header {
 	.drop-shadow(0, 1px, 5px, 0.2);
 }
 
-#heading {
-	height: 100px;
-	background: url(/assets/img/cat-rainbow.png) no-repeat 280px 0
-}
-
 header h1 {
 	float: left;
 	padding-top: 9px;
@@ -88,30 +83,26 @@ header .site-description {
 }
 
 /* Navigation */
-nav {
-	float: left;
-}
-
 nav li {
 	float: left;
 }
 
-nav a, nav a:visited, nav a:active {
+nav a, nav a:visited {
 	float: left;
 	height: 16px;
 	line-height: 16px;
 	padding: 22px 18px;
 	text-decoration: none;
 	color: #eee;
-	.transition-duration(0.4s);
+	.transition-duration(0.3s);
 }
 
-#main-navigation {
-	margin-left: 100px;
+nav a:hover {
+	color: #666;
 }
 
 #account-navigation {
-	float: right;
+	text-align: right;
 }
 
 /* Content */
