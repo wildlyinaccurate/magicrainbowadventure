@@ -30,9 +30,14 @@ class Entry extends TimestampedModel implements \Serializable {
 	protected $url_title;
 
 	/**
-	 * @Column(type="string", length=140, nullable=false)
+	 * @Column(type="string", length=64, nullable=false)
 	 */
 	protected $file_path;
+
+    /**
+     * @Column(type="string", length=40, nullable=false)
+     */
+    protected $hash;
 
 	/**
 	 * @Column(type="text", length=2000, nullable=true)
@@ -162,6 +167,28 @@ class Entry extends TimestampedModel implements \Serializable {
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set hash
+     *
+     * @param string $hash
+     * @return  \Entity\Entry
+     */
+    public function setUrlTitle($hash)
+    {
+        $this->hash = $hash;
+        return $this;
+    }
+
+    /**
+     * Get hash
+     *
+     * @return string
+     */
+    public function getUrlTitle()
+    {
+        return $this->hash;
     }
 
     /**
