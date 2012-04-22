@@ -5,7 +5,14 @@
  *
  * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class Easy_curl {
+class EasyCurl
+{
+
+	/**
+	 * The cURL result
+	 * @var mixed
+	 */
+	public $result;
 
 	/**
 	 * The cURL handler
@@ -22,37 +29,47 @@ class Easy_curl {
 	/**
 	 * Constructor
 	 *
-	 * Make sure cURL is loaded
+ 	 * @param	string	$uri
+ 	 * @return	void
 	 */
-	public function __construct()
+	public function __construct($uri = null)
 	{
 		if ( ! in_array('curl', get_loaded_extensions()))
 		{
 			throw new Exception('The cURL extension is not loaded.');
 		}
+
+		$this->curl = curl_init($uri);
 	}
 
 	/**
-	 * Make a HEAD request. Returns FALSE on failure
+	 * Initialise a new cURL handle
 	 *
-	 * @param	string	$uri
+ 	 * @param	string	$uri
+ 	 * @return	Easy_curl
+	 */
+	public static function init($uri)
+	{
+		return new self($uri);
+	}
+
+	/**
+	 * Make a HEAD request. Returns false on failure
+	 *
 	 * @return	Easy_curl
 	 */
-	public function get_header($uri)
+	public function get_header()
 	{
-		$this->_init();
-
 		curl_setopt_array($this->curl, array(
-			 CURLOPT_URL => $uri,
-			 CURLOPT_RETURNTRANSFER => TRUE,
-			 CURLOPT_HEADER => TRUE,
+			 CURLOPT_RETURNTRANSFER => true,
+			 CURLOPT_HEADER => true,
 			 CURLOPT_TIMEOUT => $this->timeout,
-			 CURLOPT_NOBODY => TRUE
+			 CURLOPT_NOBODY => true
 		 ));
 
 		if ( ! curl_exec($this->curl))
 		{
-			return FALSE;
+			return false;
 		}
 
 		return $this;
@@ -61,14 +78,13 @@ class Easy_curl {
 	/**
 	 * Return the content-type of a cURL resource
 	 *
-	 * @param	string	$uri
 	 * @return	string
 	 */
-	public function get_content_type($uri = NULL)
+	public function get_content_type()
 	{
-		if ($uri)
+		if ( ! $this->result)
 		{
-			$this->get_header($uri);
+			$this->get_header();
 		}
 
 		return curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE);
@@ -83,39 +99,39 @@ class Easy_curl {
 	 */
 	public function get_content_length()
 	{
+		if ( ! $this->result)
+		{
+			$this->get_header();
+		}
+
 		return curl_getinfo($this->curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
 	}
 
 	/**
-	 * Store the contents of a URL in a file
+	 * Store the contents of the current URL in a file
 	 *
-	 * @param	string	$url
-	 * @param	string	$file
+	 * @param	string	$file_path
 	 * @return	bool
 	 */
-	public function url_to_file($url, $file)
+	public function to_file($file_path)
 	{
-		$this->_init();
-
 		// Create a file handle
-		$file_handle = fopen($file, 'wb');
+		$file_handle = fopen($file_path, 'wb');
 
 		curl_setopt_array($this->curl, array(
-			 CURLOPT_URL => $url,
-			 CURLOPT_HEADER => FALSE,
+			 CURLOPT_HEADER => false,
 			 CURLOPT_TIMEOUT => $this->timeout,
 			 CURLOPT_FILE => $file_handle
 		 ));
 
-
 		if ( ! curl_exec($this->curl))
 		{
-			return FALSE;
+			return false;
 		}
 
-		curl_close($this->curl);
 		fclose($file_handle);
-		return TRUE;
+
+		return true;
 	}
 
 	/**
@@ -126,16 +142,6 @@ class Easy_curl {
 	public function get_error()
 	{
 		return curl_error($this->curl);
-	}
-
-	/**
-	 * Initialise cURL
-	 *
-	 * @return void
-	 */
-	private function _init()
-	{
-		$this->curl = curl_init();
 	}
 
 	/**

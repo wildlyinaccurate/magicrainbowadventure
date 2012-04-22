@@ -30,8 +30,7 @@ class Entry_Controller extends Base_Controller
 		$this->layout->title = 'Submit an Entry';
 
 		$this->layout->content = View::make('entry/submit', array(
-			'upload_error' => '',
-			'max_upload_size' => '',
+			'max_upload_size' => Config::get('magicrainbowadventure.max_upload_size'),
 		));
 	}
 
@@ -42,7 +41,43 @@ class Entry_Controller extends Base_Controller
 	 */
 	public function post_submit()
 	{
-		// Create the new Entry
+		$entry_image_error = Input::file('entry_image.error');
+
+		$validation_rules = array(
+			'title' => 'required|max:140',
+			'description' => 'max:2000',
+		);
+
+		if ($entry_image_error === null || $entry_image_error === 4)
+		{
+			// Validate the image URL
+			$validation_rules['image_url'] = 'required|valid_image_url';
+		}
+		else
+		{
+			// Validate the uploaded file
+			$validation_rules['entry_image'] = 'image|max:' . Config::get('magicrainbowadventure.max_upload_size');
+		}
+
+		$validation_messages = array(
+			'required' => 'You forgot to enter the :attribute!',
+			'valid_image_url' => 'You need to either upload an image or enter an image URL.',
+		);
+
+		$validation = \Validators\EntryValidator::make(Input::all(), $validation_rules, $validation_messages);
+
+		if ($validation->fails())
+		{
+			if (count($validation->errors->messages['image_url']) === 1)
+			{
+				// In this case we know that the image_url field has failed
+				// the 'required' validation. We'll set a custom message instead.
+				$validation->errors->messages['image_url'][0] = $validation_messages['valid_image_url'];
+			}
+
+			return Redirect::to('entry/submit')->with_errors($validation);
+		}
+
 		$entry = new \Entity\Entry;
 		$entry->setTitle(Input::get('title'))
 			->setDescription(Input::get('description'))
@@ -51,8 +86,8 @@ class Entry_Controller extends Base_Controller
 		// Administrators don't need their entries approved
 		if ($this->user->isAdmin())
 		{
-			$entry->setApproved(TRUE);
-			$entry->setModeratedBy($this->user);
+			$entry->setApproved(true)
+				->setModeratedBy($this->user);
 		}
 
 		$this->em->persist($entry);
@@ -76,7 +111,7 @@ class Entry_Controller extends Base_Controller
 		else
 		{
 			// The user has no Entries
-			$entry = FALSE;
+			$entry = false;
 		}
 
 		$this->layout->title = 'Thanks!';
@@ -209,7 +244,7 @@ class Entry_Controller extends Base_Controller
 		{
 			if ( ! $upload_data = $this->_do_upload())
 			{
-				return FALSE;
+				return false;
 			}
 			else
 			{
@@ -238,7 +273,7 @@ class Entry_Controller extends Base_Controller
 			if ( ! $this->easy_curl->url_to_file(Input::get('image_url'), $file_path))
 			{
 				$this->upload_error = lang('url_to_file_error');
-				return FALSE;
+				return false;
 			}
 			else
 			{
@@ -250,117 +285,11 @@ class Entry_Controller extends Base_Controller
 		if ( ! $this->_resize_image($file_path))
 		{
 			// Errors ocurred during the resize
-			return FALSE;
+			return false;
 		}
 
 		// Everything went ok. Return the file name to be stored against the entry
 		return $file_name;
-	}
-
-	/**
-	 * Upload a file
-	 *
-	 * Returns upload_data on success, or returns FALSE and sets $this->upload_error if the upload fails
-	 *
-	 * @return	array|bool
-	 */
-	private function _do_upload()
-	{
-		$config['upload_path'] = $this->config->item('upload_tmp_directory');
-		$config['allowed_types'] = $this->config->item('allowed_upload_types');
-		$config['max_size']	= $this->config->item('max_upload_size');
-		$config['encrypt_name']	= TRUE;
-
-		$this->load->library('upload', $config);
-		$this->upload_error = NULL;
-
-		if ( ! $this->upload->do_upload())
-		{
-			$this->upload_error = $this->upload->display_errors();
-			return FALSE;
-		}
-		else
-		{
-			// Successful upload!
-			return $this->upload->data();
-		}
-	}
-
-	/**
-	 * See if an image is bigger than the maximum dimensions. If it is, resize it.
-	 *
-	 * @param	string	$file_path
-	 * @return	bool
-	 */
-	private function _resize_image($file_path)
-	{
-		$max_width = $this->config->item('max_image_width');
-		$max_height = $this->config->item('max_image_height');
-
-		if ( ! $image_size = getimagesize($file_path))
-		{
-			// If getimagesize failed, this probably isn't a valid image...
-			$this->upload_error = 'The image you uploaded is corrupted.';
-			return FALSE;
-		}
-
-		// If the width or height are bigger than the maximum dimensions, resize the image
-		if ($image_size[0] > $max_width || $image_size[1] > $max_height)
-		{
-			$this->load->library('image_moo');
-
-			$this->image_moo->load($file_path)
-				->resize($max_width, $max_height)
-				->set_jpeg_quality($this->config->item('jpeg_quality'))
-				->save($file_path, TRUE);
-
-			if ($this->image_moo->errors)
-			{
-				// Image moo was unable to resize the image
-				$this->upload_error = $this->image_moo->display_errors();
-				return FALSE;
-			}
-		}
-
-		return TRUE;
-	}
-
-	/**
-	 * Make sure a URL is pointing to a valid image
-	 *
-	 * @param	string	$url
-	 * @return	bool
-	 */
-	public function _valid_image_url($url)
-	{
-		if ( ! $url)
-		{
-			$this->form_validation->set_message('_valid_image_url', 'Please either upload a file or paste a link to an image.');
-			return FALSE;
-		}
-
-		// Make sure the supplied URL is actually an image
-		$this->load->library('easy_curl');
-		$this->image_content_type = $this->easy_curl->get_content_type($url);
-
-		if ( ! $this->image_content_type || ! preg_match('/image\/(.+)/i', $this->image_content_type))
-		{
-			$this->form_validation->set_message('_valid_image_url', 'The link you entered does not appear to be an image.');
-			return FALSE;
-		}
-
-		// Make sure the image is not bigger than the maximum upload size
-		// Convert max_upload_size to bytes
-		$max_upload_size = $this->config->item('max_upload_size') * 1024;
-
-		if ($this->easy_curl->get_content_length($url) > $max_upload_size)
-		{
-			$this->load->helper('number');
-			$this->form_validation->set_message('_valid_image_url', 'This image is too big! Choose something that is smaller than ' . byte_format($max_upload_size, 0));
-			return FALSE;
-		}
-
-		return TRUE;
 	}
 
 	/**

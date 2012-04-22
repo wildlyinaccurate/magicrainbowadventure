@@ -36,16 +36,15 @@ class Base_Controller extends Controller
 
 		$this->em = IoC::resolve('doctrine::manager');
 		$this->dropbox = IoC::resolve('dropbox::api');
-		$this->user = Auth::user();
-
-		print_r($this->dropbox->accountinfo()); exit;
 
 		if (Auth::check())
 		{
+			$this->user = Auth::user();
 			$this->layout->nest('account_menu', 'navigation/account-user');
 		}
 		else
 		{
+			$this->user = new \Entity\User;
 			$this->layout->nest('account_menu', 'navigation/account-guest');
 		}
 
