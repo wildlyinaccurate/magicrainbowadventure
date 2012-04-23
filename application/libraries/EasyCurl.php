@@ -54,9 +54,40 @@ class EasyCurl
 	}
 
 	/**
+	 * Make a GET request. Returns false on failure.
+	 *
+	 * @param  bool     $binary
+	 * @param  resource $file
+	 * @return Easy_curl|bool
+	 */
+	public function execute($binary = false, $file = null)
+	{
+		curl_setopt_array($this->curl, array(
+			 CURLOPT_RETURNTRANSFER => true,
+			 CURLOPT_HEADER => false,
+			 CURLOPT_BINARYTRANSFER => $binary,
+			 CURLOPT_TIMEOUT => $this->timeout,
+		 ));
+
+		if ($file !== null)
+		{
+			curl_setopt($this->curl, CURLOPT_INFILE, $file);
+		}
+
+		$this->result = curl_exec($this->curl);
+
+		if ( ! $this->result)
+		{
+			return false;
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Make a HEAD request. Returns false on failure
 	 *
-	 * @return	Easy_curl
+	 * @return	Easy_curl|bool
 	 */
 	public function get_header()
 	{
@@ -67,7 +98,9 @@ class EasyCurl
 			 CURLOPT_NOBODY => true
 		 ));
 
-		if ( ! curl_exec($this->curl))
+		$this->result = curl_exec($this->curl);
+
+		if ( ! $this->result)
 		{
 			return false;
 		}

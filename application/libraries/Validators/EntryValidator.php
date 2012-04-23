@@ -22,8 +22,6 @@ class EntryValidator extends \Laravel\Validator
 		if ( ! $content_type || ! preg_match('/image\/(.+)/i', $content_type))
 		{
 			$this->errors->messages[$attribute][] = 'The link you entered does not appear to be an image.';
-			var_dump($content_type);
-			exit;
 
 			return false;
 		}

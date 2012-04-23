@@ -10,7 +10,8 @@ namespace Entity;
  * @HasLifecycleCallbacks
  * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class Entry extends TimestampedModel implements \Serializable {
+class Entry extends TimestampedModel implements \Serializable
+{
 
 	/**
 	 * @Id
@@ -34,10 +35,10 @@ class Entry extends TimestampedModel implements \Serializable {
 	 */
 	protected $file_path;
 
-    /**
-     * @Column(type="string", length=40, nullable=false)
-     */
-    protected $hash;
+	/**
+	 * @Column(type="string", length=40, nullable=false)
+	 */
+	protected $hash;
 
 	/**
 	 * @Column(type="text", length=2000, nullable=true)
@@ -69,15 +70,35 @@ class Entry extends TimestampedModel implements \Serializable {
 	 */
 	protected $moderated_by;
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
+	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		parent::__construct();
 
-        $this->ratings = new \Doctrine\Common\Collections\ArrayCollection;
-    }
+		$this->ratings = new \Doctrine\Common\Collections\ArrayCollection;
+	}
+
+	/**
+	 * Upload the entry's file to Dropbox. The file's extension must be specified.
+	 *
+	 * @param  resource $handle
+	 * @param  string   $extension
+	 * @return \Entity\Entry
+	 */
+	public function uploadFile($handle, $extension)
+	{
+		$file_hash = hash_file('sha1', $handle);
+		$file_path = date('Y/m') . "/{$file_hash}.{$extension}";
+
+		$this->setHash($file_hash)
+			->setFilePath($file_path);
+
+		$dropbox = \IoC::resolve('dropbox::api');
+
+		print_r($this); exit;
+	}
 
 	/**
 	 * Override the default behaviour when this object is serialized
@@ -135,214 +156,214 @@ class Entry extends TimestampedModel implements \Serializable {
 	{
 	}
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+	/**
+	 * Get id
+	 *
+	 * @return integer
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
 
-    /**
-     * Set title and url_title
-     *
-     * @param string $title
+	/**
+	 * Set title and url_title
+	 *
+	 * @param string $title
 	 * @return	\Entity\Entry
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
+	 */
+	public function setTitle($title)
+	{
+		$this->title = $title;
 		$this->setUrlTitle(\Str::slug($title));
 
 		return $this;
-    }
+	}
 
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
+	/**
+	 * Get title
+	 *
+	 * @return string
+	 */
+	public function getTitle()
+	{
+		return $this->title;
+	}
 
-    /**
-     * Set hash
-     *
-     * @param string $hash
-     * @return  \Entity\Entry
-     */
-    public function setHash($hash)
-    {
-        $this->hash = $hash;
-        return $this;
-    }
-
-    /**
-     * Get hash
-     *
-     * @return string
-     */
-    public function getHash()
-    {
-        return $this->hash;
-    }
-
-    /**
-     * Set url_title
-     *
-     * @param string $urlTitle
-	 * @return	\Entity\Entry
-     */
-    public function setUrlTitle($urlTitle)
-    {
-        $this->url_title = $urlTitle;
+	/**
+	 * Set hash
+	 *
+	 * @param string $hash
+	 * @return  \Entity\Entry
+	 */
+	public function setHash($hash)
+	{
+		$this->hash = $hash;
 		return $this;
-    }
+	}
 
-    /**
-     * Get url_title
-     *
-     * @return string
-     */
-    public function getUrlTitle()
-    {
-        return $this->url_title;
-    }
+	/**
+	 * Get hash
+	 *
+	 * @return string
+	 */
+	public function getHash()
+	{
+		return $this->hash;
+	}
 
-    /**
-     * Set file_path
-     *
-     * @param string $filePath
+	/**
+	 * Set url_title
+	 *
+	 * @param string $urlTitle
 	 * @return	\Entity\Entry
-     */
-    public function setFilePath($filePath)
-    {
-        $this->file_path = $filePath;
+	 */
+	public function setUrlTitle($urlTitle)
+	{
+		$this->url_title = $urlTitle;
 		return $this;
-    }
+	}
 
-    /**
-     * Get file_path
-     *
-     * @return string
-     */
-    public function getFilePath()
-    {
-        return $this->file_path;
-    }
+	/**
+	 * Get url_title
+	 *
+	 * @return string
+	 */
+	public function getUrlTitle()
+	{
+		return $this->url_title;
+	}
 
-    /**
-     * Set description
-     *
-     * @param text $description
+	/**
+	 * Set file_path
+	 *
+	 * @param string $filePath
 	 * @return	\Entity\Entry
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
+	 */
+	public function setFilePath($filePath)
+	{
+		$this->file_path = $filePath;
 		return $this;
-    }
+	}
 
-    /**
-     * Get description
-     *
-     * @return text
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
+	/**
+	 * Get file_path
+	 *
+	 * @return string
+	 */
+	public function getFilePath()
+	{
+		return $this->file_path;
+	}
 
-    /**
-     * Set type
-     *
-     * @param string $type
+	/**
+	 * Set description
+	 *
+	 * @param text $description
 	 * @return	\Entity\Entry
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
+	 */
+	public function setDescription($description)
+	{
+		$this->description = $description;
 		return $this;
-    }
+	}
 
-    /**
-     * Get type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
+	/**
+	 * Get description
+	 *
+	 * @return text
+	 */
+	public function getDescription()
+	{
+		return $this->description;
+	}
 
-    /**
-     * Add ratings
-     *
-     * @return	\Entity\EntryRating $ratings
-     */
-    public function addRating(\Entity\EntryRating $ratings)
-    {
-        $this->ratings[] = $ratings;
-    }
-
-    /**
-     * Get ratings
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRatings()
-    {
-        return $this->ratings;
-    }
-
-    /**
-     * Set user
-     *
-     * @return	\Entity\User $user
+	/**
+	 * Set type
+	 *
+	 * @param string $type
 	 * @return	\Entity\Entry
-     */
-    public function setUser(\Entity\User $user)
-    {
-        $this->user = $user;
+	 */
+	public function setType($type)
+	{
+		$this->type = $type;
+		return $this;
+	}
+
+	/**
+	 * Get type
+	 *
+	 * @return string
+	 */
+	public function getType()
+	{
+		return $this->type;
+	}
+
+	/**
+	 * Add ratings
+	 *
+	 * @return	\Entity\EntryRating $ratings
+	 */
+	public function addRating(\Entity\EntryRating $ratings)
+	{
+		$this->ratings[] = $ratings;
+	}
+
+	/**
+	 * Get ratings
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getRatings()
+	{
+		return $this->ratings;
+	}
+
+	/**
+	 * Set user
+	 *
+	 * @return	\Entity\User $user
+	 * @return	\Entity\Entry
+	 */
+	public function setUser(\Entity\User $user)
+	{
+		$this->user = $user;
 		$user->addEntry($this);
 		return $this;
-    }
+	}
 
-    /**
-     * Get user
-     *
-     * @return	\Entity\User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
+	/**
+	 * Get user
+	 *
+	 * @return	\Entity\User
+	 */
+	public function getUser()
+	{
+		return $this->user;
+	}
 
-    /**
-     * Set approved
-     *
-     * @param boolean $approved
+	/**
+	 * Set approved
+	 *
+	 * @param boolean $approved
 	 * @return	\Entity\Entry
-     */
-    public function setApproved($approved)
-    {
-        $this->approved = $approved;
+	 */
+	public function setApproved($approved)
+	{
+		$this->approved = $approved;
 		return $this;
-    }
+	}
 
-    /**
-     * Get approved
-     *
-     * @return boolean
-     */
-    public function getApproved()
-    {
-        return $this->approved;
-    }
+	/**
+	 * Get approved
+	 *
+	 * @return boolean
+	 */
+	public function getApproved()
+	{
+		return $this->approved;
+	}
 
 	/**
 	 * Alias for getApproved()
@@ -354,27 +375,27 @@ class Entry extends TimestampedModel implements \Serializable {
 		return (bool) $this->approved;
 	}
 
-    /**
-     * Set moderated_by
-     *
-     * @param	\Entity\Administrator $administrator
+	/**
+	 * Set moderated_by
+	 *
+	 * @param	\Entity\Administrator $administrator
 	 * @return	\Entity\Entry
-     */
-    public function setModeratedBy(\Entity\Administrator $administrator)
-    {
-        $this->moderated_by = $administrator;
+	 */
+	public function setModeratedBy(\Entity\Administrator $administrator)
+	{
+		$this->moderated_by = $administrator;
 		$administrator->addModeratedEntry($this);
 		return $this;
-    }
+	}
 
-    /**
-     * Get moderated_by
-     *
-     * @return	\Entity\Administrator
-     */
-    public function getModeratedBy()
-    {
-        return $this->moderated_by;
-    }
+	/**
+	 * Get moderated_by
+	 *
+	 * @return	\Entity\Administrator
+	 */
+	public function getModeratedBy()
+	{
+		return $this->moderated_by;
+	}
 
 }

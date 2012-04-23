@@ -41,12 +41,17 @@ class Entry_Controller extends Base_Controller
 	 */
 	public function post_submit()
 	{
-		$entry_image_error = Input::file('entry_image.error');
+		$validation_messages = array(
+			'required' => 'You forgot to enter the :attribute!',
+			'valid_image_url' => 'You need to either upload an image or enter an image URL.',
+		);
 
 		$validation_rules = array(
 			'title' => 'required|max:140',
 			'description' => 'max:2000',
 		);
+
+		$entry_image_error = Input::file('entry_image.error');
 
 		if ($entry_image_error === null || $entry_image_error === 4)
 		{
@@ -59,23 +64,18 @@ class Entry_Controller extends Base_Controller
 			$validation_rules['entry_image'] = 'image|max:' . Config::get('magicrainbowadventure.max_upload_size');
 		}
 
-		$validation_messages = array(
-			'required' => 'You forgot to enter the :attribute!',
-			'valid_image_url' => 'You need to either upload an image or enter an image URL.',
-		);
-
 		$validation = \Validators\EntryValidator::make(Input::all(), $validation_rules, $validation_messages);
 
 		if ($validation->fails())
 		{
-			if (count($validation->errors->messages['image_url']) === 1)
+			if (isset($validation->errors->messages['image_url']) && count($validation->errors->messages['image_url']) === 1)
 			{
 				// In this case we know that the image_url field has failed
 				// the 'required' validation. We'll set a custom message instead.
 				$validation->errors->messages['image_url'][0] = $validation_messages['valid_image_url'];
 			}
 
-			return Redirect::to('entry/submit')->with_errors($validation);
+			return Redirect::to('entry/submit')->with_input()->with_errors($validation);
 		}
 
 		$entry = new \Entity\Entry;
@@ -83,9 +83,27 @@ class Entry_Controller extends Base_Controller
 			->setDescription(Input::get('description'))
 			->setUser($this->user);
 
-		// Administrators don't need their entries approved
+		if (Input::get('image_url') !== '')
+		{
+			$handle = tmpfile();
+			$curl = new \EasyCurl(Input::get('image_url'));
+			$curl->execute(true, $handle);
+			$content_type = $curl->get_content_type();
+		}
+		else
+		{
+			$handle = fopen(Input::file('entry_image.tmp_name'), 'rb');
+			$content_type = Input::file('entry_image.type');
+		}
+
+		$mimes = Config::get('mimes');
+		$extension = \Helpers\ArrayHelper::recursive_array_search($content_type, $mimes);
+
+		$entry->uploadFile($handle, $extension);
+
 		if ($this->user->isAdmin())
 		{
+			// Administrators don't need their entries approved
 			$entry->setApproved(true)
 				->setModeratedBy($this->user);
 		}

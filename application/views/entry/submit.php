@@ -1,5 +1,5 @@
 <?=Form::open_for_files('entry/submit')?>
-<?=var_dump($errors)?>
+
 <div>
 	<?=Form::label('title', 'Title')?>
 	<?=Form::text('title', Input::old('title'), array('maxlength' => 1400))?>
