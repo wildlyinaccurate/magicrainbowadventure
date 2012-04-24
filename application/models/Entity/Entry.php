@@ -83,21 +83,23 @@ class Entry extends TimestampedModel implements \Serializable
 	/**
 	 * Upload the entry's file to Dropbox. The file's extension must be specified.
 	 *
-	 * @param  resource $handle
+	 * @param  string 	$file
 	 * @param  string   $extension
 	 * @return \Entity\Entry
 	 */
-	public function uploadFile($handle, $extension)
+	public function uploadFile($file, $extension)
 	{
-		$file_hash = hash_file('sha1', $handle);
-		$file_path = date('Y/m') . "/{$file_hash}.{$extension}";
+		$file_hash = hash_file('sha1', $file);
+		$file_name = "{$file_hash}.{$extension}";
+		$file_path = \Config::get('dropbox_base_path') . '/' . date('Y/m');
 
 		$this->setHash($file_hash)
-			->setFilePath($file_path);
+			->setFilePath("{$file_path}/{$file_name}");
 
 		$dropbox = \IoC::resolve('dropbox::api');
+		$response = $dropbox->putFile($file, $file_name, $file_path);
 
-		print_r($this); exit;
+		print_r($response); exit;
 	}
 
 	/**

@@ -85,21 +85,24 @@ class Entry_Controller extends Base_Controller
 
 		if (Input::get('image_url') !== '')
 		{
-			$handle = tmpfile();
+			// Retrieve the image with cURL and store it in a temporary file
+			$entry_file_path = tempnam(sys_get_temp_dir(), Config::get('temp_file_prefix'));
+			$handle = fopen($entry_file_path, 'w+b');
+
 			$curl = new \EasyCurl(Input::get('image_url'));
 			$curl->execute(true, $handle);
 			$content_type = $curl->get_content_type();
 		}
 		else
 		{
-			$handle = fopen(Input::file('entry_image.tmp_name'), 'rb');
+			$entry_file_path = Input::file('entry_image.tmp_name');
 			$content_type = Input::file('entry_image.type');
 		}
 
 		$mimes = Config::get('mimes');
 		$extension = \Helpers\ArrayHelper::recursive_array_search($content_type, $mimes);
 
-		$entry->uploadFile($handle, $extension);
+		$entry->uploadFile($entry_file_path, $extension);
 
 		if ($this->user->isAdmin())
 		{

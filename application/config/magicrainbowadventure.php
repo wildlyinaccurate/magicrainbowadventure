@@ -14,4 +14,30 @@ return array(
 	*/
 	'max_upload_size' => '8192',
 
+	/*
+	|--------------------------------------------------------------------------
+	| Dropbox Folder Path
+	|--------------------------------------------------------------------------
+	|
+	| The base path for all files uploaded to Dropbox, relative to /Public.
+	|
+	*/
+	'dropbox_base_path' => 'MagicRainbowAdventure',
+
+	/*
+	|--------------------------------------------------------------------------
+	| Temporary File Prefix
+	|--------------------------------------------------------------------------
+	|
+	| The prefix given to tempnam() when handling external images.
+	|
+	| When an entry's image is pulled in from an external URL, the application
+	| will create a temporary file to store the image in before it is uploaded
+	| to Dropbox.
+	|
+	| See http://www.php.net/manual/en/function.tempnam.php
+	|
+	*/
+	'temp_file_prefix' => 'MRA',
+
 );
