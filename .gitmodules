@@ -1,0 +1,3 @@
+[submodule "bundles/dropbox"]
+	path = bundles/dropbox
+	url = git://github.com/wildlyinaccurate/dropbox-laravel.git
