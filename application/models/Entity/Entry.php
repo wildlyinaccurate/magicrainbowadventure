@@ -7,7 +7,6 @@ namespace Entity;
  *
  * @Entity(repositoryClass="Entity\EntryRepository")
  * @Table(name="entry", indexes={@index(name="entry_type_idx", columns={"type"})})
- * @HasLifecycleCallbacks
  * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
  */
 class Entry extends TimestampedModel implements \Serializable
@@ -83,23 +82,25 @@ class Entry extends TimestampedModel implements \Serializable
 	/**
 	 * Upload the entry's file to Dropbox. The file's extension must be specified.
 	 *
+	 * Returns the Dropbox API response.
+	 *
 	 * @param  string 	$file
 	 * @param  string   $extension
-	 * @return \Entity\Entry
+	 * @return array
 	 */
 	public function uploadFile($file, $extension)
 	{
 		$file_hash = hash_file('sha1', $file);
 		$file_name = "{$file_hash}.{$extension}";
-		$file_path = \Config::get('dropbox_base_path') . '/' . date('Y/m');
+		$file_path = \Config::get('magicrainbowadventure.dropbox_base_path') . '/' . date('Y/m');
 
 		$this->setHash($file_hash)
 			->setFilePath("{$file_path}/{$file_name}");
 
 		$dropbox = \IoC::resolve('dropbox::api');
-		$response = $dropbox->putFile($file, $file_name, $file_path);
+		$response = $dropbox->putFile($file, $file_name, "Public/{$file_path}");
 
-		print_r($response); exit;
+		return $response;
 	}
 
 	/**
@@ -146,16 +147,6 @@ class Entry extends TimestampedModel implements \Serializable
 		$dropbox_directory = $CI->config->item('dropbox_upload_path');
 
 		return $CI->dropbox->thumbnails("Public/{$dropbox_directory}/{$this->getFilePath()}", $size);
-	}
-
-	/**
-	 * Move the entry image from the tmp directory to a permanent directory.
-	 *
-	 * @PrePersist
-	 * @return	void
-	 */
-	public function prePersist()
-	{
 	}
 
 	/**
@@ -380,20 +371,21 @@ class Entry extends TimestampedModel implements \Serializable
 	/**
 	 * Set moderated_by
 	 *
-	 * @param	\Entity\Administrator $administrator
+	 * @param	\Entity\User $user
 	 * @return	\Entity\Entry
 	 */
-	public function setModeratedBy(\Entity\Administrator $administrator)
+	public function setModeratedBy(\Entity\User $user)
 	{
-		$this->moderated_by = $administrator;
-		$administrator->addModeratedEntry($this);
+		$this->moderated_by = $user;
+		$user->addModeratedEntry($this);
+
 		return $this;
 	}
 
 	/**
 	 * Get moderated_by
 	 *
-	 * @return	\Entity\Administrator
+	 * @return	\Entity\User
 	 */
 	public function getModeratedBy()
 	{

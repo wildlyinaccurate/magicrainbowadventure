@@ -71,7 +71,7 @@ class EasyCurl
 
 		if ($file !== null)
 		{
-			curl_setopt($this->curl, CURLOPT_INFILE, $file);
+			curl_setopt($this->curl, CURLOPT_FILE, $file);
 		}
 
 		$this->result = curl_exec($this->curl);

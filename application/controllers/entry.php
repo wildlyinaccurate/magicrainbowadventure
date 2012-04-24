@@ -86,7 +86,7 @@ class Entry_Controller extends Base_Controller
 		if (Input::get('image_url') !== '')
 		{
 			// Retrieve the image with cURL and store it in a temporary file
-			$entry_file_path = tempnam(sys_get_temp_dir(), Config::get('temp_file_prefix'));
+			$entry_file_path = tempnam(sys_get_temp_dir(), Config::get('magicrainbowadventure.temp_file_prefix'));
 			$handle = fopen($entry_file_path, 'w+b');
 
 			$curl = new \EasyCurl(Input::get('image_url'));
@@ -99,9 +99,11 @@ class Entry_Controller extends Base_Controller
 			$content_type = Input::file('entry_image.type');
 		}
 
+		// Determine the extension of the file so that we can save it correctly
 		$mimes = Config::get('mimes');
 		$extension = \Helpers\ArrayHelper::recursive_array_search($content_type, $mimes);
 
+		// Upload the file to Dropbox
 		$entry->uploadFile($entry_file_path, $extension);
 
 		if ($this->user->isAdmin())
