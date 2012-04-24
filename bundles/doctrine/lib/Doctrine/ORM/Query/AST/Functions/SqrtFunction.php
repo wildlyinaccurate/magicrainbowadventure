@@ -41,9 +41,8 @@ class SqrtFunction extends FunctionNode
      */
     public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
     {
-        return $sqlWalker->getConnection()->getDatabasePlatform()->getSqrtExpression(
-            $sqlWalker->walkSimpleArithmeticExpression($this->simpleArithmeticExpression)
-        );
+        //TODO: Use platform to get SQL
+        return 'SQRT(' . $sqlWalker->walkSimpleArithmeticExpression($this->simpleArithmeticExpression) . ')';
     }
 
     /**

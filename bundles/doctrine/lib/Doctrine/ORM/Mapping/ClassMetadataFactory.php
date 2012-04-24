@@ -395,7 +395,7 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
      */
     protected function newClassMetadataInstance($className)
     {
-        return new ClassMetadata($className, $this->em->getConfiguration()->getNamingStrategy());
+        return new ClassMetadata($className);
     }
 
     /**
@@ -406,7 +406,7 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
      */
     private function addInheritedFields(ClassMetadata $subClass, ClassMetadata $parentClass)
     {
-        foreach ($parentClass->fieldMappings as $mapping) {
+        foreach ($parentClass->fieldMappings as $fieldName => $mapping) {
             if ( ! isset($mapping['inherited']) && ! $parentClass->isMappedSuperclass) {
                 $mapping['inherited'] = $parentClass->name;
             }
@@ -515,19 +515,8 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
             case ClassMetadata::GENERATOR_TYPE_NONE:
                 $class->setIdGenerator(new \Doctrine\ORM\Id\AssignedGenerator());
                 break;
-            case ClassMetadata::GENERATOR_TYPE_UUID:
-                $class->setIdGenerator(new \Doctrine\ORM\Id\UuidGenerator());
-                break;
             case ClassMetadata::GENERATOR_TYPE_TABLE:
                 throw new ORMException("TableGenerator not yet implemented.");
-                break;
-            case ClassMetadata::GENERATOR_TYPE_CUSTOM:
-                $definition = $class->customGeneratorDefinition;
-                if (!class_exists($definition['class'])) {
-                    throw new ORMException("Can't instantiate custom generator : " .
-                        $definition['class']);
-                }
-                $class->setIdGenerator(new $definition['class']);
                 break;
             default:
                 throw new ORMException("Unknown generator type: " . $class->generatorType);

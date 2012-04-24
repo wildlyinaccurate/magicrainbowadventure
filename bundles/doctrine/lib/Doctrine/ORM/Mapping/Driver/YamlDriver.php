@@ -96,10 +96,9 @@ class YamlDriver extends AbstractFileDriver
                 if (isset($element['discriminatorColumn'])) {
                     $discrColumn = $element['discriminatorColumn'];
                     $metadata->setDiscriminatorColumn(array(
-                        'name' => isset($discrColumn['name']) ? (string)$discrColumn['name'] : null,
-                        'type' => isset($discrColumn['type']) ? (string)$discrColumn['type'] : null,
-                        'length' => isset($discrColumn['length']) ? (string)$discrColumn['length'] : null,
-                        'columnDefinition' => isset($discrColumn['columnDefinition']) ? (string)$discrColumn['columnDefinition'] : null
+                        'name' => $discrColumn['name'],
+                        'type' => $discrColumn['type'],
+                        'length' => $discrColumn['length']
                     ));
                 } else {
                     $metadata->setDiscriminatorColumn(array('name' => 'dtype', 'type' => 'string', 'length' => 255));
@@ -157,10 +156,6 @@ class YamlDriver extends AbstractFileDriver
             }
         }
 
-        if (isset($element['options'])) {
-            $metadata->table['options'] = $element['options'];
-        }
-
         $associationIds = array();
         if (isset($element['id'])) {
             // Evaluate identifier settings
@@ -200,11 +195,6 @@ class YamlDriver extends AbstractFileDriver
                 // Check for SequenceGenerator/TableGenerator definition
                 if (isset($idElement['sequenceGenerator'])) {
                     $metadata->setSequenceGeneratorDefinition($idElement['sequenceGenerator']);
-                } else if (isset($idElement['customIdGenerator'])) {
-                    $customGenerator = $idElement['customIdGenerator'];
-                    $metadata->setCustomGeneratorDefinition(array(
-                        'class' => (string) $customGenerator['class']
-                    ));
                 } else if (isset($idElement['tableGenerator'])) {
                     throw MappingException::tableIdGeneratorNotImplemented($className);
                 }

@@ -48,15 +48,6 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo,
 class EntityGenerator
 {
     /**
-     * Specifies class fields should be protected
-     */
-    const FIELD_VISIBLE_PROTECTED = 'protected';
-    /**
-     * Specifies class fields should be private
-     */
-    const FIELD_VISIBLE_PRIVATE = 'private';
-
-    /**
      * @var bool
      */
     private $_backupExisting = true;
@@ -95,8 +86,6 @@ class EntityGenerator
     /** Whether or not to re-generate entity class if it exists already */
     private $_regenerateEntityIfExists = false;
 
-    private $_fieldVisibility = 'private';
-
     private static $_classTemplate =
 '<?php
 
@@ -108,8 +97,7 @@ use Doctrine\ORM\Mapping as ORM;
 <entityClassName>
 {
 <entityBody>
-}
-';
+}';
 
     private static $_getMethodTemplate =
 '/**
@@ -314,21 +302,6 @@ public function <methodName>()
     }
 
     /**
-     * Set the class fields visibility for the entity (can either be private or protected)
-     *
-     * @param bool $bool
-     * @return void
-     */
-    public function setFieldVisibility($visibility)
-    {
-        if ($visibility !== self::FIELD_VISIBLE_PRIVATE && $visibility !== self::FIELD_VISIBLE_PROTECTED) {
-            throw new \InvalidArgumentException('Invalid provided visibilty (only private and protected are allowed): ' . $visibility);
-        }
-
-        $this->_fieldVisibility = $visibility;
-    }
-
-    /**
      * Set an annotation prefix.
      *
      * @param string $prefix
@@ -430,7 +403,7 @@ public function <methodName>()
 
         $collections = array();
 
-        foreach ($metadata->associationMappings as $mapping) {
+        foreach ($metadata->associationMappings AS $mapping) {
             if ($mapping['type'] & ClassMetadataInfo::TO_MANY) {
                 $collections[] = '$this->'.$mapping['fieldName'].' = new \Doctrine\Common\Collections\ArrayCollection();';
             }
@@ -756,7 +729,7 @@ public function <methodName>()
             }
 
             $lines[] = $this->_generateAssociationMappingPropertyDocBlock($associationMapping, $metadata);
-            $lines[] = $this->_spaces . $this->_fieldVisibility . ' $' . $associationMapping['fieldName']
+            $lines[] = $this->_spaces . 'private $' . $associationMapping['fieldName']
                      . ($associationMapping['type'] == 'manyToMany' ? ' = array()' : null) . ";\n";
         }
 
@@ -774,7 +747,7 @@ public function <methodName>()
             }
 
             $lines[] = $this->_generateFieldMappingPropertyDocBlock($fieldMapping, $metadata);
-            $lines[] = $this->_spaces . $this->_fieldVisibility . ' $' . $fieldMapping['fieldName']
+            $lines[] = $this->_spaces . 'private $' . $fieldMapping['fieldName']
                      . (isset($fieldMapping['default']) ? ' = ' . var_export($fieldMapping['default'], true) : null) . ";\n";
         }
 

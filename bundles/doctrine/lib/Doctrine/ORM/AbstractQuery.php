@@ -211,15 +211,15 @@ abstract class AbstractQuery
      */
     public function setParameter($key, $value, $type = null)
     {
-        $key   = trim($key, ':');
-        $value = $this->processParameterValue($value);
+        $key = trim($key, ':');
 
+        $value = $this->processParameterValue($value);
         if ($type === null) {
             $type = Query\ParameterTypeInferer::inferType($value);
         }
 
         $this->_paramTypes[$key] = $type;
-        $this->_params[$key]     = $value;
+        $this->_params[$key] = $value;
 
         return $this;
     }
@@ -234,9 +234,9 @@ abstract class AbstractQuery
     {
         switch (true) {
             case is_array($value):
-                foreach ($value as $key => $paramValue) {
-                    $paramValue  = $this->processParameterValue($paramValue);
-                    $value[$key] = is_array($paramValue) ? $paramValue[key($paramValue)] : $paramValue;
+                for ($i = 0, $l = count($value); $i < $l; $i++) {
+                    $paramValue = $this->processParameterValue($value[$i]);
+                    $value[$i] = is_array($paramValue) ? $paramValue[key($paramValue)] : $paramValue;
                 }
 
                 return $value;
@@ -254,22 +254,18 @@ abstract class AbstractQuery
         $class = $this->_em->getClassMetadata(get_class($value));
 
         if ($class->isIdentifierComposite) {
-            throw new \InvalidArgumentException(
-                "Binding an entity with a composite primary key to a query is not supported. " .
-                "You should split the parameter into the explicit fields and bind them seperately."
-            );
+            throw new \InvalidArgumentException("Binding an entity with a composite primary key to a query is not supported. You should split the parameter into the explicit fields and bind them seperately.");
         }
 
-        $values = ($this->_em->getUnitOfWork()->getEntityState($value) === UnitOfWork::STATE_MANAGED)
-            ? $this->_em->getUnitOfWork()->getEntityIdentifier($value)
-            : $class->getIdentifierValues($value);
+        if ($this->_em->getUnitOfWork()->getEntityState($value) === UnitOfWork::STATE_MANAGED) {
+            $values = $this->_em->getUnitOfWork()->getEntityIdentifier($value);
+        } else {
+            $values = $class->getIdentifierValues($value);
+        }
 
         $value = $values[$class->getSingleIdentifierFieldName()];
-
-        if ( ! $value) {
-            throw new \InvalidArgumentException(
-                "Binding entities to query parameters only allowed for entities that have an identifier."
-            );
+        if (!$value) {
+            throw new \InvalidArgumentException("Binding entities to query parameters only allowed for entities that have an identifier.");
         }
 
         return $value;
@@ -777,7 +773,7 @@ abstract class AbstractQuery
 
     /**
      * Set the result cache id to use to store the result set cache entry.
-     * If this is not explicitly set by the developer then a hash is automatically
+     * If this is not explicitely set by the developer then a hash is automatically
      * generated for you.
      *
      * @param string $id

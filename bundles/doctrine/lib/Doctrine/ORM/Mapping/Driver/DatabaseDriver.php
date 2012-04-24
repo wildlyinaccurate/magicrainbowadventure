@@ -94,12 +94,12 @@ class DatabaseDriver implements Driver
     public function setTables($entityTables, $manyToManyTables)
     {
         $this->tables = $this->manyToManyTables = $this->classToTableNames = array();
-        foreach ($entityTables as $table) {
+        foreach ($entityTables AS $table) {
             $className = $this->getClassNameForTable($table->getName());
             $this->classToTableNames[$className] = $table->getName();
             $this->tables[$table->getName()] = $table;
         }
-        foreach ($manyToManyTables as $table) {
+        foreach ($manyToManyTables AS $table) {
             $this->manyToManyTables[$table->getName()] = $table;
         }
     }
@@ -117,7 +117,7 @@ class DatabaseDriver implements Driver
         }
 
         $this->tables = $this->manyToManyTables = $this->classToTableNames = array();
-        foreach ($tables as $tableName => $table) {
+        foreach ($tables AS $tableName => $table) {
             /* @var $table Table */
             if ($this->_sm->getDatabasePlatform()->supportsForeignKeyConstraints()) {
                 $foreignKeys = $table->getForeignKeys();
@@ -126,7 +126,7 @@ class DatabaseDriver implements Driver
             }
 
             $allForeignKeyColumns = array();
-            foreach ($foreignKeys as $foreignKey) {
+            foreach ($foreignKeys AS $foreignKey) {
                 $allForeignKeyColumns = array_merge($allForeignKeyColumns, $foreignKey->getLocalColumns());
             }
 
@@ -184,7 +184,7 @@ class DatabaseDriver implements Driver
         }
 
         $allForeignKeyColumns = array();
-        foreach ($foreignKeys as $foreignKey) {
+        foreach ($foreignKeys AS $foreignKey) {
             $allForeignKeyColumns = array_merge($allForeignKeyColumns, $foreignKey->getLocalColumns());
         }
 
@@ -232,13 +232,13 @@ class DatabaseDriver implements Driver
             $metadata->mapField($fieldMapping);
         }
 
-        foreach ($this->manyToManyTables as $manyTable) {
-            foreach ($manyTable->getForeignKeys() as $foreignKey) {
+        foreach ($this->manyToManyTables AS $manyTable) {
+            foreach ($manyTable->getForeignKeys() AS $foreignKey) {
                 // foreign  key maps to the table of the current entity, many to many association probably exists
                 if (strtolower($tableName) == strtolower($foreignKey->getForeignTableName())) {
                     $myFk = $foreignKey;
                     $otherFk = null;
-                    foreach ($manyTable->getForeignKeys() as $foreignKey) {
+                    foreach ($manyTable->getForeignKeys() AS $foreignKey) {
                         if ($foreignKey != $myFk) {
                             $otherFk = $foreignKey;
                             break;

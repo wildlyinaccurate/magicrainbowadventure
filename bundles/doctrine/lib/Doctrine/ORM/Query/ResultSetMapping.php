@@ -171,7 +171,7 @@ class ResultSetMapping
     {
         $found = false;
 
-        foreach ($this->fieldMappings as $columnName => $columnFieldName) {
+        foreach ($this->fieldMappings AS $columnName => $columnFieldName) {
             if ( ! ($columnFieldName === $fieldName && $this->columnOwnerMap[$columnName] === $alias)) continue;
 
             $this->addIndexByColumn($alias, $columnName);
@@ -308,10 +308,10 @@ class ResultSetMapping
      *
      * @todo Rename: addScalar
      */
-    public function addScalarResult($columnName, $alias, $type = 'string')
+    public function addScalarResult($columnName, $alias, $type = null)
     {
         $this->scalarMappings[$columnName] = $alias;
-        $this->typeMappings[$columnName]   = $type;
+        $this->typeMappings[$columnName]   = $type ?: 'string';
 
         if ( ! $this->isMixed && $this->fieldMappings) {
             $this->isMixed = true;

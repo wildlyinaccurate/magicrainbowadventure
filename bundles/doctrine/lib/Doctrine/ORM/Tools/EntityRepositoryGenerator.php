@@ -50,8 +50,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class <className> extends EntityRepository
 {
-}
-';
+}';
 
     public function generateEntityRepositoryClass($fullClassName)
     {

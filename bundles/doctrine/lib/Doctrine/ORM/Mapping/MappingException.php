@@ -34,18 +34,8 @@ class MappingException extends \Doctrine\ORM\ORMException
 
     public static function identifierRequired($entityName)
     {
-        if (null !== ($parent = get_parent_class($entityName))) {
-            return new self(sprintf(
-                'No identifier/primary key specified for Entity "%s" sub class of "%s". Every Entity must have an identifier/primary key.',
-                $entityName, $parent
-            ));
-        }
-
-        return new self(sprintf(
-            'No identifier/primary key specified for Entity "%s". Every Entity must have an identifier/primary key.',
-            $entityName
-        ));
-
+        return new self("No identifier/primary key specified for Entity '$entityName'."
+                . " Every Entity must have an identifier/primary key.");
     }
 
     public static function invalidInheritanceType($entityName, $type)
@@ -154,17 +144,7 @@ class MappingException extends \Doctrine\ORM\ORMException
 
     public static function classIsNotAValidEntityOrMappedSuperClass($className)
     {
-        if (null !== ($parent = get_parent_class($className))) {
-            return new self(sprintf(
-                'Class "%s" sub class of "%s" is not a valid entity or mapped super class.',
-                $className, $parent
-            ));
-        }
-
-        return new self(sprintf(
-            'Class "%s" is not a valid entity or mapped super class.',
-            $className
-        ));
+        return new self('Class '.$className.' is not a valid entity or mapped super class.');
     }
 
     public static function propertyTypeIsRequired($className, $propertyName)
@@ -244,11 +224,6 @@ class MappingException extends \Doctrine\ORM\ORMException
     public static function invalidDiscriminatorColumnType($className, $type)
     {
         return new self("Discriminator column type on entity class '$className' is not allowed to be '$type'. 'string' or 'integer' type variables are suggested!");
-    }
-
-    public static function nameIsMandatoryForDiscriminatorColumns($className)
-    {
-        return new self("Discriminator column name on entity class '$className' is not defined.");
     }
 
     public static function cannotVersionIdField($className, $fieldName)
@@ -353,14 +328,5 @@ class MappingException extends \Doctrine\ORM\ORMException
     public static function invalidTargetEntityClass($targetEntity, $sourceEntity, $associationName)
     {
         return new self("The target-entity " . $targetEntity . " cannot be found in '" . $sourceEntity."#".$associationName."'.");
-    }
-
-    public static function invalidCascadeOption(array $cascades)
-    {
-        $cascades = implode(", ", array_map(function ($e) { return "'" . $e . "'"; }, $cascades));
-        return new self(
-            "Invalid cascade option(s) specified: " . $cascades . ". " .
-            "Only 'remove', 'persist', 'refresh', 'merge' and 'detach' are allowed."
-        );
     }
 }

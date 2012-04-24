@@ -508,20 +508,10 @@ abstract class AbstractPlatform
     }
 
     /**
-     * Returns the squared value of a column
-     *
-     * @param string $column    the column to use
-     * @return string           generated sql including an SQRT aggregate function
-     */
-    public function getSqrtExpression($column)
-    {
-        return 'SQRT(' . $column . ')';
-    }
-
-    /**
      * Rounds a numeric field to the number of decimals specified.
      *
      * @param string $expression1
+     * @param string $expression2
      * @return string
      */
     public function getRoundExpression($column, $decimals = 0)
@@ -713,7 +703,7 @@ abstract class AbstractPlatform
         $values = $this->getIdentifiers($values);
 
         if (count($values) == 0) {
-            throw new \InvalidArgumentException('Values must not be empty.');
+            throw \InvalidArgumentException('Values must not be empty.');
         }
         return $column . ' IN (' . implode(', ', $values) . ')';
     }
@@ -1038,7 +1028,6 @@ abstract class AbstractPlatform
                 /* @var $index Index */
                 if ($index->isPrimary()) {
                     $options['primary'] = $index->getColumns();
-                    $options['primary_index'] = $index;
                 } else {
                     $options['indexes'][$index->getName()] = $index;
                 }
@@ -1261,27 +1250,16 @@ abstract class AbstractPlatform
         if ($index->isPrimary()) {
             return $this->getCreatePrimaryKeySQL($index, $table);
         } else {
+            $type = '';
+            if ($index->isUnique()) {
+                $type = 'UNIQUE ';
+            }
 
-            $query = 'CREATE ' . $this->getCreateIndexSQLFlags($index) . 'INDEX ' . $name . ' ON ' . $table;
+            $query = 'CREATE ' . $type . 'INDEX ' . $name . ' ON ' . $table;
             $query .= ' (' . $this->getIndexFieldDeclarationListSQL($columns) . ')';
         }
 
         return $query;
-    }
-
-    /**
-     * Adds additional flags for index generation
-     *
-     * @param Index $index
-     * @return string
-     */
-    protected function getCreateIndexSQLFlags(Index $index)
-    {
-        $type = '';
-        if ($index->isUnique()) {
-            $type = 'UNIQUE ';
-        }
-        return $type;
     }
 
     /**
@@ -1677,6 +1655,7 @@ abstract class AbstractPlatform
                     $default = " DEFAULT ".$field['default'];
                 } else if ((string)$field['type'] == 'DateTime' && $field['default'] == $this->getCurrentTimestampSQL()) {
                     $default = " DEFAULT ".$this->getCurrentTimestampSQL();
+
                 } else if ((string) $field['type'] == 'Boolean') {
                     $default = " DEFAULT '" . $this->convertBooleans($field['default']) . "'";
                 }
@@ -1724,7 +1703,7 @@ abstract class AbstractPlatform
     public function getUniqueConstraintDeclarationSQL($name, Index $index)
     {
         if (count($index->getColumns()) == 0) {
-            throw new \InvalidArgumentException("Incomplete definition. 'columns' required.");
+            throw \InvalidArgumentException("Incomplete definition. 'columns' required.");
         }
 
         return 'CONSTRAINT ' . $name . ' UNIQUE ('
@@ -1749,7 +1728,7 @@ abstract class AbstractPlatform
         }
 
         if (count($index->getColumns()) == 0) {
-            throw new \InvalidArgumentException("Incomplete definition. 'columns' required.");
+            throw \InvalidArgumentException("Incomplete definition. 'columns' required.");
         }
 
         return $type . 'INDEX ' . $name . ' ('
@@ -2430,16 +2409,6 @@ abstract class AbstractPlatform
     public function getIdentityColumnNullInsertSQL()
     {
         return "";
-    }
-
-    /**
-     * Does this platform views ?
-     *
-     * @return boolean
-     */
-    public function supportsViews()
-    {
-        return true;
     }
 
     /**

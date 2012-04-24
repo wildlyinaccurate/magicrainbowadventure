@@ -498,6 +498,7 @@ class BasicEntityPersister
                 continue;
             }
 
+            $oldVal = $change[0];
             $newVal = $change[1];
 
             if (isset($this->_class->associationMappings[$field])) {
@@ -710,6 +711,7 @@ class BasicEntityPersister
      */
     public function loadAll(array $criteria = array(), array $orderBy = null, $limit = null, $offset = null)
     {
+        $entities = array();
         $sql = $this->_getSelectEntitiesSQL($criteria, null, 0, $limit, $offset, $orderBy);
         list($params, $types) = $this->expandParameters($criteria);
         $stmt = $this->_conn->executeQuery($sql, $params, $types);
@@ -993,7 +995,7 @@ class BasicEntityPersister
                 $assocAlias = 'e' . ($eagerAliasCounter++);
                 $this->_rsm->addJoinedEntityResult($assoc['targetEntity'], $assocAlias, 'r', $assocField);
 
-                foreach ($eagerEntity->fieldNames as $field) {
+                foreach ($eagerEntity->fieldNames AS $field) {
                     if ($columnList) $columnList .= ', ';
 
                     $columnList .= $this->_getSelectColumnSQL($field, $eagerEntity, $assocAlias);
@@ -1014,7 +1016,7 @@ class BasicEntityPersister
                     $this->_selectJoinSql .= ' ' . $eagerEntity->getQuotedTableName($this->_platform) . ' ' . $this->_getSQLTableAlias($eagerEntity->name, $assocAlias) .' ON ';
 
                     $tableAlias = $this->_getSQLTableAlias($assoc['targetEntity'], $assocAlias);
-                    foreach ($assoc['sourceToTargetKeyColumns'] as $sourceCol => $targetCol) {
+                    foreach ($assoc['sourceToTargetKeyColumns'] AS $sourceCol => $targetCol) {
                         if ( ! $first) {
                             $this->_selectJoinSql .= ' AND ';
                         }
@@ -1035,7 +1037,7 @@ class BasicEntityPersister
                     $this->_selectJoinSql .= ' ' . $eagerEntity->getQuotedTableName($this->_platform) . ' '
                                            . $this->_getSQLTableAlias($eagerEntity->name, $assocAlias) . ' ON ';
 
-                    foreach ($owningAssoc['sourceToTargetKeyColumns'] as $sourceCol => $targetCol) {
+                    foreach ($owningAssoc['sourceToTargetKeyColumns'] AS $sourceCol => $targetCol) {
                         if ( ! $first) {
                             $this->_selectJoinSql .= ' AND ';
                         }
@@ -1137,13 +1139,13 @@ class BasicEntityPersister
                 $columns = array_unique($columns);
 
                 $values = array();
-                foreach ($columns as $column) {
+                foreach ($columns AS $column) {
                     $placeholder = '?';
 
-                    if (isset($this->_class->fieldNames[$column]) &&
-                        isset($this->_columnTypes[$this->_class->fieldNames[$column]]) &&
+                    if (isset($this->_columnTypes[$column]) &&
+                        isset($this->_class->fieldNames[$column]) &&
                         isset($this->_class->fieldMappings[$this->_class->fieldNames[$column]]['requireSQLConversion'])) {
-                        $type = Type::getType($this->_columnTypes[$this->_class->fieldNames[$column]]);
+                        $type = Type::getType($this->_columnTypes[$column]);
                         $placeholder = $type->convertToDatabaseValueSQL('?', $this->_platform);
                     }
 
@@ -1265,7 +1267,7 @@ class BasicEntityPersister
 
         list($params, $types) = $this->expandParameters($criteria);
 
-        $this->_conn->executeQuery($sql, $params, $types);
+        $stmt = $this->_conn->executeQuery($sql, $params, $types);
     }
 
     /**
@@ -1416,7 +1418,7 @@ class BasicEntityPersister
     {
         $params = $types = array();
 
-        foreach ($criteria as $field => $value) {
+        foreach ($criteria AS $field => $value) {
             if ($value === null) {
                 continue; // skip null values.
             }
@@ -1537,7 +1539,7 @@ class BasicEntityPersister
             $sql .= ' AND ' . $filterSql;
         }
 
-        list($params) = $this->expandParameters($criteria);
+        list($params, $types) = $this->expandParameters($criteria);
 
         return (bool) $this->_conn->fetchColumn($sql, $params);
     }

@@ -59,9 +59,6 @@ class MySqlSchemaManager extends AbstractSchemaManager
             } else {
                 $v['primary'] = false;
             }
-            if (strpos($v['index_type'], 'FULLTEXT') !== false) {
-                $v['flags'] = array('FULLTEXT');
-            }
             $tableIndexes[$k] = $v;
         }
 

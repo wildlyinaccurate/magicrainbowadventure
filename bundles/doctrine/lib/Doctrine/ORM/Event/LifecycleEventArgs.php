@@ -56,7 +56,7 @@ class LifecycleEventArgs extends EventArgs
     }
 
     /**
-     * Retrieve associated Entity.
+     * Retireve associated Entity.
      *
      * @return object
      */

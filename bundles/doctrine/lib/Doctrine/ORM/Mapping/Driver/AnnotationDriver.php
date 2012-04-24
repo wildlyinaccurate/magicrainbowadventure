@@ -197,10 +197,6 @@ class AnnotationDriver implements Driver
                 }
             }
 
-            if ($tableAnnot->options !== null) {
-                $primaryTable['options'] = $tableAnnot->options;
-            }
-
             $metadata->setPrimaryTable($primaryTable);
         }
 
@@ -235,8 +231,7 @@ class AnnotationDriver implements Driver
                     $metadata->setDiscriminatorColumn(array(
                         'name' => $discrColumnAnnot->name,
                         'type' => $discrColumnAnnot->type,
-                        'length' => $discrColumnAnnot->length,
-                        'columnDefinition'    => $discrColumnAnnot->columnDefinition
+                        'length' => $discrColumnAnnot->length
                     ));
                 } else {
                     $metadata->setDiscriminatorColumn(array('name' => 'dtype', 'type' => 'string', 'length' => 255));
@@ -328,7 +323,7 @@ class AnnotationDriver implements Driver
                     $metadata->setIdGeneratorType(constant('Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_' . $generatedValueAnnot->strategy));
                 }
 
-                if ($this->_reader->getPropertyAnnotation($property, 'Doctrine\ORM\Mapping\Version')) {
+                if ($versionAnnot = $this->_reader->getPropertyAnnotation($property, 'Doctrine\ORM\Mapping\Version')) {
                     $metadata->setVersionMapping($mapping);
                 }
 
@@ -341,12 +336,8 @@ class AnnotationDriver implements Driver
                         'allocationSize' => $seqGeneratorAnnot->allocationSize,
                         'initialValue' => $seqGeneratorAnnot->initialValue
                     ));
-                } else if ($this->_reader->getPropertyAnnotation($property, 'Doctrine\ORM\Mapping\TableGenerator')) {
+                } else if ($tblGeneratorAnnot = $this->_reader->getPropertyAnnotation($property, 'Doctrine\ORM\Mapping\TableGenerator')) {
                     throw MappingException::tableIdGeneratorNotImplemented($className);
-                } else if ($customGeneratorAnnot = $this->_reader->getPropertyAnnotation($property, 'Doctrine\ORM\Mapping\CustomIdGenerator')) {
-                    $metadata->setCustomGeneratorDefinition(array(
-                        'class' => $customGeneratorAnnot->class
-                    ));
                 }
             } else if ($oneToOneAnnot = $this->_reader->getPropertyAnnotation($property, 'Doctrine\ORM\Mapping\OneToOne')) {
                 if ($idAnnot = $this->_reader->getPropertyAnnotation($property, 'Doctrine\ORM\Mapping\Id')) {

@@ -61,7 +61,7 @@ class ResolveTargetEntityListener
     public function loadClassMetadata(LoadClassMetadataEventArgs $args)
     {
         $cm = $args->getClassMetadata();
-        foreach ($cm->associationMappings as $mapping) {
+        foreach ($cm->associationMappings as $assocName => $mapping) {
             if (isset($this->resolveTargetEntities[$mapping['targetEntity']])) {
                 $this->remapAssociation($cm, $mapping);
             }

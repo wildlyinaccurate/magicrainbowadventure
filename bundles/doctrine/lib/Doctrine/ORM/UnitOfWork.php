@@ -255,7 +255,7 @@ class UnitOfWork implements PropertyChangedListener
      * 4) All collection updates
      * 5) All entity deletions
      *
-     * @param null|object|array $entity
+     * @param object $entity
      * @return void
      */
     public function commit($entity = null)
@@ -268,12 +268,8 @@ class UnitOfWork implements PropertyChangedListener
         // Compute changes done since last commit.
         if ($entity === null) {
             $this->computeChangeSets();
-        } elseif (is_object($entity)) {
+        } else {
             $this->computeSingleEntityChangeSet($entity);
-        } elseif (is_array($entity)) {
-            foreach ($entity as $object) {
-                $this->computeSingleEntityChangeSet($object);
-            }
         }
 
         if ( ! ($this->entityInsertions ||
@@ -735,17 +731,15 @@ class UnitOfWork implements PropertyChangedListener
 
         foreach ($unwrappedValue as $key => $entry) {
             $state = $this->getEntityState($entry, self::STATE_NEW);
+            $oid   = spl_object_hash($entry);
 
-            if ( ! ($entry instanceof $assoc['targetEntity'])) {
-                throw new ORMException(
-                    sprintf(
-                        'Found entity of type %s on association %s#%s, but expecting %s',
-                        get_class($entry),
-                        $assoc['sourceEntity'],
-                        $assoc['fieldName'],
-                        $targetClass->name
-                    )
-                );
+            if (!($entry instanceof $assoc['targetEntity'])) {
+                throw new ORMException(sprintf("Found entity of type %s on association %s#%s, but expecting %s",
+                    get_class($entry),
+                    $assoc['sourceEntity'],
+                    $assoc['fieldName'],
+                    $targetClass->name
+                ));
             }
 
             switch ($state) {
@@ -1042,7 +1036,7 @@ class UnitOfWork implements PropertyChangedListener
         // are not yet available.
         $newNodes = array();
 
-        foreach ($entityChangeSet as $entity) {
+        foreach ($entityChangeSet as $oid => $entity) {
             $className = get_class($entity);
 
             if ($calc->hasClass($className)) {
@@ -1689,8 +1683,7 @@ class UnitOfWork implements PropertyChangedListener
                     foreach ($id as $idField => $idValue) {
                         if (isset($class->associationMappings[$idField])) {
                             $targetClassMetadata = $this->em->getClassMetadata($class->associationMappings[$idField]['targetEntity']);
-                            $associatedId        = $this->getEntityIdentifier($idValue);
-
+                            $associatedId = $this->getEntityIdentifier($idValue);
                             $flatId[$idField] = $associatedId[$targetClassMetadata->identifier[0]];
                         }
                     }
@@ -1737,9 +1730,7 @@ class UnitOfWork implements PropertyChangedListener
             }
 
             // Merge state of $entity into existing (managed) entity
-            foreach ($class->reflClass->getProperties() as $prop) {
-                $name = $prop->name;
-                $prop->setAccessible(true);
+            foreach ($class->reflFields as $name => $prop) {
                 if ( ! isset($class->associationMappings[$name])) {
                     if ( ! $class->isIdentifier($name)) {
                         $prop->setValue($managedCopy, $prop->getValue($entity));
@@ -2455,9 +2446,9 @@ class UnitOfWork implements PropertyChangedListener
                         case (isset($this->identityMap[$targetClass->rootEntityName][$relatedIdHash])):
                             $newValue = $this->identityMap[$targetClass->rootEntityName][$relatedIdHash];
 
-                            // If this is an uninitialized proxy, we are deferring eager loads,
+                            // if this is an uninitialized proxy, we are deferring eager loads,
                             // this association is marked as eager fetch, and its an uninitialized proxy (wtf!)
-                            // then we can append this entity for eager loading!
+                            // then we cann append this entity for eager loading!
                             if ($hints['fetchMode'][$class->name][$field] == ClassMetadata::FETCH_EAGER &&
                                 isset($hints['deferEagerLoad']) &&
                                 !$targetClass->isIdentifierComposite &&
@@ -2563,15 +2554,13 @@ class UnitOfWork implements PropertyChangedListener
         $this->eagerLoadingEntities = array();
 
         foreach ($eagerLoadingEntities as $entityName => $ids) {
-            if ( ! $ids) {
-                continue;
-            }
-
             $class = $this->em->getClassMetadata($entityName);
 
-            $this->getEntityPersister($entityName)->loadAll(
-                array_combine($class->identifier, array(array_values($ids)))
-            );
+            if ($ids) {
+                $this->getEntityPersister($entityName)->loadAll(
+                    array_combine($class->identifier, array(array_values($ids)))
+                );
+            }
         }
     }
 
@@ -2951,7 +2940,7 @@ class UnitOfWork implements PropertyChangedListener
      */
     public function isReadOnly($object)
     {
-        if ( ! is_object($object)) {
+        if ( ! is_object($object) ) {
             throw ORMInvalidArgumentException::readOnlyRequiresManagedEntity($object);
         }
 

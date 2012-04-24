@@ -11,6 +11,8 @@ Doctrine\ORM\Tools\Setup::registerAutoloadGit(__DIR__);
 
 /**
  * Laravel Configuration Loader
+ *
+ * This is required when using the CLI.
  */
 Laravel\Event::listen(Laravel\Config::loader, function($bundle, $file)
 {
@@ -57,7 +59,7 @@ Laravel\Event::listen('laravel.started: doctrine', function()
 	}
 	else
 	{
-		$driverImpl = $config->newDefaultAnnotationDriver(Config::get('doctrine::config.models.directory'));
+		$driverImpl = $config->newDefaultAnnotationDriver(Config::get('doctrine::config.models'));
 	}
 
 	$config->setMetadataDriverImpl($driverImpl);

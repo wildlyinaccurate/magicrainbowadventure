@@ -69,7 +69,7 @@ class WhereInWalker extends TreeWalkerAdapter
     public function walkSelectStatement(SelectStatement $AST)
     {
         $rootComponents = array();
-        foreach ($this->_getQueryComponents() as $dqlAlias => $qComp) {
+        foreach ($this->_getQueryComponents() AS $dqlAlias => $qComp) {
             $isParent = array_key_exists('parent', $qComp)
                 && $qComp['parent'] === null
                 && $qComp['nestingLevel'] == 0
@@ -120,9 +120,7 @@ class WhereInWalker extends TreeWalkerAdapter
                         $conditionalPrimary
                     ))
                 ));
-            } elseif ($AST->whereClause->conditionalExpression instanceof ConditionalExpression
-                || $AST->whereClause->conditionalExpression instanceof ConditionalFactor
-            ) {
+            } elseif ($AST->whereClause->conditionalExpression instanceof ConditionalExpression) {
                 $tmpPrimary = new ConditionalPrimary;
                 $tmpPrimary->conditionalExpression = $AST->whereClause->conditionalExpression;
                 $AST->whereClause->conditionalExpression = new ConditionalTerm(array(
