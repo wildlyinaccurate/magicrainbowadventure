@@ -1,3 +1,6 @@
 [submodule "bundles/dropbox"]
 	path = bundles/dropbox
 	url = git://github.com/wildlyinaccurate/dropbox-laravel.git
+[submodule "bundles/doctrine"]
+	path = bundles/doctrine
+	url = git://github.com/wildlyinaccurate/doctrine-bundle.git
