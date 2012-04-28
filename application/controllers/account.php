@@ -17,7 +17,7 @@ class Account_Controller extends Base_Controller {
 	{
 		$this->auth->require_login();
 
-		$this->layout->title = lang('account');
+		$this->layout->title = Lang::line('general.account');
 		View::make('account/index', array(
 				'user' => $this->user
 			));
@@ -42,7 +42,7 @@ class Account_Controller extends Base_Controller {
 			});
 		}
 
-		$this->layout->title = lang('my_entries');
+		$this->layout->title = Lang::line('general.my_entries');
 		View::make('account/my-entries', array(
 				'entries' => $entries,
 				'thumb_width' => $this->config->item('thumb_width'),
@@ -57,10 +57,10 @@ class Account_Controller extends Base_Controller {
 	{
 		$this->auth->require_login();
 
-		$this->form_validation->set_rules('email', lang('field_email'), 'required|valid_email|callback__unique_email');
-		$this->form_validation->set_rules('display_name', lang('display_name'), 'max_length[160]');
-		$this->form_validation->set_rules('country', lang('field_country'), 'callback__valid_country');
-		$this->form_validation->set_rules('language', lang('field_language'), 'callback__valid_language');
+		$this->form_validation->set_rules('email', Lang::line('account.field_email'), 'required|valid_email|callback__unique_email');
+		$this->form_validation->set_rules('display_name', Lang::line('account.display_name'), 'max_length[160]');
+		$this->form_validation->set_rules('country', Lang::line('account.field_country'), 'callback__valid_country');
+		$this->form_validation->set_rules('language', Lang::line('account.field_language'), 'callback__valid_language');
 
 		if ($this->form_validation->run())
 		{
@@ -77,11 +77,11 @@ class Account_Controller extends Base_Controller {
 			$this->em->flush();
 
 			// Set a success message and redirect the user
-			set_message(lang('settings_saved'), 'success');
-			redirect('account/settings');
+			set_message(Lang::line('account.settings_saved'), 'success');
+			Redirect::to('account/settings');
 		}
 
-		$this->layout->title = lang('settings');
+		$this->layout->title = Lang::line('account.settings');
 		View::make('account/settings', array(
 				'user' => $this->user,
 				'countries' => $this->em->getRepository('Entity\Country')->getAllCountries(),
@@ -96,9 +96,9 @@ class Account_Controller extends Base_Controller {
 	{
 		$this->auth->require_login();
 
-		$this->form_validation->set_rules('password', lang('field_current_password'), 'required|callback__correct_password');
-		$this->form_validation->set_rules('new_password', lang('field_new_password'), 'min_length[6]|matches[password_confirm]');
-		$this->form_validation->set_message('matches', lang('validation_matches'));
+		$this->form_validation->set_rules('password', Lang::line('account.field_current_password'), 'required|callback__correct_password');
+		$this->form_validation->set_rules('new_password', Lang::line('account.field_new_password'), 'min_length[6]|matches[password_confirm]');
+		$this->form_validation->set_message('matches', Lang::line('account.validation_matches'));
 
 		if ($this->form_validation->run())
 		{
@@ -108,11 +108,11 @@ class Account_Controller extends Base_Controller {
 			$this->em->flush();
 
 			// Set a success message and redirect the user
-			set_status(lang('password_changed'), 'success');
-			redirect('account');
+			set_status(Lang::line('account.password_changed'), 'success');
+			Redirect::to('account');
 		}
 
-		$this->layout->title = lang('change_password');
+		$this->layout->title = Lang::line('account.change_password');
 		View::make('account/change-password', array(
 				'user' => $this->user
 			));
@@ -126,32 +126,29 @@ class Account_Controller extends Base_Controller {
 		// Attempt to log in
 		$identifier = Input::get('identifier');
 		$password = Input::get('password');
-		$login = FALSE; //Initial value
 
 		if ( ! Auth::attempt($identifier, $password))
 		{
 			// The page title changes if the user has been redirected to the login page
 			if (Input::get('return'))
 			{
-				$this->layout->title = lang('log_in_required');;
+				$this->layout->title = 'Login Required';
 			}
 
-			$this->layout
-				 ->title(lang('log_in'))
-				 ->build('account/login', array(
-				 	'login' => $login,
-				 ));
+			$this->layout->title = Lang::line('account.log_in');
+			$this->layout->content = View::make('account/login', array(
+			 ));
 		}
 		else
 		{
 			// Successful login - redirect to the previous page (if it is set)
 			if ($return = Input::get('return'))
 			{
-				redirect($return);
+				Redirect::to($return);
 			}
 
 			// No return URI was set; redirect to the default user page
-			redirect($this->config->item('default_user_page'));
+			Redirect::to($this->config->item('default_user_page'));
 		}
 	}
 
@@ -161,7 +158,7 @@ class Account_Controller extends Base_Controller {
 	public function logout()
 	{
 		$this->auth->logout();
-		redirect($this->config->item('default_guest_page'));
+		Redirect::to($this->config->item('default_guest_page'));
 	}
 
 	/**
@@ -172,24 +169,20 @@ class Account_Controller extends Base_Controller {
 		// If a user is already signed in, redirect them to the account index
 		if ($this->authenticated)
 		{
-			redirect('account');
+			Redirect::to('account');
 		}
 
-		$this->form_validation->set_rules('username', lang('field_username'), 'required|alpha_dash|max_length[32]|callback__unique_username');
-		$this->form_validation->set_rules('password', lang('field_password'), 'required|min_length[6]|matches[password_confirm]');
-		$this->form_validation->set_rules('email', lang('field_email'), 'required|valid_email|callback__unique_email');
-		$this->form_validation->set_rules('display_name', lang('field_display_name'), 'max_length[160]');
-		$this->form_validation->set_rules('country', lang('field_country'), 'callback__valid_country');
-		$this->form_validation->set_message('matches', lang('validation_matches'));
+		$this->form_validation->set_rules('username', Lang::line('account.field_username'), 'required|alpha_dash|max_length[32]|callback__unique_username');
+		$this->form_validation->set_rules('password', Lang::line('account.field_password'), 'required|min_length[6]|matches[password_confirm]');
+		$this->form_validation->set_rules('email', Lang::line('account.field_email'), 'required|valid_email|callback__unique_email');
+		$this->form_validation->set_rules('display_name', Lang::line('account.field_display_name'), 'max_length[160]');
+		$this->form_validation->set_message('matches', Lang::line('account.validation_matches'));
 
 		if ($this->form_validation->run() === FALSE)
 		{
-			$this->layout
-				 ->title(lang('sign_up'))
-				 ->build('account/signup', array(
-				 	'selected_country' => ! Input::get('country') ? $this->config->item('default_country') : Input::get('country'),
-				 	'countries' => $this->em->getRepository('Entity\Country')->getAllCountries()
-				 ));
+			$this->layout->title(Lang::line('general.sign_up'));
+			$this->layout->content = View::make('account/signup', array(
+			 ));
 		}
 		else
 		{
@@ -231,7 +224,7 @@ class Account_Controller extends Base_Controller {
 			// Authenticate the User
 			$this->auth->authenticate($user);
 
-			redirect($this->config->item('default_user_page'));
+			Redirect::to($this->config->item('default_user_page'));
 		}
 	}
 
@@ -335,7 +328,7 @@ class Account_Controller extends Base_Controller {
 		}
 
 		// Password is incorrect
-		$this->form_validation->set_message('_correct_password', lang('validation_current_password'));
+		$this->form_validation->set_message('_correct_password', Lang::line('general.validation_current_password'));
 		return FALSE;
 	}
 }

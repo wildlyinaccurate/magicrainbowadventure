@@ -1,7 +1,7 @@
-<section id="entries">
+<section class="entries">
 
 <?php foreach ($entries as $index => $entry): ?>
-	<div class="entry">
+	<article class="entry">
 		<h3><?=HTML::link("{$entry->getId()}/{$entry->getUrlTitle()}", $entry->getTitle())?></h3>
 
 		<a href="<?=URL::to("{$entry->getId()}/{$entry->getUrlTitle()}")?>">
@@ -13,7 +13,7 @@
 
 		<p class="description"><?=nl2br($entry->getDescription())?></p>
 		<p class="submitted-by">Submitted by <?=$entry->getUser()->getDisplayName()?> on <?=$entry->getCreatedDate()->format('d F Y')?></p>
-	</div>
+	</article>
 <?php endforeach; ?>
 
 </section> 

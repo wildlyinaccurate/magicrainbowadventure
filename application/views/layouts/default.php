@@ -1,12 +1,15 @@
 <!doctype html>
-<html lang="en">
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
 	<title><?=$title?> &ndash; Magic Rainbow Adventure!</title>
     <meta name="description" content="">
-    <meta name="author" content="Joseph Wynn / Magic Rainbow Adventure!">
+	<meta name="viewport" content="width=device-width">
 
 	<link href='http://fonts.googleapis.com/css?family=Coustard|Open+Sans:400,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" media="all" href="<?=URL::base();?>/basset/magicrainbowadventure.css">
@@ -29,36 +32,43 @@
 <body>
 
     <header>
-		<div class="container_12" id="heading">
-			<h1 class="grid_6"><?=HTML::link('/', 'Magic Rainbow Adventure!')?></h1>
+		<div class="container" id="heading">
+			<div class="row">
+				<h1 class="sixcol"><?=HTML::link('/', 'Magic Rainbow Adventure!')?></h1>
 
-			<nav id="main-navigation" class="grid_3"><?=$navigation?></nav>
-			<nav id="account-navigation" class="grid_3"><?=$account_menu?></nav>
+				<nav id="main-navigation" class="threecol"><?=$navigation?></nav>
+				<nav id="account-navigation" class="threecol last"><?=$account_menu?></nav>
+			</div>
 		</div>
 	</header>
 
-    <div id="content" class="container_12">
-        <div class="grid_8 alpha">
-			<section id="main">
-				<h2><?=$title?></h2>
+    <div id="content" class="container">
+		<div class="row">
+			<h2><?=$title?></h2>
+		</div>
+
+		<div class="row">
+			<div id="main" class="eightcol">
 				<?=$content?>
-			</section>
-		</div> <!-- #main -->
+			</div> <!-- #main -->
 
-		<div class="grid_4 omega">
-			<section id="sidebar">
-
-			</section>
+			<div id="sidebar" class="fourcol last">
+				<section class="lipsum">
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed egestas est eu massa lobortis ut vulputate nisl tristique. Aliquam dictum elementum imperdiet. Duis convallis tempus diam a rutrum. Maecenas diam odio, ultrices at porta sit amet, mattis eget neque. Praesent elit tortor, euismod vitae volutpat in, tristique nec odio. Curabitur sit amet felis purus, eu venenatis mi. Praesent non sem metus. Nulla placerat porttitor elit eget facilisis. Suspendisse tempor pulvinar metus, at posuere nibh tincidunt suscipit. In hac habitasse platea dictumst.</p>
+				</section>
+			</div>
 		</div>
 	</div> <!-- #content -->
 
-	<footer class="container_12">
-		<ul id="footer-links">
-			<li><?=HTML::link('about', 'About')?></li>
-			<li><?=HTML::link('privacy', 'Privacy')?></li>
-		</ul>
+	<footer class="container">
+		<div class="row">
+			<ul id="footer-links" class="eightcol">
+				<li><?=HTML::link('about', 'About')?></li>
+				<li><?=HTML::link('privacy', 'Privacy')?></li>
+			</ul>
 
-		<p id="copy-notice">Magic Rainbow Adventure! &copy; <?=date('Y')?>.</p>
+			<p id="copy-notice" class="fourcol">Magic Rainbow Adventure! &copy; <?=date('Y')?>.</p>
+		</div>
 	</footer>
 
     <script src="<?=URL::base();?>/basset/default.js"></script>

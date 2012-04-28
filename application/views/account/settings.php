@@ -8,13 +8,13 @@
 
 <div>
 	<label for="email">Your email address</label>
-	<input type="text" name="email" id="email" maxlength="255" value="<?=set_value('email', $user->getEmail())?>" />
+	<input type="text" name="email" id="email" maxlength="255" value="<?=Input::old('email', $user->getEmail())?>" />
 	<?=form_error('email')?>
 </div>
 
 <div>
 	<label for="display_name">Display name</label>
-	<input type="text" name="display_name" id="display_name" maxlength="160" value="<?=set_value('display_name', $user->getDisplayName())?>" />
+	<input type="text" name="display_name" id="display_name" maxlength="160" value="<?=Input::old('display_name', $user->getDisplayName())?>" />
 	<span class="note">Optional</span>
 	<?=form_error('display_name')?>
 </div>
@@ -40,7 +40,7 @@
 </div>
 
 <div id="controls">
-	<?=HTML::link('account', lang('cancel'), 'class="big negative button"')?>
+	<?=HTML::link('account', Lang::line('general.cancel'), 'class="big negative button"')?>
 	<button type="submit" name="save_settings" id="save_settings" class="big button">Save Settings</button>
 </div>
 <?=Form::close()?>

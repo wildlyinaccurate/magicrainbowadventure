@@ -172,7 +172,7 @@ class Entry_Controller extends Base_Controller
 		if ( ! $entry || ( ! $entry->isApproved() && ! $this->user->isAdmin() && $entry->getUser() != $this->user))
 		{
 			$this->output->set_status_header(404);
-			$this->layout->title = lang('not_found');
+			$this->layout->title = Lang::line('general.not_found');
 				View::make('entry/not-found');
 		}
 		elseif ($entry->isApproved() || $this->user->isAdmin())
@@ -295,7 +295,7 @@ class Entry_Controller extends Base_Controller
 			// Easy_curl is already loaded from _valid_image_url()
 			if ( ! $this->easy_curl->url_to_file(Input::get('image_url'), $file_path))
 			{
-				$this->upload_error = lang('url_to_file_error');
+				$this->upload_error = Lang::line('general.url_to_file_error');
 				return false;
 			}
 			else

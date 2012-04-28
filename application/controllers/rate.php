@@ -92,7 +92,7 @@ class Rate_Controller extends Base_Controller {
 		else
 		{
 			$entry = $entry_rating->getEntry();
-			redirect("{$entry->getId()}/{$entry->getUrlTitle()}");
+			Redirect::to("{$entry->getId()}/{$entry->getUrlTitle()}");
 		}
 	}
 
@@ -114,7 +114,7 @@ class Rate_Controller extends Base_Controller {
 		else
 		{
 			set_message(implode('<br />', $this->errors), 'error');
-			redirect('/');
+			Redirect::to('/');
 		}
 	}
 

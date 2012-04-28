@@ -5,19 +5,20 @@ namespace Entity;
 /**
  * User
  *
- * @Entity
+ * @Entity(repositoryClass="Entity\UserRepository")
  * @InheritanceType("SINGLE_TABLE")
  * @DiscriminatorColumn(name="type", type="string", length=15)
  * @DiscriminatorMap({"user" = "User", "administrator" = "Administrator"})
  * @Table(name="user")
  * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class User extends TimestampedModel implements \Serializable {
+class User extends TimestampedModel implements \Serializable
+{
 
-	/** @var \Entity\User The User currently logged in */
-	public static $current;
-
-	/** @var string */
+	/**
+	 *
+	 * @var string
+	 */
 	protected static $encryption_key = 'q@.qi)h23~U`Yu&&yzy,R$/bR=5g^bGC0\"s`}0D$iY$XAa9tL</}UPX(N9Mm2#';
 
 	/**
@@ -46,12 +47,6 @@ class User extends TimestampedModel implements \Serializable {
 	 * @Column(type="string", length=160, nullable=true)
 	 */
 	protected $display_name;
-
-	/**
-	 * @ManyToOne(targetEntity="Country", inversedBy="users")
-	 * @JoinColumn(name="country_iso", referencedColumnName="iso")
-	 */
-	protected $country;
 
 	/**
 	 * @Column(type="string", length=2, nullable=false)
@@ -171,24 +166,6 @@ class User extends TimestampedModel implements \Serializable {
 		return $this instanceof Administrator;
 	}
 
-
-	/**
-	 * Find a User account by username or email
-	 *
-	 * @access	public
-	 * @param	string	$identifier
-	 * @return	User|FALSE
-	 */
-	public static function findUser($identifier)
-	{
-        $CI =& get_instance();
-
-		$user = $CI->em->createQuery("SELECT u FROM Entity\User u WHERE u.username = '{$identifier}' OR u.email = '{$identifier}'")
-                ->getResult();
-
-		return $user ? $user[0] : FALSE;
-	}
-
     /**
      * Get id
      *
@@ -279,28 +256,6 @@ class User extends TimestampedModel implements \Serializable {
 			return $this->getUsername();
 		}
 	}
-
-    /**
-     * Set country
-     *
-     * @param	\Entity\Country 	$country
-     * @return	\Entity\User
-     */
-    public function setCountry(\Entity\Country $country)
-    {
-        $this->country = $country;
-        return $this;
-    }
-
-    /**
-     * Get country
-     *
-     * @return	\Entity\Country $country
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
 
     /**
      * Set language

@@ -14,7 +14,7 @@
         </li>
 	<?php endif; ?>
 
-	<li><?=HTML::link('account/my-entries', lang('my_entries'))?></li>
-	<li><?=HTML::link('account/settings', lang('settings'))?></li>
-	<li><?=HTML::link('account/change-password', lang('change_password'))?></li>
+	<li><?=HTML::link('account/my-entries', Lang::line('general.my_entries'))?></li>
+	<li><?=HTML::link('account/settings', Lang::line('general.settings'))?></li>
+	<li><?=HTML::link('account/change-password', Lang::line('general.change_password'))?></li>
 </ul>

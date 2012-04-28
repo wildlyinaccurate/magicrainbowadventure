@@ -1,9 +1,9 @@
-<p>Already have an account? <?=HTML::link('account/login', lang('log_in'))?></p>
+<p>Already have an account? <?=HTML::link('account/login', Lang::line('general.log_in'))?></p>
 
 <?=Form::open('account/signup', 'method="post" class="tabbed')?>
 <div>
 	<label for="username">Pick a username</label>
-	<input type="text" name="username" id="username" maxlength="32" value="<?=set_value('username')?>" />
+	<input type="text" name="username" id="username" maxlength="32" value="<?=Input::old('username')?>" />
 	<?=form_error('username')?>
 </div>
 
@@ -20,13 +20,13 @@
 
 <div>
 	<label for="email">Your email address</label>
-	<input type="text" name="email" id="email" maxlength="255" value="<?=set_value('email')?>" />
+	<input type="text" name="email" id="email" maxlength="255" value="<?=Input::old('email')?>" />
 	<?=form_error('email')?>
 </div>
 
 <div>
 	<label for="display_name">Display name</label>
-	<input type="text" name="display_name" id="display_name" maxlength="160" value="<?=set_value('display_name')?>" />
+	<input type="text" name="display_name" id="display_name" maxlength="160" value="<?=Input::old('display_name')?>" />
 	<span class="note">Optional</span>
 	<?=form_error('display_name')?>
 </div>

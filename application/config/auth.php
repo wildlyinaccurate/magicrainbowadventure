@@ -52,13 +52,16 @@ return array(
 	|
 	*/
 
-	'attempt' => function($username, $password)
+	'attempt' => function($identifier, $password) use ($entity_manager)
 	{
-		$user = DB::table('users')->where_username($username)->first();
-
-		if ( ! is_null($user) and Hash::check($password, $user->password))
+		if ($identifier)
 		{
-			return $user;
+			$user = $entity_manager->getRepository('Entity\User')->findUser($identifier);
+
+			if ($user !== null && $password === \Entity\User::encryptPassword($password))
+			{
+				return $user;
+			}
 		}
 	},
 

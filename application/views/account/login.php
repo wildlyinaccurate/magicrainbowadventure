@@ -1,23 +1,15 @@
-<p>Don't have an account? <?=HTML::link('account/signup', lang('sign_up'))?></p>
+<p>Don't have an account? <?=HTML::link('account/signup', Lang::line('general.sign_up'))?></p>
 
-<?php if ($validate && ! $login): ?>
-	<div class="error">The username / email and password you entered were incorrect.</div>
-<?php endif; ?>
+<?=Form::open(($return = Input::get('return')) ? "account/login?return={$return}" : 'account/login', 'class="tabbed"')?>
 
-<?=Form::open(($return = $this->input->get('return')) ? "account/login?return={$return}" : 'account/login', 'class="tabbed"')?>
-<div>
-		<label for="identifier">Username / Email</label>
-		<input type="text" name="identifier" id="identifier" value="<?=set_value('identifier')?>" />
-		<?=form_error('identifier')?>
-	</div>
+	<?=Form::text('identifier', Input::old('identifier'), array('placeholder' => 'Username / Email Address'))?>
+	<?=$errors->first('identifier')?>
 
-	<div>
-		<label for="password">Password</label>
-		<input type="password" name="password" id="password" />
-		<?=form_error('password')?>
-	</div>
+	<?=Form::password('password', array('placeholder' => 'Password'))?>
+	<?=$errors->first('password')?>
 
 	<div class="controls">
-		<button type="submit" name="log-in" id="log-in" class="big">Log In</button>
+		<button type="submit" name="log-in" id="log-in" class="big"><?=Lang::line('general.log_in')?></button>
 	</div>
+
 <?=Form::close()?>

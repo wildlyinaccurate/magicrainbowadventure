@@ -17,7 +17,7 @@
 </div>
 
 <div id="controls">
-	<?=HTML::link('account', lang('cancel'), 'class="negative button"')?>
-	<button type="submit" name="change_password" id="change_password" class="button"><?=lang('change_password')?></button>
+	<?=HTML::link('account', Lang::line('general.cancel'), 'class="negative button"')?>
+	<button type="submit" name="change_password" id="change_password" class="button"><?=Lang::line('general.change_password')?></button>
 </div>
 <?=Form::close()?>
