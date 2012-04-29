@@ -10,14 +10,13 @@
 
 /* THANKS */
   Paul Irish & the HTML5 Boilerplate team: http://html5boilerplate.com/
-  Tijs Verkoyen for his Dropbox library: http://classes.verkoyen.eu/dropbox
-  Yusuke Kamiyamane for his Fugue Icons set: http://p.yusukekamiyamane.com/
+  Ben Tadiar for his Dropbox SDK: https://github.com/BenTheDesigner/Dropbox
 
 
 /* SITE */
   Standards: HTML5, CSS3
-  Components: Modernizr, jQuery, Fugue Icons
-  Software: Apache, PHP, CodeIgniter framework, Doctrine ORM, Dropbox (for storage)
+  Components: Modernizr, jQuery, Twitter Bootstrap
+  Software: Laravel PHP framework, Doctrine ORM, Dropbox
 
 
 
