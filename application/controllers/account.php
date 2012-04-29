@@ -198,7 +198,7 @@ class Account_Controller extends Base_Controller
 	/**
 	 * Register a new user
 	 *
-	 * @return	void
+	 * @return	Laravel\Redirect
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
 	public function post_signup()
@@ -206,59 +206,46 @@ class Account_Controller extends Base_Controller
 		// If a user is already signed in, redirect them to the account index
 		if (Auth::check())
 		{
-			Redirect::to('account')->with('');
+			return Redirect::to('account');
 		}
 
-		$this->form_validation->set_rules('username', Lang::line('account.field_username'), 'required|alpha_dash|max_length[32]|callback__unique_username');
-		$this->form_validation->set_rules('password', Lang::line('account.field_password'), 'required|min_length[6]|matches[password_confirm]');
-		$this->form_validation->set_rules('email', Lang::line('account.field_email'), 'required|valid_email|callback__unique_email');
-		$this->form_validation->set_rules('display_name', Lang::line('account.field_display_name'), 'max_length[160]');
-		$this->form_validation->set_message('matches', Lang::line('account.validation_matches'));
+		$validation_rules = array(
+			'username' => 'required|alpha_dash|max:32|unique:user',
+			'password' => 'required|min:5|same:password_confirm',
+			'email' => 'required|email|unique:user',
+			'display_name' => 'required|max:160',
+		);
 
-		if ($this->form_validation->run() === FALSE)
+		$validation_messages = array(
+			'password_same' => 'The passwords you enter don\'t match',
+		);
+
+		$validation = Validator::make(Input::all(), $validation_rules, $validation_messages);
+
+		if ($validation->fails())
 		{
+			return Redirect::to('account/signup')->with_input()->with_errors($validation);
 		}
 		else
 		{
-			// Create the new user
-			$user = new \Entity\User;
-			$user->setUsername(Input::get('username'));
-			$user->setPassword(Input::get('password'));
-			$user->setEmail(Input::get('email'));
-			$user->setDisplayName(Input::get('display_name'));
-
-			// Set the user's language
-			$language_cookie = $this->input->cookie($this->config->item('language_cookie'));
-			$default_language = $this->config->item('default_language');
-			$user->setLanguage($language_cookie ? $language_cookie : $default_language);
-
-			// Set the User's country
-			$country = $this->em->getRepository('Entity\Country')->find(Input::get('country'));
-			$user->setCountry($country);
-
-			// Create the User's default settings
-			$default_settings = $this->config->item('default_user_settings');
-
-			foreach ($default_settings as $setting_name => $setting_data)
-			{
-				$setting = new \Entity\UserSetting;
-				$setting->setName($setting_name);
-				$setting->setType($setting_data['type']);
-				$setting->setValue($setting_data['value']);
-				$setting->setUser($user);
-			}
+			$user = new Entity\User;
+			$user->setUsername(Input::get('username'))
+				->setPassword(Input::get('password'))
+				->setEmail(Input::get('email'))
+				->setDisplayName(Input::get('display_name'));
 
 			// Transfer over any temporary entry ratings
-			$this->load->library('ratings');
-			$this->ratings->assign_to_user($user);
+//			$this->load->library('ratings');
+//			$this->ratings->assign_to_user($user);
 
 			$this->em->persist($user);
 			$this->em->flush();
 
 			// Authenticate the User
-			$this->auth->authenticate($user);
+			Auth::login($user->getId());
 
-			Redirect::to($this->config->item('default_user_page'));
+			$this->layout->title = Lang::line('account.welcome');
+			$this->layout->content = View::make('account/welcome');
 		}
 	}
 

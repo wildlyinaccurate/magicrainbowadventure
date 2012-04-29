@@ -23,12 +23,12 @@ class Entry_Controller extends Base_Controller
 	/**
 	 * Show the entry submission form
 	 *
+	 * @return	void
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
 	public function get_submit()
 	{
 		$this->layout->title = 'Submit an Entry';
-
 		$this->layout->content = View::make('entry/submit', array(
 			'max_upload_size' => Config::get('magicrainbowadventure.max_upload_size'),
 		));
@@ -37,6 +37,7 @@ class Entry_Controller extends Base_Controller
 	/**
 	 * Save a new Entry
 	 *
+	 * @return Laravel\Redirect
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
 	public function post_submit()

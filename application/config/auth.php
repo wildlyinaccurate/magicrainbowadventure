@@ -58,7 +58,7 @@ return array(
 		{
 			$user = $entity_manager->getRepository('Entity\User')->findUser($identifier);
 
-			if ($user !== null && $password === \Entity\User::encryptPassword($password))
+			if ($user !== null && $password === $user->encryptPassword($password))
 			{
 				return $user;
 			}

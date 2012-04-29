@@ -62,16 +62,19 @@
 
 	<footer class="container">
 		<div class="row">
-			<ul id="footer-links" class="eightcol">
+			<div class="eightcol">
+				<p>Magic Rainbow Adventure! &copy; <?=date('Y')?>.</p>
+			</div>
+
+			<ul id="footer-links" class="fourcol last">
 				<li><?=HTML::link('about', 'About')?></li>
 				<li><?=HTML::link('privacy', 'Privacy')?></li>
 			</ul>
-
-			<p id="copy-notice" class="fourcol">Magic Rainbow Adventure! &copy; <?=date('Y')?>.</p>
 		</div>
 	</footer>
 
     <script src="<?=URL::base();?>/basset/default.js"></script>
+	<?=Basset::inline('assets')->scripts();?>
 
 </body>
 </html>

@@ -4,7 +4,7 @@
 	<?=Form::open('account/signup', 'POST')?>
 
 		<div class="control-group">
-			<?=Form::text('username', Input::old('title'), array('maxlength' => 32, 'placeholder' => Lang::line('account.label_username')))?>
+			<?=Form::text('username', Input::old('username'), array('maxlength' => 32, 'placeholder' => Lang::line('account.label_username')))?>
 			<?=$errors->first('username', '<span class="error">:message</span>')?>
 		</div>
 

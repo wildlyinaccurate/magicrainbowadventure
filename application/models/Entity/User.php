@@ -16,12 +16,6 @@ class User extends TimestampedModel implements \Serializable
 {
 
 	/**
-	 *
-	 * @var string
-	 */
-	protected static $encryption_key = 'q@.qi)h23~U`Yu&&yzy,R$/bR=5g^bGC0\"s`}0D$iY$XAa9tL</}UPX(N9Mm2#';
-
-	/**
 	 * @Id
 	 * @Column(type="integer", nullable=false)
 	 * @GeneratedValue(strategy="AUTO")
@@ -34,7 +28,7 @@ class User extends TimestampedModel implements \Serializable
 	protected $username;
 
 	/**
-	 * @Column(type="string", length=64, nullable=false)
+	 * @Column(type="string", length=128, nullable=false)
 	 */
 	protected $password;
 
@@ -121,21 +115,27 @@ class User extends TimestampedModel implements \Serializable
 	 */
 	public function setPassword($password)
 	{
-		$encrypted_password = self::encryptPassword($password);
-
-		$this->password = $encrypted_password;
+		$this->password = $this->encryptPassword($password);
         return $this;
 	}
 
 	/**
-	 * Encrypt a Password
+	 * Encrypt the user's password, using their username as a salt
 	 *
-	 * @access	public
+	 * @static
 	 * @param	string	$password
+	 * @return	string
+	 * @throws \BadMethodCallException
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public static function encryptPassword($password)
+	public function encryptPassword($password)
 	{
-		return sha1($password . self::$encryption_key);
+		if ( ! $this->username)
+		{
+			throw new \BadMethodCallException('User password cannot be encrypted until username has been set.');
+		}
+
+		return hash('sha512', $password . $this->username);
 	}
 
 	/**
