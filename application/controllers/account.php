@@ -28,9 +28,9 @@ class Account_Controller extends Base_Controller
 		$this->auth->require_login();
 
 		$this->layout->title = Lang::line('general.account');
-		View::make('account/index', array(
-				'user' => $this->user
-			));
+		$this->layout->content = View::make('account/index', array(
+			'user' => $this->user
+		));
 	}
 
 	/**
@@ -53,11 +53,11 @@ class Account_Controller extends Base_Controller
 		}
 
 		$this->layout->title = Lang::line('general.my_entries');
-		View::make('account/my-entries', array(
-				'entries' => $entries,
-				'thumb_width' => $this->config->item('thumb_width'),
-				'thumb_height' => $this->config->item('thumb_height')
-			));
+		$this->layout->content = View::make('account/my-entries', array(
+			'entries' => $entries,
+			'thumb_width' => $this->config->item('thumb_width'),
+			'thumb_height' => $this->config->item('thumb_height')
+		));
 	}
 
 	/**
@@ -92,11 +92,11 @@ class Account_Controller extends Base_Controller
 		}
 
 		$this->layout->title = Lang::line('account.settings');
-		View::make('account/settings', array(
-				'user' => $this->user,
-				'countries' => $this->em->getRepository('Entity\Country')->getAllCountries(),
-				'languages' => $this->config->item('available_languages')
-			));
+		$this->layout->content = View::make('account/settings', array(
+			'user' => $this->user,
+			'countries' => $this->em->getRepository('Entity\Country')->getAllCountries(),
+			'languages' => $this->config->item('available_languages')
+		));
 	}
 
 	/**
@@ -123,9 +123,9 @@ class Account_Controller extends Base_Controller
 		}
 
 		$this->layout->title = Lang::line('account.change_password');
-		View::make('account/change-password', array(
-				'user' => $this->user
-			));
+		$this->layout->content = View::make('account/change-password', array(
+			'user' => $this->user
+		));
 	}
 
 	/**
@@ -137,8 +137,7 @@ class Account_Controller extends Base_Controller
 	public function get_login()
 	{
 		$this->layout->title = Lang::line('general.log_in');
-		$this->layout->content = View::make('account/login', array(
-		));
+		$this->layout->content = View::make('account/login');
 	}
 
 	/**
@@ -205,9 +204,9 @@ class Account_Controller extends Base_Controller
 	public function post_signup()
 	{
 		// If a user is already signed in, redirect them to the account index
-		if ($this->authenticated)
+		if (Auth::check())
 		{
-			Redirect::to('account');
+			Redirect::to('account')->with('');
 		}
 
 		$this->form_validation->set_rules('username', Lang::line('account.field_username'), 'required|alpha_dash|max_length[32]|callback__unique_username');
