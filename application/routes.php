@@ -42,6 +42,7 @@ Basset::styles('magicrainbowadventure', function($basset)
 	{
 		$basset->add('reset', 'reset.css')
 			->add('1140gs', '1140.css')
+			->add('bootstrap', 'bootstrap.css')
 			->add('default', 'default.less');
 	});
 });

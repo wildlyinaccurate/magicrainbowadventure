@@ -1,6 +1,16 @@
 <?php
 
-class Account_Controller extends Base_Controller {
+/**
+ * Account Controller
+ *
+ * Sign up, log in, view submitted entries.
+ *
+ * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+ */
+class Account_Controller extends Base_Controller
+{
+
+	public $restful = true;
 
 	/**
 	 * Constructor
@@ -119,9 +129,22 @@ class Account_Controller extends Base_Controller {
 	}
 
 	/**
+	 * Show the login form
+	 *
+	 * @return	void
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	public function get_login()
+	{
+		$this->layout->title = Lang::line('general.log_in');
+		$this->layout->content = View::make('account/login', array(
+		));
+	}
+
+	/**
 	 * Log into the system
 	 */
-	public function action_login()
+	public function post_login()
 	{
 		// Attempt to log in
 		$identifier = Input::get('identifier');
@@ -155,16 +178,31 @@ class Account_Controller extends Base_Controller {
 	/**
 	 * Log out of the system
 	 */
-	public function logout()
+	public function get_logout()
 	{
 		$this->auth->logout();
 		Redirect::to($this->config->item('default_guest_page'));
 	}
 
 	/**
-	 * Register a new user
+	 * Show the registration form
+	 *
+	 * @return	void
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function signup()
+	public function get_signup()
+	{
+		$this->layout->title = Lang::line('general.sign_up');
+		$this->layout->content = View::make('account/signup');
+	}
+
+	/**
+	 * Register a new user
+	 *
+	 * @return	void
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	public function post_signup()
 	{
 		// If a user is already signed in, redirect them to the account index
 		if ($this->authenticated)
@@ -180,9 +218,6 @@ class Account_Controller extends Base_Controller {
 
 		if ($this->form_validation->run() === FALSE)
 		{
-			$this->layout->title(Lang::line('general.sign_up'));
-			$this->layout->content = View::make('account/signup', array(
-			 ));
 		}
 		else
 		{

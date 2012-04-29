@@ -1,5 +1,5 @@
-<div class="entry">
-	<img class="entry-image" src="<?=dropbox_public_url($entry)?>" alt="" />
+<article class="entry">
+	<img src="http://dl.dropbox.com/u/<?=Config::get('dropbox::config.access_token.uid')?>/<?=Config::get('magicrainbowadventure.dropbox_base_path')?>/<?=$entry->getPath()?>" alt="" />
 
     <div class="entry-rating">
         <a href="<?=URL::to("rate/cute/{$entry->getId()}")?>" class="rate-button cute <?=($entry_rating->getCute()) ? 'active' : ''?>">Cute!</a>
@@ -8,4 +8,4 @@
 
 	<p class="description"><?=nl2br($entry->getDescription())?></p>
 	<p class="submitted-by">Submitted by <?=$entry->getUser()->getDisplayName()?> on <?=$entry->getCreatedDate()->format('d F Y')?></p>
-</div>
+</article>

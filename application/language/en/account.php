@@ -2,6 +2,13 @@
 
 return array(
 
+	// Form labels
+	'label_username' => 'Pick a username',
+	'label_password' => 'Choose your password',
+	'label_password_confirm' => 'Confirm your password',
+	'label_email' => 'Enter your email address',
+	'label_display_name' => 'Choose a display name',
+
 	// Form fields
 	'field_identifier' => "your username or email address",
 	'field_password_login' => "your password",

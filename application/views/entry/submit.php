@@ -1,4 +1,4 @@
-<section>
+<section class="submit-entry">
 	<?=Form::open_for_files('entry/submit')?>
 
 		<?=Form::text('title', Input::old('title'), array('maxlength' => 1400, 'placeholder' => Lang::line('entry.title')))?>

@@ -135,18 +135,6 @@ class Administrator extends \Entity\Administrator implements \Doctrine\ORM\Proxy
         return parent::getDisplayName();
     }
 
-    public function setCountry(\Entity\Country $country)
-    {
-        $this->__load();
-        return parent::setCountry($country);
-    }
-
-    public function getCountry()
-    {
-        $this->__load();
-        return parent::getCountry();
-    }
-
     public function setLanguage($language)
     {
         $this->__load();
@@ -228,7 +216,7 @@ class Administrator extends \Entity\Administrator implements \Doctrine\ORM\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'username', 'password', 'email', 'display_name', 'language', 'created_date', 'modified_date', 'country', 'settings', 'entries', 'entry_ratings', 'moderated_entries');
+        return array('__isInitialized__', 'id', 'username', 'password', 'email', 'display_name', 'language', 'created_date', 'modified_date', 'settings', 'entries', 'entry_ratings', 'moderated_entries');
     }
 
     public function __clone()

@@ -49,11 +49,6 @@ class User extends TimestampedModel implements \Serializable
 	protected $display_name;
 
 	/**
-	 * @Column(type="string", length=2, nullable=false)
-	 */
-	protected $language;
-
-	/**
 	 * @OneToMany(targetEntity="UserSetting", mappedBy="user", cascade={"persist", "remove"})
 	 */
 	protected $settings;
@@ -92,7 +87,6 @@ class User extends TimestampedModel implements \Serializable
 			'username' => $this->getUsername(),
 			'email' => $this->getEmail(),
 			'display_name' => $this->getDisplayName(),
-			'language' => $this->getLanguage(),
 			'settings' => $this->getSettings(),
 			'entries' => $this->getEntries(),
 			'entry_ratings' => $this->getEntryRatings()
@@ -113,7 +107,6 @@ class User extends TimestampedModel implements \Serializable
 		$this->username = $data['username'];
 		$this->email = $data['email'];
 		$this->display_name = $data['display_name'];
-		$this->language = $data['language'];
 		$this->settings = $data['settings'];
 		$this->entries = $data['entries'];
 		$this->entry_ratings = $data['entry_ratings'];
@@ -256,28 +249,6 @@ class User extends TimestampedModel implements \Serializable
 			return $this->getUsername();
 		}
 	}
-
-    /**
-     * Set language
-     *
-     * @param	string 	$language
-     * @return	\Entity\User
-     */
-    public function setLanguage($language)
-    {
-        $this->language = $language;
-        return $this;
-    }
-
-    /**
-     * Get language
-     *
-     * @return	string	$country
-     */
-    public function getLanguage()
-    {
-        return $this->language;
-    }
 
     /**
      * Add settings

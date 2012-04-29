@@ -44,7 +44,7 @@
 
     <div id="content" class="container">
 		<div class="row">
-			<h2><?=$title?></h2>
+			<h2 class="twelvecol"><?=$title?></h2>
 		</div>
 
 		<div class="row">
