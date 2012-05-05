@@ -60,6 +60,12 @@ class User extends \Entity\User implements \Doctrine\ORM\Proxy\Proxy
         return parent::setPassword($password);
     }
 
+    public function encryptPassword($password)
+    {
+        $this->__load();
+        return parent::encryptPassword($password);
+    }
+
     public function authenticate()
     {
         $this->__load();
@@ -123,30 +129,6 @@ class User extends \Entity\User implements \Doctrine\ORM\Proxy\Proxy
         return parent::getDisplayName();
     }
 
-    public function setCountry(\Entity\Country $country)
-    {
-        $this->__load();
-        return parent::setCountry($country);
-    }
-
-    public function getCountry()
-    {
-        $this->__load();
-        return parent::getCountry();
-    }
-
-    public function setLanguage($language)
-    {
-        $this->__load();
-        return parent::setLanguage($language);
-    }
-
-    public function getLanguage()
-    {
-        $this->__load();
-        return parent::getLanguage();
-    }
-
     public function addSetting(\Entity\UserSetting $setting)
     {
         $this->__load();
@@ -157,12 +139,6 @@ class User extends \Entity\User implements \Doctrine\ORM\Proxy\Proxy
     {
         $this->__load();
         return parent::getSettings();
-    }
-
-    public function getSetting($setting_name)
-    {
-        $this->__load();
-        return parent::getSetting($setting_name);
     }
 
     public function addEntry(\Entity\Entry $entry)
@@ -222,7 +198,7 @@ class User extends \Entity\User implements \Doctrine\ORM\Proxy\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'username', 'password', 'email', 'display_name', 'language', 'created_date', 'modified_date', 'country', 'settings', 'entries', 'entry_ratings');
+        return array('__isInitialized__', 'id', 'username', 'password', 'email', 'display_name', 'created_date', 'modified_date', 'settings', 'entries', 'entry_ratings');
     }
 
     public function __clone()

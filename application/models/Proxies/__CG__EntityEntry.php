@@ -42,6 +42,12 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
     }
 
     
+    public function uploadFile($file, $extension)
+    {
+        $this->__load();
+        return parent::uploadFile($file, $extension);
+    }
+
     public function serialize()
     {
         $this->__load();
@@ -58,12 +64,6 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
     {
         $this->__load();
         return parent::getDropboxThumbnail($size);
-    }
-
-    public function prePersist()
-    {
-        $this->__load();
-        return parent::prePersist();
     }
 
     public function getId()
@@ -85,6 +85,18 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
     {
         $this->__load();
         return parent::getTitle();
+    }
+
+    public function setHash($hash)
+    {
+        $this->__load();
+        return parent::setHash($hash);
+    }
+
+    public function getHash()
+    {
+        $this->__load();
+        return parent::getHash();
     }
 
     public function setUrlTitle($urlTitle)
@@ -177,10 +189,10 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
         return parent::isApproved();
     }
 
-    public function setModeratedBy(\Entity\Administrator $administrator)
+    public function setModeratedBy(\Entity\User $user)
     {
         $this->__load();
-        return parent::setModeratedBy($administrator);
+        return parent::setModeratedBy($user);
     }
 
     public function getModeratedBy()
@@ -222,7 +234,7 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'title', 'url_title', 'file_path', 'description', 'type', 'approved', 'created_date', 'modified_date', 'ratings', 'user', 'moderated_by');
+        return array('__isInitialized__', 'id', 'title', 'url_title', 'file_path', 'hash', 'description', 'type', 'approved', 'created_date', 'modified_date', 'ratings', 'user', 'moderated_by');
     }
 
     public function __clone()
