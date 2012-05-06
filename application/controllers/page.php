@@ -7,28 +7,28 @@
  */
 class Page_Controller extends Base_Controller {
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+	public function __construct()
+	{
+		parent::__construct();
+	}
 
-    /**
-     * About Magic Rainbow Adventure
-     */
-    public function about()
-    {
-        $this->layout->title = 'About Magic Rainbow Adventure';
-            ->build('page/about');
-    }
+	/**
+	 * About Magic Rainbow Adventure
+	 */
+	public function about()
+	{
+		$this->layout->title = 'About Magic Rainbow Adventure';
+			->build('page/about');
+	}
 
-    /**
-     * Privacy Statement
-     */
-    public function privacy()
-    {
-        $this->layout->title = 'Privacy Statement';
-            ->build('page/privacy');
-    }
+	/**
+	 * Privacy Statement
+	 */
+	public function privacy()
+	{
+		$this->layout->title = 'Privacy Statement';
+			->build('page/privacy');
+	}
 
 }
 

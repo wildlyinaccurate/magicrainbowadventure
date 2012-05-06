@@ -2,10 +2,10 @@
 
 class Rate_Controller extends Base_Controller {
 
-    /**
-     * @var array
-     */
-    private $errors = array();
+	/**
+	 * @var array
+	 */
+	private $errors = array();
 
 	/**
 	 * Valid rating methods
@@ -16,12 +16,12 @@ class Rate_Controller extends Base_Controller {
 	/**
 	 * Constructor
 	 */
-    public function __construct()
-    {
-        parent::__construct();
+	public function __construct()
+	{
+		parent::__construct();
 
 		$this->load->library('ratings');
-    }
+	}
 
 	/**
 	 * Override CodeIgniter's default URI mapping
@@ -44,11 +44,11 @@ class Rate_Controller extends Base_Controller {
 		}
 
 		// Make sure the entry exists
-        if ( ! $entry = $this->em->getRepository('Entity\Entry')->find($entry_id))
-        {
-	        $this->errors[] = "The entry you rated doesn't seem to exist anymore!";
+		if ( ! $entry = $this->em->getRepository('Entity\Entry')->find($entry_id))
+		{
+			$this->errors[] = "The entry you rated doesn't seem to exist anymore!";
 			$this->_display_errors();
-        }
+		}
 
 		// Get the EntryRating for this User/Entry. If none exists, a new one will be created
 		$entry_rating = $this->ratings->find_by_entry($entry);

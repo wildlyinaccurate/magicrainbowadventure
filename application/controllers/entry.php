@@ -18,6 +18,10 @@ class Entry_Controller extends Base_Controller
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->filter('before', 'auth')->only(array(
+			'submit',
+		));
 	}
 
 	/**
@@ -184,13 +188,13 @@ class Entry_Controller extends Base_Controller
 				'entry' => $entry
 			));
 		}
-        else
-        {
+		else
+		{
 			$this->layout->title = $entry->getTitle();
 			View::make('entry/view-preview', array(
 					'entry' => $entry
 				));
-        }
+		}
 	}
 
 	/**
@@ -217,42 +221,42 @@ class Entry_Controller extends Base_Controller
 		// Load the Image_moo library for resizing and cropping
 		$this->load->library('image_moo');
 
-        // Load the caching driver and see if the thumbnail is already cached
+		// Load the caching driver and see if the thumbnail is already cached
 		$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
 		$cache_id = "entry/thumbnail/{$entry_id}";
 
 		if ( ! $cache = $this->cache->get($cache_id))
 		{
 			$image_dir = $this->config->item('upload_directory');
-            $thumb_width = $this->config->item('thumb_width');
-            $thumb_height = $this->config->item('thumb_height');
-            $thumb_quality = $this->config->item('thumb_quality');
+			$thumb_width = $this->config->item('thumb_width');
+			$thumb_height = $this->config->item('thumb_height');
+			$thumb_quality = $this->config->item('thumb_quality');
 
-            // Capture the output of Image_moo::save_dynamic() so that we can cache the thumbnail
-            ob_start();
+			// Capture the output of Image_moo::save_dynamic() so that we can cache the thumbnail
+			ob_start();
 
-            $this->image_moo->load("{$image_dir}/{$entry->getFilePath()}")
+			$this->image_moo->load("{$image_dir}/{$entry->getFilePath()}")
 					->set_jpeg_quality($thumb_quality)
 					->resize_crop($thumb_width, $thumb_height)
-                    ->save_dynamic();
+					->save_dynamic();
 
-            $thumbnail = ob_get_clean();
+			$thumbnail = ob_get_clean();
 
-            // We need to cache not only the thumbnail content, but the HTTP headers set
-            $cache = array(
-                'thumbnail' => $thumbnail,
-                'headers' => headers_list()
-            );
+			// We need to cache not only the thumbnail content, but the HTTP headers set
+			$cache = array(
+				'thumbnail' => $thumbnail,
+				'headers' => headers_list()
+			);
 
-            // Save the thumbnail to cache
-            $this->cache->save($cache_id, $cache, 7200);
-        }
+			// Save the thumbnail to cache
+			$this->cache->save($cache_id, $cache, 7200);
+		}
 
-        // Set some headers and we're good to go!
-        foreach ($cache['headers'] as $header)
-        {
-            header($header);
-        }
+		// Set some headers and we're good to go!
+		foreach ($cache['headers'] as $header)
+		{
+			header($header);
+		}
 
 		die($cache['thumbnail']);
 	}
