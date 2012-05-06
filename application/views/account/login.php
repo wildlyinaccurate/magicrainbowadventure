@@ -1,6 +1,9 @@
 <section class="login">
+    <p class="error"><?=$error?></p>
+
 	<?=Form::open('account/login', 'POST', array('class' => 'form-inline'))?>
 
+        <?=Form::hidden('referrer', Input::old('referrer', $referrer))?>
 		<?=Form::text('identifier', Input::old('identifier'), array('placeholder' => 'Username / Email Address'))?>
 		<?=Form::password('password', array('placeholder' => 'Password'))?>
 

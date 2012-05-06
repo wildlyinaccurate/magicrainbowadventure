@@ -18,23 +18,32 @@ class Account_Controller extends Base_Controller
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->filter('before', 'auth')->except(array(
+			'login',
+			'signup',
+		));
 	}
 
 	/**
 	 * Account Index
+	 *
+	 * @return  void
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function action_index()
+	public function get_index()
 	{
-		$this->auth->require_login();
-
 		$this->layout->title = Lang::line('general.account');
 		$this->layout->content = View::make('account/index', array(
-			'user' => $this->user
+			'user' => $this->user,
 		));
 	}
 
 	/**
 	 * List all User's Entries
+	 *
+	 * @return  void
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
 	public function action_my_entries()
 	{
@@ -62,6 +71,9 @@ class Account_Controller extends Base_Controller
 
 	/**
 	 * Update Account Settings
+	 *
+	 * @return  void
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
 	public function action_settings()
 	{
@@ -101,6 +113,9 @@ class Account_Controller extends Base_Controller
 
 	/**
 	 * Change the user's password
+	 *
+	 * @return  void
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
 	public function action_change_password()
 	{
@@ -137,11 +152,17 @@ class Account_Controller extends Base_Controller
 	public function get_login()
 	{
 		$this->layout->title = Lang::line('general.log_in');
-		$this->layout->content = View::make('account/login');
+		$this->layout->content = View::make('account/login', array(
+			'error' => Session::get('error'),
+			'referrer' => Session::get('auth_referrer') ?: Request::referrer(),
+		));
 	}
 
 	/**
 	 * Log into the system
+	 *
+	 * @return  Laravel\Redirect
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
 	public function post_login()
 	{
@@ -149,17 +170,9 @@ class Account_Controller extends Base_Controller
 		$identifier = Input::get('identifier');
 		$password = Input::get('password');
 
-		if ( ! Auth::attempt($identifier, $password))
+		if ( ! Auth::attempt($identifier, $password, true))
 		{
-			// The page title changes if the user has been redirected to the login page
-			if (Input::get('return'))
-			{
-				$this->layout->title = 'Login Required';
-			}
-
-			$this->layout->title = Lang::line('account.log_in');
-			$this->layout->content = View::make('account/login', array(
-			 ));
+			return Redirect::to('login')->with_input()->with('error', Lang::line('account.login_failed'));
 		}
 		else
 		{
@@ -176,11 +189,14 @@ class Account_Controller extends Base_Controller
 
 	/**
 	 * Log out of the system
+	 *
+	 * @return	Laravel\Redirect
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
 	public function get_logout()
 	{
-		$this->auth->logout();
-		Redirect::to($this->config->item('default_guest_page'));
+		Auth::logout();
+		return Redirect::home();
 	}
 
 	/**
@@ -191,8 +207,14 @@ class Account_Controller extends Base_Controller
 	 */
 	public function get_signup()
 	{
+		// If a user is already signed in, redirect them to the account index
+		if (Auth::check())
+		{
+			return Redirect::to('account');
+		}
+
 		$this->layout->title = Lang::line('general.sign_up');
-		$this->layout->content = View::make('account/signup');
+		$this->layout->content = View::make('account.signup');
 	}
 
 	/**
@@ -217,7 +239,7 @@ class Account_Controller extends Base_Controller
 		);
 
 		$validation_messages = array(
-			'password_same' => 'The passwords you enter don\'t match',
+			'password_same' => Lang::line('account.validation_password_same'),
 		);
 
 		$validation = Validator::make(Input::all(), $validation_rules, $validation_messages);
@@ -241,11 +263,10 @@ class Account_Controller extends Base_Controller
 			$this->em->persist($user);
 			$this->em->flush();
 
-			// Authenticate the User
+			// Log the new user in
 			Auth::login($user->getId());
 
-			$this->layout->title = Lang::line('account.welcome');
-			$this->layout->content = View::make('account/welcome');
+			return Redirect::to('account')->with('message', Lang::line('account.welcome_message'));
 		}
 	}
 

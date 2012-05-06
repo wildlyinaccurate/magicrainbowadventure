@@ -33,9 +33,15 @@
 |
 */
 
+// Register all controller routes
 Route::controller(Controller::detect());
 
+// Named 'shortcut' routes
+Route::get('login', array('as' => 'login', 'uses' => 'account@login'));
+
+// Configure assets with Basset
 Bundle::start('basset');
+
 Basset::styles('magicrainbowadventure', function($basset)
 {
 	$basset->directory('public/assets/css', function($basset)
@@ -126,5 +132,10 @@ Route::filter('csrf', function()
 
 Route::filter('auth', function()
 {
-	if (Auth::guest()) return Redirect::to('login');
+	if (Auth::guest())
+	{
+		Session::flash('auth_referrer', URL::current());
+
+		return Redirect::to('login');
+	}
 });
