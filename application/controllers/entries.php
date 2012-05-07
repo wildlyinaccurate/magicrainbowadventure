@@ -38,8 +38,8 @@ class Entries_Controller extends Base_Controller
 
 		Basset::inline('assets')->add('lazyload', 'assets/js/lazyload.js');
 
-		$this->layout->title = 'Latest Entries';
-		$this->layout->content = View::make('home/index', array(
+		$this->layout->title = Lang::line('general.latest_entries');
+		$this->layout->content = View::make('entries/index', array(
 			'entries' => $entries,
 		));
 	}
@@ -174,45 +174,36 @@ class Entries_Controller extends Base_Controller
 	 *
 	 * @param	integer	$id
 	 * @param	string	$url_title
-	 * @return	void
+	 * @return	\Laravel\Response
 	 */
-	public function view($id = NULL, $url_title = '')
+	public function get_view($id = null, $url_title = null)
 	{
 		if ( ! $id)
 		{
-			show_404();
+			return Response::error(404);
 		}
 
 		// Try and find the Entry
 		$entry = $this->em->find('\Entity\Entry', $id);
 
-		// See if the user has rated this entries
-		if ($entry)
-		{
-			$this->load->library('ratings');
-			$this->layout->setVar('entry_rating', $this->ratings->find_by_entry($entry));
-		}
-
 		// Only show the entries if it has been approved, or if the user is the owner or an administrator
 		if ( ! $entry || ( ! $entry->isApproved() && ! $this->user->isAdmin() && $entry->getUser() != $this->user))
 		{
-			$this->output->set_status_header(404);
 			$this->layout->title = Lang::line('general.not_found');
-				View::make('entries/not-found');
+			$this->layout->content = View::make('entries/not-found');
 		}
 		elseif ($entry->isApproved() || $this->user->isAdmin())
 		{
 			$this->layout->title = $entry->getTitle();
-
-			View::make('entries/view', array(
-				'entries' => $entry
+			$this->layout->content = View::make('entries/view', array(
+				'entry' => $entry
 			));
 		}
 		else
 		{
 			$this->layout->title = $entry->getTitle();
 			View::make('entries/view-preview', array(
-					'entries' => $entry
+					'entry' => $entry
 				));
 		}
 	}
@@ -336,7 +327,7 @@ class Entries_Controller extends Base_Controller
 			return false;
 		}
 
-		// Everything went ok. Return the file name to be stored against the entries
+		// Everything went ok. Return the file name to be stored against the entry
 		return $file_name;
 	}
 

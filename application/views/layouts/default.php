@@ -29,7 +29,7 @@
 </head>
 <?php flush(); ?>
 
-<body>
+<body class="<?=(Auth::check()) ? 'logged-in' : 'guest'?>">
 
     <header>
 		<div class="container" id="heading">
@@ -44,7 +44,9 @@
 
     <div id="content" class="container">
 		<div class="row">
-			<h2 class="twelvecol"><?=$title?></h2>
+			<div class="twelvecol">
+				<h2><?=$title?></h2>
+			</div>
 		</div>
 
 		<div class="row">
