@@ -45,7 +45,7 @@ class Account_Controller extends Base_Controller
 	 * @return  void
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function action_my_entries()
+	public function get_my_entries()
 	{
 		$entries = $this->user->getEntries();
 
@@ -75,7 +75,7 @@ class Account_Controller extends Base_Controller
 	 * @return  void
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function action_settings()
+	public function get_settings()
 	{
 		$this->auth->require_login();
 
@@ -117,7 +117,7 @@ class Account_Controller extends Base_Controller
 	 * @return  void
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function action_change_password()
+	public function get_change_password()
 	{
 		$this->auth->require_login();
 
@@ -134,7 +134,8 @@ class Account_Controller extends Base_Controller
 
 			// Set a success message and redirect the user
 			set_status(Lang::line('account.password_changed'), 'success');
-			Redirect::to('account');
+
+			return Redirect::to('account');
 		}
 
 		$this->layout->title = Lang::line('account.change_password');
@@ -146,11 +147,16 @@ class Account_Controller extends Base_Controller
 	/**
 	 * Show the login form
 	 *
-	 * @return	void
+	 * @return Laravel\Redirect
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
 	public function get_login()
 	{
+		if (Auth::check())
+		{
+			return Redirect::to('account');
+		}
+
 		$this->layout->title = Lang::line('general.log_in');
 		$this->layout->content = View::make('account/login', array(
 			'error' => Session::get('error'),
@@ -177,13 +183,13 @@ class Account_Controller extends Base_Controller
 		else
 		{
 			// Successful login - redirect to the previous page (if it is set)
-			if ($return = Input::get('return'))
+			if ($return = Input::get('referrer'))
 			{
-				Redirect::to($return);
+				return Redirect::to($return);
 			}
 
 			// No return URI was set; redirect to the default user page
-			Redirect::to($this->config->item('default_user_page'));
+			return Redirect::to('/');
 		}
 	}
 
@@ -196,13 +202,14 @@ class Account_Controller extends Base_Controller
 	public function get_logout()
 	{
 		Auth::logout();
+
 		return Redirect::home();
 	}
 
 	/**
 	 * Show the registration form
 	 *
-	 * @return	void
+	 * @return	\Laravel\Redirect
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
 	public function get_signup()
