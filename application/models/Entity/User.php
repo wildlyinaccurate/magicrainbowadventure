@@ -20,7 +20,7 @@ class User extends TimestampedModel implements \Serializable
 	 * @Column(type="integer", nullable=false)
 	 * @GeneratedValue(strategy="AUTO")
 	 */
-	protected $id;
+	public $id;
 
 	/**
 	 * @Column(type="string", length=32, unique=true, nullable=false)
