@@ -3,6 +3,8 @@
 class Base_Controller extends Controller
 {
 
+	public $restful = true;
+
 	/**
 	 * The template layout to use
 	 * @var \Laravel\View
