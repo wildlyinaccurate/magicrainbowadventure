@@ -1,16 +1,14 @@
 <?php
 
 /**
- * Entry Controller
+ * Entries Controller
  *
  * View, submit and edit entries.
  *
  * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class Entry_Controller extends Base_Controller
+class Entries_Controller extends Base_Controller
 {
-
-	public $restful = true;
 
 	/**
 	 * Constructor
@@ -25,7 +23,29 @@ class Entry_Controller extends Base_Controller
 	}
 
 	/**
-	 * Show the entry submission form
+	 * Index/home page - show latest entries
+	 *
+	 * @return	void
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	public function get_index()
+	{
+		$page = Input::get('page') ?: 1;
+		$entries_per_page = Config::get('magicrainbowadventure.entries_page_page');
+		$offset = $entries_per_page * ($page - 1);
+
+		$entries = $this->em->getRepository('Entity\Entry')->getLatestEntries($offset, $entries_per_page);
+
+		Basset::inline('assets')->add('lazyload', 'assets/js/lazyload.js');
+
+		$this->layout->title = 'Latest Entries';
+		$this->layout->content = View::make('home/index', array(
+			'entries' => $entries,
+		));
+	}
+
+	/**
+	 * Show the entries submission form
 	 *
 	 * @return	void
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
@@ -33,7 +53,7 @@ class Entry_Controller extends Base_Controller
 	public function get_submit()
 	{
 		$this->layout->title = 'Submit an Entry';
-		$this->layout->content = View::make('entry/submit', array(
+		$this->layout->content = View::make('entries/submit', array(
 			'max_upload_size' => Config::get('magicrainbowadventure.max_upload_size'),
 		));
 	}
@@ -80,7 +100,7 @@ class Entry_Controller extends Base_Controller
 				$validation->errors->messages['image_url'][0] = $validation_messages['valid_image_url'];
 			}
 
-			return Redirect::to('entry/submit')->with_input()->with_errors($validation);
+			return Redirect::to('entries/submit')->with_input()->with_errors($validation);
 		}
 
 		$entry = new \Entity\Entry;
@@ -133,7 +153,7 @@ class Entry_Controller extends Base_Controller
 
 		if ($entries->count() > 0)
 		{
-			// Get the user's latest entry
+			// Get the user's latest entries
 			$entry = $entries->last();
 		}
 		else
@@ -144,8 +164,8 @@ class Entry_Controller extends Base_Controller
 
 		$this->layout->title = 'Thanks!';
 
-		View::make('entry/thank-you', array(
-			 'entry' => $entry
+		View::make('entries/thank-you', array(
+			 'entries' => $entry
 		 ));
 	}
 
@@ -166,33 +186,33 @@ class Entry_Controller extends Base_Controller
 		// Try and find the Entry
 		$entry = $this->em->find('\Entity\Entry', $id);
 
-		// See if the user has rated this entry
+		// See if the user has rated this entries
 		if ($entry)
 		{
 			$this->load->library('ratings');
 			$this->layout->setVar('entry_rating', $this->ratings->find_by_entry($entry));
 		}
 
-		// Only show the entry if it has been approved, or if the user is the owner or an administrator
+		// Only show the entries if it has been approved, or if the user is the owner or an administrator
 		if ( ! $entry || ( ! $entry->isApproved() && ! $this->user->isAdmin() && $entry->getUser() != $this->user))
 		{
 			$this->output->set_status_header(404);
 			$this->layout->title = Lang::line('general.not_found');
-				View::make('entry/not-found');
+				View::make('entries/not-found');
 		}
 		elseif ($entry->isApproved() || $this->user->isAdmin())
 		{
 			$this->layout->title = $entry->getTitle();
 
-			View::make('entry/view', array(
-				'entry' => $entry
+			View::make('entries/view', array(
+				'entries' => $entry
 			));
 		}
 		else
 		{
 			$this->layout->title = $entry->getTitle();
-			View::make('entry/view-preview', array(
-					'entry' => $entry
+			View::make('entries/view-preview', array(
+					'entries' => $entry
 				));
 		}
 	}
@@ -223,7 +243,7 @@ class Entry_Controller extends Base_Controller
 
 		// Load the caching driver and see if the thumbnail is already cached
 		$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
-		$cache_id = "entry/thumbnail/{$entry_id}";
+		$cache_id = "entries/thumbnail/{$entry_id}";
 
 		if ( ! $cache = $this->cache->get($cache_id))
 		{
@@ -316,7 +336,7 @@ class Entry_Controller extends Base_Controller
 			return false;
 		}
 
-		// Everything went ok. Return the file name to be stored against the entry
+		// Everything went ok. Return the file name to be stored against the entries
 		return $file_name;
 	}
 
