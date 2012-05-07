@@ -21,9 +21,7 @@ var lazyloader = entries_container.lazyload({
         var entries = $(data).find('.entry');
 
         if (entries.length === 0) {
-            this.disable();
-            this.settings.page--;
-
+            this.settings.noResults();
             return;
         }
 
