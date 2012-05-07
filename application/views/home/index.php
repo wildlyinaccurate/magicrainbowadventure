@@ -16,4 +16,7 @@
 	</article>
 <?php endforeach; ?>
 
-</section> 
+</section>
+
+<a href="#page2" class="btn btn-large btn-primary load-more">Load More</a>
+

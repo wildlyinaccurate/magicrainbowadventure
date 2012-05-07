@@ -6,7 +6,7 @@
 @content-border-colour: darken(@body-bg-colour, 10%);
 
 @base-text-colour: #333;
-@dark-grey: lighten(@base-text-colour, 10%);
+@dark-grey: lighten(@base-text-colour, 15%);
 
 @link-colour: #607890;
 @link-hover-colour: #036;
@@ -59,13 +59,6 @@ h2 a, h3 a, h4 a {
 }
 
 // Common Classes 
-.note {
-	color: @dark-grey;
-	padding: 4px;
-	font-style: italic;
-	text-shadow: 1px 1px 1px #ccc;
-}
-
 .error {
 	color: #d00;
 	padding: 4px;
@@ -188,6 +181,15 @@ footer {
 }
 
 .submitted-by {
-	color: #999;
+	color: @dark-grey;
 	font-size: 11px;
+}
+
+.load-more {
+    display: block;
+    text-decoration: none;
+}
+
+.load-more.loading {
+    background: url(../img/loading.gif) no-repeat right;
 }

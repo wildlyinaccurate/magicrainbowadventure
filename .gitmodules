@@ -4,3 +4,6 @@
 [submodule "bundles/doctrine"]
 	path = bundles/doctrine
 	url = git://github.com/wildlyinaccurate/doctrine-bundle.git
+[submodule "public/assets/js/jquery-lazyload"]
+	path = public/assets/js/jquery-lazyload
+	url = git://github.com/wildlyinaccurate/jquery-lazyload.git

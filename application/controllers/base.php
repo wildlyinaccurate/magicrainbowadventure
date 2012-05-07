@@ -32,6 +32,11 @@ class Base_Controller extends Controller
 	 */
 	public function __construct()
 	{
+		if (Request::ajax())
+		{
+			$this->layout = 'layouts/ajax';
+		}
+
 		parent::__construct();
 
 		$this->em = IoC::resolve('doctrine::manager');

@@ -42,6 +42,8 @@ class Home_Controller extends Base_Controller
 			$entry_ratings[$index] = array();
 		}
 
+		Basset::inline('assets')->add('lazyload', 'assets/js/lazyload.js');
+
 		$this->layout->content = View::make('home/index', array(
 			'entries' => $entries,
 			'entry_ratings' => $entry_ratings,
