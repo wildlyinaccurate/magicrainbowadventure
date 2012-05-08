@@ -49,23 +49,9 @@ class Account_Controller extends Base_Controller
 	{
 		$entries = $this->user->getEntries();
 
-		// Count the 'cute' and 'funny' ratings
-		foreach ($entries as $entry)
-		{
-			$entry->funny_ratings = $entry->getRatings()->filter(function($entry_rating) {
-				return $entry_rating->getFunny();
-			});
-
-			$entry->cute_ratings = $entry->getRatings()->filter(function($entry_rating) {
-				return $entry_rating->getCute();
-			});
-		}
-
-		$this->layout->title = Lang::line('general.my_entries');
+		$this->layout->title = Lang::line('account.my_entries');
 		$this->layout->content = View::make('account/my-entries', array(
 			'entries' => $entries,
-			'thumb_width' => $this->config->item('thumb_width'),
-			'thumb_height' => $this->config->item('thumb_height')
 		));
 	}
 

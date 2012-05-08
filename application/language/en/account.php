@@ -3,7 +3,9 @@
 return array(
 
 	// Titles
-	'welcome' => 'Welcome!',
+	'my_entries' => 'My Entries',
+	'settings' => 'Account Settings',
+	'change_password' => 'Change Password',
 
     // Messages
     'login_failed' => 'The username and password you entered were not correct.',

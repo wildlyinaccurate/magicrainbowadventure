@@ -8,10 +8,7 @@ return array(
 	'log_out' => 'Log Out',
 	'sign_up' => 'Sign Up',
 	'account' => 'My Account',
-	'my_entries' => 'My Entries',
 	'latest_entries' => 'Latest Entries',
-	'settings' => 'Account Settings',
-	'change_password' => 'Change Password',
 	'wishlists' => 'My Wish Lists',
 
 	// Common words/phrases

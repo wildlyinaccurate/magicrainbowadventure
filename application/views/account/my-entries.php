@@ -13,13 +13,8 @@
 		<?php endif; ?>
 
 		<a href="<?=URL::to("{$entry->getId()}/{$entry->getUrlTitle()}")?>">
-			<img class="thumbnail" src="<?=URL::to("entry/thumbnail/{$entry->getId()}")?>" width="<?=$thumb_width?>" height="<?=$thumb_height?>" alt="" />
+			<img class="thumbnail" src="<?=URL::to("entry/thumbnail/{$entry->getId()}")?>" alt="" />
 		</a>
-
-		<div class="ratings">
-			<span class="active cute rate-button">Cute Ratings: <strong><?=number_format(count($entry->cute_ratings))?></strong></span><br />
-			<span class="active funny rate-button">Funny Ratings: <strong><?=number_format(count($entry->funny_ratings))?></strong></span>
-		</div>
 
 		<p class="description"><?=nl2br($entry->getDescription())?></p>
 	</div>
