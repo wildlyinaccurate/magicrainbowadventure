@@ -111,10 +111,12 @@ class Entry extends TimestampedModel implements \Serializable
 	public function serialize()
 	{
 		return serialize(array(
-			'id' => $this->getId(),
-			'title' => $this->getTitle(),
-			'url_title' => $this->getUrlTitle(),
-			'description' => $this->getDescription()
+			'id' => $this->id,
+			'title' => $this->title,
+			'url_title' => $this->url_title,
+			'description' => $this->description,
+			'hash' => $this->hash,
+			'file_path' => $this->file_path,
 		));
 	}
 
@@ -132,6 +134,8 @@ class Entry extends TimestampedModel implements \Serializable
 		$this->title = $data['title'];
 		$this->url_title = $data['url_title'];
 		$this->description = $data['description'];
+		$this->hash = $data['hash'];
+		$this->file_path = $data['file_path'];
 	}
 
 	/**
