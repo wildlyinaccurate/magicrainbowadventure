@@ -147,7 +147,7 @@ class Account_Controller extends Base_Controller
 	/**
 	 * Show the login form
 	 *
-	 * @return Laravel\Redirect
+	 * @return	Laravel\Redirect
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
 	public function get_login()
@@ -242,7 +242,7 @@ class Account_Controller extends Base_Controller
 			'username' => 'required|alpha_dash|max:32|unique:user',
 			'password' => 'required|min:5|same:password_confirm',
 			'email' => 'required|email|unique:user',
-			'display_name' => 'required|max:160',
+			'display_name' => 'max:160',
 		);
 
 		$validation_messages = array(
@@ -263,10 +263,6 @@ class Account_Controller extends Base_Controller
 				->setEmail(Input::get('email'))
 				->setDisplayName(Input::get('display_name'));
 
-			// Transfer over any temporary entry ratings
-//			$this->load->library('ratings');
-//			$this->ratings->assign_to_user($user);
-
 			$this->em->persist($user);
 			$this->em->flush();
 
@@ -277,110 +273,4 @@ class Account_Controller extends Base_Controller
 		}
 	}
 
-	/**
-	 * Validate a Username
-	 *
-	 * Check if a User with that username already exists
-	 *
-	 * @access	public
-	 * @param	string	$username
-	 * @return	bool
-	 */
-	public function _unique_username($username)
-	{
-		$user = $this->em->getRepository('Entity\User')->findOneByUsername($username);
-
-		if ( ! $user)
-		{
-			// The username is free
-			return TRUE;
-		}
-
-		$this->form_validation->set_message('_unique_username', 'That username is not available.');
-		return FALSE;
-	}
-
-	/**
-	 * Check that the email is not already in use
-	 *
-	 * If a user is currently logged in, we don't consider their own email to be in use
-	 *
-	 * @access	public
-	 * @param	string	$email
-	 * @return	bool
-	 */
-	public function _unique_email($email)
-	{
-		$user = $this->em->getRepository('Entity\User')->findOneByEmail($email);
-
-		if ( ! $user || $this->authenticated && $this->user->getEmail() == $user->getEmail())
-		{
-			return TRUE;
-		}
-
-		// The email is already in use
-		$this->form_validation->set_message('_unique_email', 'That email is already in use.');
-		return FALSE;
-	}
-
-	/**
-	 * Check that the language specified exists in the available_languages config item
-	 *
-	 * @access	public
-	 * @param	string	$language
-	 * @return	bool
-	 */
-	public function _valid_language($language)
-	{
-		if ( ! array_key_exists($language, $this->config->item('available_languages')))
-		{
-			// Invalid language specified
-			$this->form_validation->set_message('_valid_country', 'Please select a language from the drop-down list.');
-			return FALSE;
-		}
-
-		return TRUE;
-	}
-
-	/**
-	 * Check that the specified country exists in the DB
-	 *
-	 * @access	public
-	 * @param	string	$country
-	 * @return	bool
-	 */
-	public function _valid_country($country)
-	{
-		$country = $this->em->getRepository('Entity\Country')->find($country);
-
-		if ( ! $country)
-		{
-			// The country doesn't exist
-			$this->form_validation->set_message('_valid_country', 'Please select a country from the drop-down list.');
-			return FALSE;
-		}
-
-		return TRUE;
-	}
-
-	/**
-	 * Check that the password provided is the current user's password
-	 *
-	 * @param	string	$password
-	 * @return 	bool
-	 */
-	public function _correct_password($password)
-	{
-		if ($this->authenticated && \Entity\User::encryptPassword($password) == $this->user->getPassword())
-		{
-			return TRUE;
-		}
-
-		// Password is incorrect
-		$this->form_validation->set_message('_correct_password', Lang::line('general.validation_current_password'));
-		return FALSE;
-	}
 }
-
-/* End of file account.php */
-/* Location: ./application/controllers/account.php */
