@@ -37,9 +37,10 @@
 Route::controller(Controller::detect());
 
 // Named 'shortcut' routes
-Route::get('/', array('as' => 'home', 'uses' => 'entries@index'));
-Route::get('login', array('as' => 'login', 'uses' => 'account@login'));
-Route::get('(:num)/(:any)', array('as' => 'view_entry', 'uses' => 'entries@view'));
+Route::get('/', array('uses' => 'entries@index'));
+Route::get('login', array('uses' => 'account@login'));
+Route::get('(:num)/(:any)', array('uses' => 'entries@view'));
+Route::get('account/my-entries', array('uses' => 'account@my_entries'));
 
 // Configure assets with Basset
 Bundle::start('basset');
