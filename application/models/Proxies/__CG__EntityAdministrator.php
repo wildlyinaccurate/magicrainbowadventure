@@ -135,10 +135,10 @@ class Administrator extends \Entity\Administrator implements \Doctrine\ORM\Proxy
         return parent::setDisplayName($displayName);
     }
 
-    public function getDisplayName()
+    public function getDisplayName($fallbackToUsername = true)
     {
         $this->__load();
-        return parent::getDisplayName();
+        return parent::getDisplayName($fallbackToUsername);
     }
 
     public function addSetting(\Entity\UserSetting $setting)
