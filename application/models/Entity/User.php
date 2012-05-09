@@ -12,7 +12,7 @@ namespace Entity;
  * @Table(name="user")
  * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class User extends TimestampedModel implements \Serializable
+class User extends TimestampedModel
 {
 
 	/**
@@ -68,43 +68,6 @@ class User extends TimestampedModel implements \Serializable
         $this->entries = new \Doctrine\Common\Collections\ArrayCollection;
         $this->entry_ratings = new \Doctrine\Common\Collections\ArrayCollection;
     }
-
-	/**
-	 * Override the default behaviour when this object is serialized
-	 *
-	 * @return  string
-	 */
-	public function serialize()
-	{
-		return serialize(array(
-			'id' => $this->getId(),
-			'username' => $this->getUsername(),
-			'email' => $this->getEmail(),
-			'display_name' => $this->getDisplayName(),
-			'settings' => $this->getSettings(),
-			'entries' => $this->getEntries(),
-			'entry_ratings' => $this->getEntryRatings()
-		));
-	}
-
-	/**
-	 * Override the defeault behaviour when this object is unserialized
-	 *
-	 * @param   string  $data
-	 * @return  void
-	 */
-	public function unserialize($data)
-	{
-		$data = unserialize($data);
-
-		$this->id = $data['id'];
-		$this->username = $data['username'];
-		$this->email = $data['email'];
-		$this->display_name = $data['display_name'];
-		$this->settings = $data['settings'];
-		$this->entries = $data['entries'];
-		$this->entry_ratings = $data['entry_ratings'];
-	}
 
 	/**
 	 * Encrypt the password before we store it
@@ -234,13 +197,15 @@ class User extends TimestampedModel implements \Serializable
     }
 
 	/**
-	 * Return the user's display name (display_name, or if it isn't set; username)
+	 * Return the user's display name. If the user doesn't have a display
+	 * name, their username can be returned instead.
 	 *
+	 * @param	bool	$fallbackToUsername
 	 * @return	string
 	 */
-	public function getDisplayName()
+	public function getDisplayName($fallbackToUsername = true)
 	{
-		if ($this->display_name)
+		if ($this->display_name || $fallbackToUsername === false)
 		{
 			return utf8_decode($this->display_name);
 		}
