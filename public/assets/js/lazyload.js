@@ -1,5 +1,6 @@
 var entries_container = $('.entries').first();
 var load_more = $('.load-more');
+var no_more_entries = $('.no-more-entries');
 
 var lazyloader = entries_container.lazyload({
     src: '/',
@@ -27,6 +28,12 @@ var lazyloader = entries_container.lazyload({
         }
 
         entries.appendTo(entries_container);
+    },
+    noResults: function() {
+        this.lazyloader.disable();
+        load_more.hide();
+        no_more_entries.css('display', 'block');
+
     }
 });
 

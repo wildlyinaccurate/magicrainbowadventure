@@ -69,11 +69,22 @@ h2 a, h3 a, h4 a {
   text-decoration: none;
 }
 
-// Common Classes 
-.error {
-  color: #d00;
+// Common Classes
+.error, .success {
   padding: 4px;
   text-shadow: 1px 1px 1px #ccc;
+}
+
+.error {
+  color: #b32;
+}
+
+.success {
+  color: #5a5;
+}
+
+.loading {
+  background: url(../img/loading.gif) no-repeat right;
 }
 
 // Heading 
@@ -200,10 +211,9 @@ footer {
 }
 
 .load-more {
-  display: block;
-  text-decoration: none;
+    display: block;
 }
 
-.load-more.loading {
-  background: url(../img/loading.gif) no-repeat right;
+.no-more-entries {
+    display: none;
 }

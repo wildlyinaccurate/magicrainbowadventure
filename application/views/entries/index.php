@@ -18,5 +18,6 @@
 
 </section>
 
-<a href="#page2" class="btn btn-large btn-primary load-more">Load More</a>
+<a href="#load-more" class="btn btn-large btn-primary load-more">Load More</a>
+<span class="btn btn-large btn-danger no-more-entries">You've seen it all, there's nothing else to load! :(</span>
 
