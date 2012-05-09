@@ -3,6 +3,7 @@ var load_more = $('.load-more');
 
 var lazyloader = entries_container.lazyload({
     src: '/',
+    scrollThreshold: 0.6,
     loadStart: function() {
         load_more.activity({
             align: 'right',
