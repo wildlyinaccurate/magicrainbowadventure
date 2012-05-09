@@ -5,7 +5,7 @@
 		<h3><?=HTML::link("{$entry->getId()}/{$entry->getUrlTitle()}", $entry->getTitle())?></h3>
 
 		<a href="<?=URL::to("{$entry->getId()}/{$entry->getUrlTitle()}")?>">
-			<img src="http://dl.dropbox.com/u/<?=Config::get('dropbox::config.access_token.uid')?>/<?=Config::get('magicrainbowadventure.dropbox_base_path')?>/<?=$entry->getFilePath()?>" alt="" />
+			<img src="http://dl.dropbox.com/u/<?=Config::get('dropbox::config.access_token.uid')?>/<?=$entry->getFilePath()?>" alt="" />
 		</a>
 
 		<div class="entry-rating">
