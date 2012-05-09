@@ -8,6 +8,7 @@ return array(
 	'change_password' => 'Change Password',
 
     // Messages
+    'settings_saved' => 'Your account settings have been saved.',
     'login_failed' => 'The username and password you entered were not correct.',
     'welcome_message' => 'Thanks for signing up!',
 

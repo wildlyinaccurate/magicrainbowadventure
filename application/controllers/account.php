@@ -56,78 +56,51 @@ class Account_Controller extends Base_Controller
 	}
 
 	/**
-	 * Update Account Settings
+	 * Show the account settings form
 	 *
-	 * @return  void
+	 * @return	void
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
 	public function get_settings()
 	{
-		$this->auth->require_login();
-
-		$this->form_validation->set_rules('email', Lang::line('account.field_email'), 'required|valid_email|callback__unique_email');
-		$this->form_validation->set_rules('display_name', Lang::line('account.display_name'), 'max_length[160]');
-		$this->form_validation->set_rules('country', Lang::line('account.field_country'), 'callback__valid_country');
-		$this->form_validation->set_rules('language', Lang::line('account.field_language'), 'callback__valid_language');
-
-		if ($this->form_validation->run())
-		{
-			// Update the user's settings
-			$this->user->setEmail(Input::get('email'));
-			$this->user->setDisplayName(Input::get('display_name'));
-			$this->user->setLanguage(Input::get('language'));
-
-			// Find the selected country
-			$country = $this->em->getRepository('Entity\Country')->find(Input::get('country'));
-			$this->user->setCountry($country);
-
-			$this->em->persist($this->user);
-			$this->em->flush();
-
-			// Set a success message and redirect the user
-			set_message(Lang::line('account.settings_saved'), 'success');
-			Redirect::to('account/settings');
-		}
-
 		$this->layout->title = Lang::line('account.settings');
 		$this->layout->content = View::make('account/settings', array(
 			'user' => $this->user,
-			'countries' => $this->em->getRepository('Entity\Country')->getAllCountries(),
-			'languages' => $this->config->item('available_languages')
 		));
 	}
 
 	/**
-	 * Change the user's password
+	 * Validate and update the user's account settings
 	 *
-	 * @return  void
+	 * @return  \Laravel\Redirect
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function get_change_password()
+	public function post_settings()
 	{
-		$this->auth->require_login();
+		$validation_rules = array(
+			'username' => "required|alpha_dash|max:32|unique:user,username,{$this->user->getId()}",
+			'email' => "required|email|unique:user,email,{$this->user->getId()}",
+			'display_name' => 'max:160',
+		);
 
-		$this->form_validation->set_rules('password', Lang::line('account.field_current_password'), 'required|callback__correct_password');
-		$this->form_validation->set_rules('new_password', Lang::line('account.field_new_password'), 'min_length[6]|matches[password_confirm]');
-		$this->form_validation->set_message('matches', Lang::line('account.validation_matches'));
+		$validation = Validator::make(Input::all(), $validation_rules);
 
-		if ($this->form_validation->run())
+		if ($validation->fails())
+		{
+			return Redirect::to('account/settings')->with_input()->with_errors($validation);
+		}
+		else
 		{
 			// Update the user's settings
-			$this->user->setPassword(Input::get('new_password'));
+			$this->user->setEmail(Input::get('email'));
+			$this->user->setDisplayName(Input::get('display_name'));
+
 			$this->em->persist($this->user);
 			$this->em->flush();
 
 			// Set a success message and redirect the user
-			set_status(Lang::line('account.password_changed'), 'success');
-
-			return Redirect::to('account');
+			return Redirect::to('account/settings')->with('success_message', Lang::line('account.settings_saved'));
 		}
-
-		$this->layout->title = Lang::line('account.change_password');
-		$this->layout->content = View::make('account/change-password', array(
-			'user' => $this->user
-		));
 	}
 
 	/**

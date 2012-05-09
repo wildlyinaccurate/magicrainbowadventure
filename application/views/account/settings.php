@@ -1,46 +1,41 @@
-<?=Form::open('account/settings', 'method="post" class="tabbed')?>
+<section class="account-settings">
+	<?php if (Session::has('success_message')): ?>
+		<p class="success"><?=Session::get('success_message')?></p>
+	<?php endif; ?>
 
-<div>
-	<label for="username">Your username</label>
-	<input type="text" name="username" id="username" maxlength="32" value="<?=$user->getUsername()?>" disabled />
-	<?=form_error('username')?>
-</div>
+	<?=Form::open('account/settings', 'POST', array('class' => 'form-horizontal'))?>
 
-<div>
-	<label for="email">Your email address</label>
-	<input type="text" name="email" id="email" maxlength="255" value="<?=Input::old('email', $user->getEmail())?>" />
-	<?=form_error('email')?>
-</div>
+		<div class="control-group">
+			<?=Form::label('username', Lang::line('account.label_username'), array('class' => 'control-label'))?>
 
-<div>
-	<label for="display_name">Display name</label>
-	<input type="text" name="display_name" id="display_name" maxlength="160" value="<?=Input::old('display_name', $user->getDisplayName())?>" />
-	<span class="note">Optional</span>
-	<?=form_error('display_name')?>
-</div>
+			<div class="controls">
+				<?=Form::text('username', Input::old('username', $user->getUsername()), array('maxlength' => 32))?>
+				<?=$errors->first('username', '<span class="error">:message</span>')?>
+			</div>
+		</div>
 
-<div>
-	<label for="country">Country</label>
-	<select name="country" id="country">
-		<?php foreach ($countries as $key => $country): ?>
-		<option value="<?=$country->getIso()?>"<?=set_select('country', $country->getIso(), $country->getIso() == $user->getCountry()->getIso())?>><?=$country->getName()?></option>
-		<?php endforeach; ?>
-	</select>
-	<?=form_error('country')?>
-</div>
+		<div class="control-group">
+			<?=Form::label('email', Lang::line('account.label_email'), array('class' => 'control-label'))?>
 
-<div>
-	<label for="language">Preferred language</label>
-	<select name="language" id="language">
-		<?php foreach ($languages as $iso => $language): ?>
-		<option value="<?=$iso?>"<?=set_select('language', $iso, $iso == $user->getLanguage())?>><?=$language['name']?></option>
-		<?php endforeach; ?>
-	</select>
-	<?=form_error('country')?>
-</div>
+			<div class="controls">
+				<?=Form::text('email', Input::old('email', $user->getEmail()), array('maxlength' => 255))?>
+				<?=$errors->first('email', '<span class="error">:message</span>')?>
+			</div>
+		</div>
 
-<div id="controls">
-	<?=HTML::link('account', Lang::line('general.cancel'), 'class="big negative button"')?>
-	<button type="submit" name="save_settings" id="save_settings" class="big button">Save Settings</button>
-</div>
-<?=Form::close()?>
+		<div class="control-group">
+			<?=Form::label('display_name', Lang::line('account.label_display_name'), array('class' => 'control-label'))?>
+
+			<div class="controls">
+				<?=Form::text('display_name', Input::old('display_name', $user->getDisplayName(false)), array('maxlength' => 160))?>
+				<?=$errors->first('display_name', '<span class="error">:message</span>')?>
+			</div>
+		</div>
+
+		<div class="form-actions">
+			<?=HTML::link('account', Lang::line('general.cancel'), array('class' => 'btn'))?>
+			<button type="submit" name="save_settings" class="btn btn-primary">Save Settings</button>
+		</div>
+
+	<?=Form::close()?>
+</section>

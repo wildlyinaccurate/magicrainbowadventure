@@ -17,181 +17,193 @@
 
 // HTML Elements 
 body {
-	color: @base-text-colour;
-	font-family: 'Open Sans', sans-serif;
-	background-color: @body-bg-colour;
-	overflow-x: hidden;
-	text-rendering: optimizeLegibility;
+  color: @base-text-colour;
+  font-family: 'Open Sans', sans-serif;
+  background-color: @body-bg-colour;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
 }
 
 a, a:active, a:visited {
-	color: @link-colour;
+  color: @link-colour;
 }
 
 a:hover {
-	color: @link-hover-colour;
+  color: @link-hover-colour;
+}
+
+a.btn {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+p {
+  margin: 4px 0 7px;
 }
 
 h1 {
-	font-size: 29px;
-	padding-top: 10px;
+  font-size: 25px;
+  padding-top: 1px;
 }
 
 h2 {
-	font-size: 24px;
-    padding: 0 6px 2px;
+  font-size: 24px;
+  padding: 0 6px 2px;
 }
 
 h3 {
-	font-size: 16px;
-    padding: 4px 0;
+  font-size: 16px;
+  padding: 4px 0;
 }
 
 h4 {
-	font-size: 14px;
+  font-size: 14px;
 }
 
 h1, h2, h3, h4 {
-	color: @dark-grey;
-	font-family: 'Coustard', Verdana, sans-serif;
+  color: @dark-grey;
+  font-family: 'Coustard', Verdana, sans-serif;
 }
 
 h2 a, h3 a, h4 a {
-	text-decoration: none;
+  text-decoration: none;
 }
 
 // Common Classes 
 .error {
-	color: #d00;
-	padding: 4px;
-	text-shadow: 1px 1px 1px #ccc;
+  color: #d00;
+  padding: 4px;
+  text-shadow: 1px 1px 1px #ccc;
 }
 
 // Heading 
 header {
-	height: 60px;
-	background-color: #2a292d;
-	.drop-shadow(0, 1px, 5px, 0.2);
+  background-color: #2a292d;
+  width: 100%;
+  height: 40px;
+  position: fixed;
+  top: 0;
+  .drop-shadow(0, 2px, 7px, 0.5);
 }
 
 header h1 a {
-	color: @link-colour !important;
-	padding-left: 4px;
-	text-decoration: none;
-	text-shadow: 1px 1px 1px rgba(255, 255, 255, 1);
-	.transition-duration(0.6s);
+  color: @link-colour !important;
+  padding-left: 4px;
+  text-decoration: none;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 1);
+  .transition-duration(0.6s);
 }
 
 header h1 a:hover {
-	text-shadow: 1px 1px 2px rgba(161, 39, 209, 0.8);;
-	.transition-duration(0.3s);
+  text-shadow: 1px 1px 2px rgba(161, 39, 209, 0.8);;
+  .transition-duration(0.3s);
 }
 
 // Navigation 
 header nav ul {
-	float: right;
+  float: right;
 }
 
 header nav li {
-	float: left;
+  float: left;
 }
 
-header nav a, nav a:visited {
-	float: left;
-	height: 16px;
-	font-weight: bold;
-	line-height: 16px;
-	padding: 22px 18px;
-	text-decoration: none;
-	color: @nav-colour;
-	.transition-duration(0.4s);
+header nav a, header nav a:visited {
+  float: left;
+  height: 16px;
+  font-weight: bold;
+  line-height: 16px;
+  padding: 11px 18px;
+  text-decoration: none;
+  color: @nav-colour;
+  .transition-duration(0.4s);
 }
 
 header nav a:hover {
-	color: @nav-hover-colour;
+  color: @nav-hover-colour;
 }
 
 #account-navigation {
-	text-align: right;
+  text-align: right;
 }
 
 // Content 
 #content {
-	margin-top: 38px;
+  margin-top: 52px;
 }
 
 #main section, .entry, #sidebar section {
-	padding: 14px;
-	background-color: @content-bg-colour;
-	border: 1px solid @content-border-colour;
-	.border-radius(6px);
+  padding: 14px;
+  background-color: @content-bg-colour;
+  border: 1px solid @content-border-colour;
+  .border-radius(6px);
 }
 
 #main .entries {
-	border: none;
-	padding: 0;
-	background-color: transparent;
+  border: none;
+  padding: 0;
+  background-color: transparent;
 }
 
 // Footer 
 footer {
-	font-size: 0.8em;
-	margin-top: 24px;
-	padding: 8px 0;
-	clear: left;
+  font-size: 0.8em;
+  margin-top: 24px;
+  padding: 8px 0;
+  clear: left;
 }
 
 #footer-links {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
 #footer-links li {
-	display: inline;
-	margin-right: 6px;
+  display: inline;
+  margin-right: 6px;
 }
 
 // Entries
 .entry {
-	margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
 .entry .description {
-	margin-top: 8px;
+  margin-top: 8px;
 }
 
 .entry .entry-status {
-	font-style: italic;
+  font-style: italic;
 }
 
 .entry-image {
-	margin-bottom: 4px;
+  margin-bottom: 4px;
 }
 
 .my-entries .thumbnail {
-	float: left;
-	margin: 0 8px 8px 0;
+  float: left;
+  margin: 0 8px 8px 0;
 }
 
 .my-entries .ratings {
-	margin-top: 16px;
+  margin-top: 16px;
 }
 
 .my-entries .description {
-	clear: left;
+  clear: left;
 }
 
 .submitted-by {
-	color: @dark-grey;
-	font-size: 11px;
+  color: @dark-grey;
+  font-size: 11px;
 }
 
 .load-more {
-    display: block;
-    text-decoration: none;
+  display: block;
+  text-decoration: none;
 }
 
 .load-more.loading {
-    background: url(../img/loading.gif) no-repeat right;
+  background: url(../img/loading.gif) no-repeat right;
 }

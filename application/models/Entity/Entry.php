@@ -9,7 +9,7 @@ namespace Entity;
  * @Table(name="entry", indexes={@index(name="entry_type_idx", columns={"type"})})
  * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class Entry extends TimestampedModel implements \Serializable
+class Entry extends TimestampedModel
 {
 
 	/**
@@ -30,7 +30,7 @@ class Entry extends TimestampedModel implements \Serializable
 	protected $url_title;
 
 	/**
-	 * @Column(type="string", length=64, nullable=false)
+	 * @Column(type="string", length=80, nullable=false)
 	 */
 	protected $file_path;
 
@@ -80,6 +80,17 @@ class Entry extends TimestampedModel implements \Serializable
 	}
 
 	/**
+	 * Return a cache key for this Entry's thumbnail
+	 *
+	 * @return	string
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	private function _getThumbnailCacheKey()
+	{
+		return "/Entity/Entry/Thumbnail/{$this->hash}";
+	}
+
+	/**
 	 * Upload the entry's file to Dropbox. The file's extension must be specified.
 	 *
 	 * Returns the Dropbox API response.
@@ -100,57 +111,30 @@ class Entry extends TimestampedModel implements \Serializable
 		$dropbox = \IoC::resolve('dropbox::api');
 		$response = $dropbox->putFile($file, $file_name, "Public/{$file_path}");
 
+		// Remove cached thumbnails
+		\Cache::forget($this->_getThumbnailCacheKey());
+
 		return $response;
 	}
 
 	/**
-	 * Override the default behaviour when this object is serialized
-	 *
-	 * @return  string
-	 */
-	public function serialize()
-	{
-		return serialize(array(
-			'id' => $this->id,
-			'title' => $this->title,
-			'url_title' => $this->url_title,
-			'description' => $this->description,
-			'hash' => $this->hash,
-			'file_path' => $this->file_path,
-		));
-	}
-
-	/**
-	 * Override the defeault behaviour when this object is unserialized
-	 *
-	 * @param   string  $data
-	 * @return  void
-	 */
-	public function unserialize($data)
-	{
-		$data = unserialize($data);
-
-		$this->id = $data['id'];
-		$this->title = $data['title'];
-		$this->url_title = $data['url_title'];
-		$this->description = $data['description'];
-		$this->hash = $data['hash'];
-		$this->file_path = $data['file_path'];
-	}
-
-	/**
-	 * Get this Entry's thumbnail from Dropbox
+	 * Get the Entry's thumbnail as base64-encoded data
 	 *
 	 * @param	string	$size
 	 * @return	string
 	 */
-	public function getDropboxThumbnail($size = 'small')
+	public function getThumbnail($size = 'medium')
 	{
-		$CI =& get_instance();
-		$CI->load->library('dropbox');
-		$dropbox_directory = $CI->config->item('dropbox_upload_path');
+		$cache_key = $this->_getThumbnailCacheKey();
 
-		return $CI->dropbox->thumbnails("Public/{$dropbox_directory}/{$this->getFilePath()}", $size);
+		if ( ! \Cache::has($cache_key))
+		{
+			$dropbox = \IoC::resolve('dropbox::api');
+			$thumbnail = $dropbox->thumbnails("Public/{$this->file_path}", 'JPEG', $size);
+			\Cache::forever($cache_key, base64_encode($thumbnail['data']));
+		}
+
+		return \Cache::get($cache_key);
 	}
 
 	/**

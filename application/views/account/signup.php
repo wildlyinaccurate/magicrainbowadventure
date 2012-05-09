@@ -1,7 +1,7 @@
 <section class="signup">
 	<p>Already have an account? <?=HTML::link('account/login', Lang::line('general.log_in'))?></p>
 
-	<?=Form::open('account/signup', 'POST')?>
+	<?=Form::open('account/signup')?>
 
 		<div class="control-group">
 			<?=Form::text('username', Input::old('username'), array('maxlength' => 32, 'placeholder' => Lang::line('account.label_username')))?>
