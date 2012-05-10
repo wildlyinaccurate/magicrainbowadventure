@@ -14,7 +14,10 @@
             <?=Form::label('entry_image', Lang::line('entries.label_description'), array('class' => 'control-label'))?>
 
             <div class="controls">
-                <?=Form::textarea('description', Input::old('description'), array('placeholder' => Lang::line('entries.description')))?>
+                <?=Form::textarea('description', Input::old('description'), array(
+                    'placeholder' => Lang::line('entries.description'),
+                    'rows' => 4,
+                ))?>
                 <?=$errors->first('description', '<span class="error">:message</span>')?>
             </div>
         </div>

@@ -66,14 +66,13 @@ class Entries_Controller extends Base_Controller
 	 */
 	public function post_submit()
 	{
-		$validation_messages = array(
-			'required' => 'You forgot to enter the :attribute!',
-			'valid_image_url' => 'You need to either upload an image or enter an image URL.',
-		);
-
 		$validation_rules = array(
 			'title' => 'required|max:140',
 			'description' => 'max:2000',
+		);
+
+		$validation_messages = array(
+			'valid_image_url' => 'You need to either upload an image or enter an image URL.',
 		);
 
 		$entry_image_error = Input::file('entry_image.error');
@@ -140,33 +139,9 @@ class Entries_Controller extends Base_Controller
 
 		$this->em->persist($entry);
 		$this->em->flush();
-	}
 
-	/**
-	 * Display the thank-you message
-	 *
-	 * @return void
-	 */
-	public function thank_you()
-	{
-		$entries = $this->user->getEntries();
-
-		if ($entries->count() > 0)
-		{
-			// Get the user's latest entries
-			$entry = $entries->last();
-		}
-		else
-		{
-			// The user has no Entries
-			$entry = false;
-		}
-
-		$this->layout->title = 'Thanks!';
-
-		View::make('entries/thank-you', array(
-			 'entries' => $entry
-		 ));
+		return Redirect::to("{$entry->getId()}/{$entry->getUrlTitle()}")
+						->with('success_message', Lang::line('entries.entry_submit_success'));
 	}
 
 	/**
@@ -202,9 +177,9 @@ class Entries_Controller extends Base_Controller
 		else
 		{
 			$this->layout->title = $entry->getTitle();
-			View::make('entries/view-preview', array(
-					'entry' => $entry
-				));
+			$this->layout->content = View::make('entries/view-preview', array(
+				'entry' => $entry
+			));
 		}
 	}
 
