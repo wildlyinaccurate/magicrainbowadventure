@@ -15,7 +15,7 @@
 @nav-colour: darken(@nav-hover-colour, 20%);
 
 
-// HTML Elements 
+// HTML Elements
 body {
   color: @base-text-colour;
   font-family: 'Open Sans', sans-serif;
@@ -43,7 +43,7 @@ p {
 
 h1 {
   font-size: 25px;
-  padding-top: 1px;
+  padding-top: 3px;
 }
 
 h2 {
@@ -72,11 +72,10 @@ h2 a, h3 a, h4 a {
 // Common Classes
 .error, .success {
   padding: 4px;
-  text-shadow: 1px 1px 1px #ccc;
 }
 
 .error {
-  color: #b32;
+  color: #c32;
 }
 
 .success {
@@ -87,11 +86,15 @@ h2 a, h3 a, h4 a {
   background: url(../img/loading.gif) no-repeat right;
 }
 
-// Heading 
+form .error, form .success, form .help-block, form .help-inline {
+  font-size: 12px;
+}
+
+// Heading
 header {
   background-color: #2a292d;
   width: 100%;
-  height: 40px;
+  height: 44px;
   position: fixed;
   top: 0;
   .drop-shadow(0, 2px, 7px, 0.5);
@@ -110,7 +113,7 @@ header h1 a:hover {
   .transition-duration(0.3s);
 }
 
-// Navigation 
+// Navigation
 header nav ul {
   float: right;
 }
@@ -124,7 +127,7 @@ header nav a, header nav a:visited {
   height: 16px;
   font-weight: bold;
   line-height: 16px;
-  padding: 11px 18px;
+  padding: 13px 18px;
   text-decoration: none;
   color: @nav-colour;
   .transition-duration(0.4s);
@@ -138,7 +141,7 @@ header nav a:hover {
   text-align: right;
 }
 
-// Content 
+// Content
 #content {
   margin-top: 56px;
 }
@@ -156,7 +159,7 @@ header nav a:hover {
   background-color: transparent;
 }
 
-// Footer 
+// Footer
 footer {
   font-size: 0.8em;
   margin-top: 24px;
