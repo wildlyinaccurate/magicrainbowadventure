@@ -34,7 +34,7 @@ return array(
 	|
 	*/
 	'max_upload_size' => '8192',
-	'thumbnail_cache_path' => path('public') . 'assets',
+	'thumbnail_cache_path' => path('public') . 'uploads',
 	'dropbox_base_path' => 'MagicRainbowAdventure',
 	'temp_file_prefix' => 'MRA',
 
