@@ -5,8 +5,8 @@ return array(
 	// Titles
 	'vote_up' => 'Vote Up',
 	'vote_down' => 'Vote Down',
-	'favourite' => 'Favourite',
-	'comments' => 'Comments',
+	'favourite' => 'Add as Favourite',
+	'comments' => 'View Comments',
 
 	// Form labels
 	'label_title' => 'Give your entry a title',

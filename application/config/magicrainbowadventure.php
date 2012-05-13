@@ -25,6 +25,9 @@ return array(
 	| thumbnail_cache_path
 	| The base path for cached thumbnails (stored locally).
 	|
+	| thumbnail_cache_url
+	| The URL for accessing thumbnails. Can be relative.
+	|
 	| dropbox_base_path
 	| The base path for all files uploaded to Dropbox, relative to /Public.
 	|
@@ -35,6 +38,7 @@ return array(
 	*/
 	'max_upload_size' => '8192',
 	'thumbnail_cache_path' => path('public') . 'uploads',
+	'thumbnail_cache_url' => 'uploads',
 	'dropbox_base_path' => 'MagicRainbowAdventure',
 	'temp_file_prefix' => 'MRA',
 

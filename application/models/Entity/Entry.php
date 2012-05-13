@@ -95,6 +95,12 @@ class Entry extends TimestampedModel
 	);
 
 	/**
+	 * Format to use when saving and retrieving thumbnails.
+	 * @var string
+	 */
+	private $thumbnail_format = 'JPEG';
+
+	/**
 	 * Constructor
 	 */
 	public function __construct()
@@ -136,7 +142,7 @@ class Entry extends TimestampedModel
 
 		// Upload the file to dropbox
 		$dropbox = \IoC::resolve('dropbox::api');
-		$response = $dropbox->putFile($file_path, $file_name, "Public/{$entry_file_path}");
+		$dropbox->putFile($file_path, $file_name, "Public/{$entry_file_path}");
 
 		// Retrieve various thumbnails and store them locally
 		foreach ($this->thumbnail_sizes as $size)
@@ -151,25 +157,37 @@ class Entry extends TimestampedModel
 	}
 
 	/**
+	 * Build the thumbnail directory from a base path
+	 *
+	 * @param	string	$base
+	 * @param	string	$size
+	 * @return	string
+	 */
+	private function _getThumbnailPath($base, $size)
+	{
+		return dirname($base . "/{$this->file_path}") . "/{$size}/{$this->getHash()}." . strtolower($this->thumbnail_format);
+	}
+
+	/**
 	 * Download a thumbnail from Dropbox and store it locally
 	 *
 	 * @param	string	$size
-	 * @param	string	$format
 	 * @return	void
 	 */
-	private function _downloadThumbnail($size, $format = 'JPEG')
+	private function _downloadThumbnail($size)
 	{
 		$dropbox = \IoC::resolve('dropbox::api');
 
-		$thumbnail = $dropbox->thumbnails("Public/{$this->file_path}", $format, $size);
-		$thumbnail_dir = dirname(\Config::get('magicrainbowadventure.thumbnail_cache_path') . "/{$this->file_path}") . "/{$size}";
+		$thumbnail = $dropbox->thumbnails("Public/{$this->file_path}", $this->thumbnail_format, $size);
+		$thumbnail_path = $this->_getThumbnailPath(\Config::get('magicrainbowadventure.thumbnail_cache_path'), $size);
+		$thumbnail_dir = dirname($thumbnail_path);
 
 		if ( ! is_dir($thumbnail_dir))
 		{
 			mkdir($thumbnail_dir, 0777, true);
 		}
 
-		file_put_contents("{$thumbnail_dir}/{$this->getHash()}", $thumbnail['data']);
+		file_put_contents($thumbnail_path, $thumbnail['data']);
 	}
 
 	/**
@@ -184,7 +202,7 @@ class Entry extends TimestampedModel
 
 		if ( ! \Cache::has($cache_key))
 		{
-			$thumbnail_path = dirname(\Config::get('magicrainbowadventure.thumbnail_cache_path') . "/{$this->file_path}") . "/{$size}/{$this->hash}";
+			$thumbnail_path = $this->_getThumbnailPath(\Config::get('magicrainbowadventure.thumbnail_cache_path'), $size);
 
 			if ( ! file_exists($thumbnail_path))
 			{
@@ -196,6 +214,17 @@ class Entry extends TimestampedModel
 		}
 
 		return \Cache::get($cache_key);
+	}
+
+	/**
+	 * Get the public URL for a thumbnail.
+	 *
+	 * @param	string	$size
+	 * @return	string
+	 */
+	public function getThumbnailUrl($size)
+	{
+		return $this->_getThumbnailPath(\Config::get('magicrainbowadventure.thumbnail_cache_url'), $size);
 	}
 
 	/**
