@@ -8,7 +8,8 @@ namespace Entity;
  * @Entity
  * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class Administrator extends User implements \Serializable {
+class Administrator extends User
+{
 
 	/**
 	 * @OneToMany(targetEntity="Entry", mappedBy="moderated_by", fetch="EXTRA_LAZY")
@@ -24,10 +25,6 @@ class Administrator extends User implements \Serializable {
 
         $this->moderated_entries = new \Doctrine\Common\Collections\ArrayCollection;
     }
-
-	public function serialize() { return parent::serialize(); }
-	public function unserialize($data) { return parent::unserialize($data); }
-
 
     /**
      * Add approved entry
