@@ -141,22 +141,35 @@ class Entry extends TimestampedModel
 		// Retrieve various thumbnails and store them locally
 		foreach ($this->thumbnail_sizes as $size)
 		{
-			$thumbnail = $dropbox->thumbnails("Public/{$this->file_path}", 'JPEG', $size);
-			$thumbnail_dir = dirname(\Config::get('magicrainbowadventure.thumbnail_cache_path') . '/' . $this->getFilePath()) . '/' . $size;
-
-			if ( ! is_dir($thumbnail_dir))
-			{
-				mkdir($thumbnail_dir, 0777, true);
-			}
-
-			file_put_contents("{$thumbnail_dir}/{$this->getHash()}", $thumbnail['data']);
+			$this->_downloadThumbnail($size);
 		}
-
 
 		// Remove cached thumbnails
 		\Cache::forget($this->_getThumbnailCacheKey());
 
 		return $this;
+	}
+
+	/**
+	 * Download a thumbnail from Dropbox and store it locally
+	 *
+	 * @param	string	$size
+	 * @param	string	$format
+	 * @return	void
+	 */
+	private function _downloadThumbnail($size, $format = 'JPEG')
+	{
+		$dropbox = \IoC::resolve('dropbox::api');
+
+		$thumbnail = $dropbox->thumbnails("Public/{$this->file_path}", $format, $size);
+		$thumbnail_dir = dirname(\Config::get('magicrainbowadventure.thumbnail_cache_path') . "/{$this->file_path}") . "/{$size}";
+
+		if ( ! is_dir($thumbnail_dir))
+		{
+			mkdir($thumbnail_dir, 0777, true);
+		}
+
+		file_put_contents("{$thumbnail_dir}/{$this->getHash()}", $thumbnail['data']);
 	}
 
 	/**
@@ -171,8 +184,14 @@ class Entry extends TimestampedModel
 
 		if ( ! \Cache::has($cache_key))
 		{
-			$thumbnail_dir = \Config::get('magicrainbowadventure.thumbnail_cache_path') . '/' . $this->getFilePath();
-			$thumbnail_data = file_get_contents("{$thumbnail_dir}/{$size}/{$this->getHash()}");
+			$thumbnail_path = dirname(\Config::get('magicrainbowadventure.thumbnail_cache_path') . "/{$this->file_path}") . "/{$size}/{$this->hash}";
+
+			if ( ! file_exists($thumbnail_path))
+			{
+				$this->_downloadThumbnail($size);
+			}
+
+			$thumbnail_data = file_get_contents($thumbnail_path);
 			\Cache::forever($cache_key, base64_encode($thumbnail_data));
 		}
 

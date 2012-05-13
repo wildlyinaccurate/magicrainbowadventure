@@ -66,6 +66,12 @@ class Administrator extends \Entity\Administrator implements \Doctrine\ORM\Proxy
         return parent::getModeratedEntries();
     }
 
+    public function __get($property)
+    {
+        $this->__load();
+        return parent::__get($property);
+    }
+
     public function setPassword($password)
     {
         $this->__load();
