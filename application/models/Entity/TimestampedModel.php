@@ -9,13 +9,10 @@ namespace Entity;
  *
  * @MappedSuperclass
  * @HasLifecycleCallbacks
- * @package		CuteStuff
- * @subpackage	Classes
- * @category	Models
  * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
- * @since		Version 0.1
  */
-class TimestampedModel extends BaseModel {
+class TimestampedModel
+{
 
 	/**
 	 * @var	\DateTime
@@ -30,6 +27,14 @@ class TimestampedModel extends BaseModel {
 	 * @column(type="datetime", nullable=true)
 	 */
 	protected $modified_date;
+
+	/**
+	 * Constructor Ahoy!
+	 */
+	public function __construct()
+	{
+		// Nothing here yet!
+	}
 
 	/**
 	 * Set created_date to the current date/time before persisting an object

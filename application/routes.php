@@ -64,6 +64,8 @@ Basset::scripts('default', function($basset)
 		$basset->add('css3-mediaqueries', 'css3-mediaqueries.js');
 		$basset->add('jquery-lazyload', 'jquery-lazyload/jquery.lazyload.js');
 		$basset->add('activity-indicator', 'jquery.activity-indicator-1.0.0.min.js');
+		$basset->add('bootstrap-tooltip', 'bootstrap/bootstrap-tooltip.js');
+		$basset->add('bootstrap-popover', 'bootstrap/bootstrap-popover.js');
 	});
 });
 

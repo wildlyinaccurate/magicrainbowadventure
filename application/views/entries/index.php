@@ -4,12 +4,20 @@
 	<article class="entry">
 		<h3><?=HTML::link("{$entry->getId()}/{$entry->getUrlTitle()}", $entry->getTitle())?></h3>
 
-		<a href="<?=URL::to("{$entry->getId()}/{$entry->getUrlTitle()}")?>">
-			<img src="http://dl.dropbox.com/u/<?=Config::get('dropbox::config.access_token.uid')?>/<?=$entry->getFilePath()?>" alt="" />
-		</a>
-
-		<div class="entry-rating">
+		<div class="buttons">
+			<?=HTML::link("{$entry->getId()}/{$entry->getUrlTitle()}/favourite", $entry->getFavouritedBy()->count(), array(
+				'class' => 'favourite',
+				'title' => Lang::line('entries.favourite'),
+			))?>
+			<?=HTML::link("{$entry->getId()}/{$entry->getUrlTitle()}/comments", $entry->getComments()->count(), array(
+				'class' => 'comments',
+				'title' => Lang::line('entries.comments'),
+			))?>
 		</div>
+
+		<a href="<?=URL::to("{$entry->getId()}/{$entry->getUrlTitle()}")?>">
+			<img src="http://dl.dropbox.com/u/<?=Config::get('dropbox::config.access_token.uid')?>/<?=$entry->getFilePath()?>" alt="<?=$entry->getTitle()?>" />
+		</a>
 
 		<p class="description"><?=nl2br($entry->getDescription())?></p>
 		<p class="submitted-by">Submitted by <?=$entry->getUser()->getDisplayName()?> on <?=$entry->getCreatedDate()->format('d F Y')?></p>

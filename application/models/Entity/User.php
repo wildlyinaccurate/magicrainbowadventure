@@ -48,14 +48,19 @@ class User extends TimestampedModel
 	protected $settings;
 
 	/**
-	 * @OneToMany(targetEntity="Entry", mappedBy="user", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
+	 * @OneToMany(targetEntity="Entry", mappedBy="user", cascade={"persist", "remove"})
 	 */
 	protected $entries;
 
 	/**
-	 * @OneToMany(targetEntity="EntryRating", mappedBy="user", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
+	 * @OneToMany(targetEntity="Comment", mappedBy="user", cascade={"persist", "remove"})
 	 */
-	protected $entry_ratings;
+	protected $comments;
+
+	/**
+	 * @ManyToMany(targetEntity="Entry", mappedBy="favourites", cascade={"persist", "remove"})
+	 */
+	protected $favourites;
 
     /**
      * Constructor
@@ -66,7 +71,8 @@ class User extends TimestampedModel
 
         $this->settings = new \Doctrine\Common\Collections\ArrayCollection;
         $this->entries = new \Doctrine\Common\Collections\ArrayCollection;
-        $this->entry_ratings = new \Doctrine\Common\Collections\ArrayCollection;
+        $this->favourites = new \Doctrine\Common\Collections\ArrayCollection;
+        $this->comments = new \Doctrine\Common\Collections\ArrayCollection;
     }
 
 	/**
@@ -99,16 +105,6 @@ class User extends TimestampedModel
 		}
 
 		return hash('sha512', $password . $this->username);
-	}
-
-	/**
-	 * Authenticate this User by setting self::current to $this
-	 *
-	 * @return	void
-	 */
-	public function authenticate()
-	{
-		self::$current = $this;
 	}
 
 	/**
@@ -187,13 +183,13 @@ class User extends TimestampedModel
     }
 
     /**
-     * Set display_name (make sure we encode UTF8 characters)
+     * Set display_name
      *
      * @param string $displayName
      */
     public function setDisplayName($displayName)
     {
-        $this->display_name = utf8_encode($displayName);
+        $this->display_name = $displayName;
     }
 
 	/**
@@ -207,7 +203,7 @@ class User extends TimestampedModel
 	{
 		if ($this->display_name || $fallbackToUsername === false)
 		{
-			return utf8_decode($this->display_name);
+			return $this->display_name;
 		}
 		else
 		{
@@ -237,15 +233,46 @@ class User extends TimestampedModel
         return $this->settings;
     }
 
+	/**
+	 * Add entries
+	 *
+	 * @param Entry $entry
+	 * @return User
+	 */
+	public function addFavourite(\Entity\Entry $entry)
+	{
+		if ( ! $this->favourites->contains($entry))
+		{
+			$this->favourites[] = $entry;
+			$entry->addFavouritedBy($this);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Get favourites
+	 *
+	 * @return Doctrine\Common\Collections\Collection
+	 */
+	public function getFavourites()
+	{
+		return $this->favourites;
+	}
+
     /**
      * Add entries
      *
-     * @param	\Entity\Entry 	$entry
-     * @return	\Entity\User
+     * @param	Entry 	$entry
+     * @return	User
      */
-	public function addEntry(\Entity\Entry $entry)
+	public function addEntry(Entry $entry)
 	{
-        $this->entries[] = $entry;
+		if ( ! $this->entries->contains($entry))
+		{
+			$this->entries[] = $entry;
+		}
+
         return $this;
     }
 
@@ -260,25 +287,41 @@ class User extends TimestampedModel
     }
 
     /**
-     * Add entry_rating
+     * Add comment
      *
-     * @param	\Entity\EntryRating 	$entry_rating
+     * @param	\Entity\Comment 	$comment
      * @return	\Entity\User
      */
-	public function addEntryRating(\Entity\EntryRating $entry_rating)
+	public function addComment(\Entity\Comment $comment)
 	{
-        $this->entry_ratings[] = $entry_rating;
+		if ( ! $this->comments->contains($comment))
+		{
+			$this->comments[] = $comment;
+			$comment->setUser($this);
+		}
+
         return $this;
     }
 
     /**
-     * Get all entry_ratings
+     * Get all comments
      *
-     * @return	Doctrine\Common\Collections\ArrayCollection $entry_ratings
+     * @return	Doctrine\Common\Collections\Collection $comments
      */
-    public function getEntryRatings()
+    public function getComments()
     {
-        return $this->entry_ratings;
+        return $this->comments;
     }
 
+    /**
+     * Add settings
+     *
+     * @param \Entity\UserSetting $settings
+     * @return User
+     */
+    public function addUserSetting(\Entity\UserSetting $settings)
+    {
+        $this->settings[] = $settings;
+        return $this;
+    }
 }

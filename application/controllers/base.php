@@ -56,6 +56,7 @@ class Base_Controller extends Controller
 		}
 
 		$this->layout->nest('navigation', 'navigation/default');
+		$this->layout->nest('login_required_popover', 'partials/login-required');
 	}
 
 	/**

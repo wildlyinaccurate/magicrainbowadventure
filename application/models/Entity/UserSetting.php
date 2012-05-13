@@ -9,7 +9,8 @@ namespace Entity;
  * @Table(name="user_setting")
  * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class UserSetting extends TimestampedModel {
+class UserSetting extends TimestampedModel
+{
 	
 	/**
 	 * @Id

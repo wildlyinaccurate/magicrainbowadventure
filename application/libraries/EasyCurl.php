@@ -57,10 +57,10 @@ class EasyCurl
 	 * Make a GET request. Returns false on failure.
 	 *
 	 * @param  bool     $binary
-	 * @param  resource $file
+	 * @param  string	$file_path
 	 * @return Easy_curl|bool
 	 */
-	public function execute($binary = false, $file = null)
+	public function execute($binary = false, $file_path = null)
 	{
 		curl_setopt_array($this->curl, array(
 			 CURLOPT_RETURNTRANSFER => true,
@@ -69,12 +69,20 @@ class EasyCurl
 			 CURLOPT_TIMEOUT => $this->timeout,
 		 ));
 
-		if ($file !== null)
+		$handle = false;
+
+		if ($file_path !== null)
 		{
-			curl_setopt($this->curl, CURLOPT_FILE, $file);
+			$handle = fopen($file_path, 'wb');
+			curl_setopt($this->curl, CURLOPT_FILE, $handle);
 		}
 
 		$this->result = curl_exec($this->curl);
+
+		if ($handle !== false)
+		{
+			fclose($handle);
+		}
 
 		if ( ! $this->result)
 		{
@@ -138,33 +146,6 @@ class EasyCurl
 		}
 
 		return curl_getinfo($this->curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
-	}
-
-	/**
-	 * Store the contents of the current URL in a file
-	 *
-	 * @param	string	$file_path
-	 * @return	bool
-	 */
-	public function to_file($file_path)
-	{
-		// Create a file handle
-		$file_handle = fopen($file_path, 'wb');
-
-		curl_setopt_array($this->curl, array(
-			 CURLOPT_HEADER => false,
-			 CURLOPT_TIMEOUT => $this->timeout,
-			 CURLOPT_FILE => $file_handle
-		 ));
-
-		if ( ! curl_exec($this->curl))
-		{
-			return false;
-		}
-
-		fclose($file_handle);
-
-		return true;
 	}
 
 	/**

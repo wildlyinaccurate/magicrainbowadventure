@@ -16,40 +16,26 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
-	| Max Upload Size
+	| File Uploads
 	|--------------------------------------------------------------------------
 	|
-	| The maximum size a file upload can be, in kilobytes (KB).
+	| max_upload_size
+	| The maximum size a file upload can be, in kilobytes (KB). Default: 8192 (8MB)
 	|
-	| Default: 8192 (8MB)
+	| thumbnail_cache_path
+	| The base path for cached thumbnails (stored locally).
 	|
-	*/
-	'max_upload_size' => '8192',
-
-	/*
-	|--------------------------------------------------------------------------
-	| Dropbox Folder Path
-	|--------------------------------------------------------------------------
-	|
+	| dropbox_base_path
 	| The base path for all files uploaded to Dropbox, relative to /Public.
 	|
-	*/
-	'dropbox_base_path' => 'MagicRainbowAdventure',
-
-	/*
-	|--------------------------------------------------------------------------
-	| Temporary File Prefix
-	|--------------------------------------------------------------------------
-	|
+	| temp_file_prefix
 	| The prefix given to tempnam() when handling external images.
-	|
-	| When an entry's image is pulled in from an external URL, the application
-	| will create a temporary file to store the image in before it is uploaded
-	| to Dropbox.
-	|
 	| See http://www.php.net/manual/en/function.tempnam.php
 	|
 	*/
+	'max_upload_size' => '8192',
+	'thumbnail_cache_path' => path('public') . 'assets',
+	'dropbox_base_path' => 'MagicRainbowAdventure',
 	'temp_file_prefix' => 'MRA',
 
 );

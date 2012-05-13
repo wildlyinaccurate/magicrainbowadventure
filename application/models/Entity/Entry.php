@@ -6,7 +6,7 @@ namespace Entity;
  * Entry Model
  *
  * @Entity(repositoryClass="Entity\EntryRepository")
- * @Table(name="entry", indexes={@index(name="entry_type_idx", columns={"type"})})
+ * @Table(name="entry")
  * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
  */
 class Entry extends TimestampedModel
@@ -45,14 +45,9 @@ class Entry extends TimestampedModel
 	protected $description;
 
 	/**
-	 * @Column(type="string", length=16, nullable=false)
+	 * @Column(type="boolean", nullable=false)
 	 */
-	protected $type = 'image';
-
-	/**
-	 * @OneToMany(targetEntity="EntryRating", mappedBy="entry", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
-	 */
-	protected $ratings;
+	protected $approved = false;
 
 	/**
 	 * @ManyToOne(targetEntity="User", inversedBy="entries", fetch="EAGER")
@@ -60,14 +55,44 @@ class Entry extends TimestampedModel
 	protected $user;
 
 	/**
-	 * @Column(type="boolean", nullable=false)
-	 */
-	protected $approved = false;
-
-	/**
 	 * @ManyToOne(targetEntity="Administrator", inversedBy="moderated_entries", fetch="EXTRA_LAZY")
 	 */
 	protected $moderated_by;
+
+	/**
+	 * @ManyToMany(targetEntity="User", inversedBy="favourites")
+	 * @JoinTable(name="entry_favourites",
+	 *      joinColumns={@JoinColumn(name="entry_id", referencedColumnName="id")},
+	 *      inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="id")}
+	 * )
+	 */
+	protected $favourited_by;
+
+	/**
+	 * @OneToMany(targetEntity="Comment", mappedBy="user", cascade={"persist", "remove"})
+	 */
+	protected $comments;
+
+	/**
+	 * @ManyToMany(targetEntity="Tag", inversedBy="entries")
+	 * @JoinTable(name="entry_tags",
+	 *      joinColumns={@JoinColumn(name="entry_id", referencedColumnName="id")},
+	 *      inverseJoinColumns={@JoinColumn(name="tag_id", referencedColumnName="id")}
+	 * )
+	 */
+	protected $tags;
+
+	/**
+	 * When the Entry's file is set, thumbnails in these sizes will be retrieved
+	 * from Dropbox and stored locally.
+	 *
+	 * @var array
+	 */
+	private $thumbnail_sizes = array(
+		'medium',
+		'l',
+		'xl',
+	);
 
 	/**
 	 * Constructor
@@ -76,7 +101,9 @@ class Entry extends TimestampedModel
 	{
 		parent::__construct();
 
-		$this->ratings = new \Doctrine\Common\Collections\ArrayCollection;
+		$this->comments = new \Doctrine\Common\Collections\ArrayCollection;
+		$this->tags = new \Doctrine\Common\Collections\ArrayCollection;
+		$this->favourited_by = new \Doctrine\Common\Collections\ArrayCollection;
 	}
 
 	/**
@@ -91,30 +118,45 @@ class Entry extends TimestampedModel
 	}
 
 	/**
-	 * Upload the entry's file to Dropbox. The file's extension must be specified.
+	 * Upload the Entry's file to Dropbox, and store various sized
+	 * thumbnails locally.
 	 *
-	 * Returns the Dropbox API response.
-	 *
-	 * @param  string 	$file
-	 * @param  string   $extension
-	 * @return array
+	 * @param  string 	$file_path
+	 * @param  string 	$extension
+	 * @return Entry
 	 */
-	public function uploadFile($file, $extension)
+	public function setFile($file_path, $extension)
 	{
-		$file_hash = hash_file('sha1', $file);
+		$file_hash = hash_file('sha1', $file_path);
 		$file_name = "{$file_hash}.{$extension}";
-		$file_path = \Config::get('magicrainbowadventure.dropbox_base_path') . '/' . date('Y/m');
+		$entry_file_path = \Config::get('magicrainbowadventure.dropbox_base_path') . '/' . date('Y/m');
 
 		$this->setHash($file_hash)
-			->setFilePath("{$file_path}/{$file_name}");
+			->setFilePath("{$entry_file_path}/{$file_name}");
 
+		// Upload the file to dropbox
 		$dropbox = \IoC::resolve('dropbox::api');
-		$response = $dropbox->putFile($file, $file_name, "Public/{$file_path}");
+		$response = $dropbox->putFile($file_path, $file_name, "Public/{$entry_file_path}");
+
+		// Retrieve various thumbnails and store them locally
+		foreach ($this->thumbnail_sizes as $size)
+		{
+			$thumbnail = $dropbox->thumbnails("Public/{$this->file_path}", 'JPEG', $size);
+			$thumbnail_dir = dirname(\Config::get('magicrainbowadventure.thumbnail_cache_path') . '/' . $this->getFilePath()) . '/' . $size;
+
+			if ( ! is_dir($thumbnail_dir))
+			{
+				mkdir($thumbnail_dir, 0777, true);
+			}
+
+			file_put_contents("{$thumbnail_dir}/{$this->getHash()}", $thumbnail['data']);
+		}
+
 
 		// Remove cached thumbnails
 		\Cache::forget($this->_getThumbnailCacheKey());
 
-		return $response;
+		return $this;
 	}
 
 	/**
@@ -129,9 +171,9 @@ class Entry extends TimestampedModel
 
 		if ( ! \Cache::has($cache_key))
 		{
-			$dropbox = \IoC::resolve('dropbox::api');
-			$thumbnail = $dropbox->thumbnails("Public/{$this->file_path}", 'JPEG', $size);
-			\Cache::forever($cache_key, base64_encode($thumbnail['data']));
+			$thumbnail_dir = \Config::get('magicrainbowadventure.thumbnail_cache_path') . '/' . $this->getFilePath();
+			$thumbnail_data = file_get_contents("{$thumbnail_dir}/{$size}/{$this->getHash()}");
+			\Cache::forever($cache_key, base64_encode($thumbnail_data));
 		}
 
 		return \Cache::get($cache_key);
@@ -260,57 +302,16 @@ class Entry extends TimestampedModel
 	}
 
 	/**
-	 * Set type
-	 *
-	 * @param string $type
-	 * @return	\Entity\Entry
-	 */
-	public function setType($type)
-	{
-		$this->type = $type;
-		return $this;
-	}
-
-	/**
-	 * Get type
-	 *
-	 * @return string
-	 */
-	public function getType()
-	{
-		return $this->type;
-	}
-
-	/**
-	 * Add ratings
-	 *
-	 * @return	\Entity\EntryRating $ratings
-	 */
-	public function addRating(\Entity\EntryRating $ratings)
-	{
-		$this->ratings[] = $ratings;
-	}
-
-	/**
-	 * Get ratings
-	 *
-	 * @return \Doctrine\Common\Collections\Collection
-	 */
-	public function getRatings()
-	{
-		return $this->ratings;
-	}
-
-	/**
 	 * Set user
 	 *
-	 * @return	\Entity\User $user
-	 * @return	\Entity\Entry
+	 * @param User $user
+	 * @return Entry
 	 */
 	public function setUser(\Entity\User $user)
 	{
-		$this->user = $user;
 		$user->addEntry($this);
+		$this->user = $user;
+
 		return $this;
 	}
 
@@ -357,6 +358,33 @@ class Entry extends TimestampedModel
 	}
 
 	/**
+	 * Add favourited_by
+	 *
+	 * @param Entity\User $user
+	 * @return Entry
+	 */
+	public function addFavouritedBy(\Entity\User $user)
+	{
+		if ( ! $this->favourited_by->contains($user))
+		{
+			$this->favourited_by[] = $user;
+			$user->addFavourite($this);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Get favourited_by
+	 *
+	 * @return Doctrine\Common\Collections\Collection
+	 */
+	public function getFavouritedBy()
+	{
+		return $this->favourited_by;
+	}
+
+	/**
 	 * Set moderated_by
 	 *
 	 * @param	\Entity\User $user
@@ -378,6 +406,55 @@ class Entry extends TimestampedModel
 	public function getModeratedBy()
 	{
 		return $this->moderated_by;
+	}
+
+    /**
+     * Add tags
+     *
+     * @param Entity\Tag $tags
+     * @return Entry
+     */
+    public function addTag(\Entity\Tag $tags)
+    {
+        $this->tags[] = $tags;
+        return $this;
+    }
+
+    /**
+     * Get tags
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+	/**
+	 * Add comment
+	 *
+	 * @param	\Entity\Comment 	$comment
+	 * @return	\Entity\User
+	 */
+	public function addComment(\Entity\Comment $comment)
+	{
+		if ( ! $this->comments->contains($comment))
+		{
+			$this->comments[] = $comment;
+			$comment->setUser($this);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Get all comments
+	 *
+	 * @return	Doctrine\Common\Collections\Collection $comments
+	 */
+	public function getComments()
+	{
+		return $this->comments;
 	}
 
 }

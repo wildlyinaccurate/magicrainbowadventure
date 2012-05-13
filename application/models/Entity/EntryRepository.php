@@ -17,7 +17,7 @@ class EntryRepository extends EntityRepository
 	 * Result cache TTL for entry queries (latest, by rating, etc)
 	 * @var int
 	 */
-	const ENTRY_RESULTS_CACHE_TTL = 600;
+	const RESULTS_CACHE_TTL = 600;
 
 	/**
 	 * Total number of query results (for pagination)
@@ -33,7 +33,7 @@ class EntryRepository extends EntityRepository
 	 * @param	string	$search
 	 * @return	array
 	 */
-	public function getAllEntries($offset = 0, $entries_per_page = 20, $search = '')
+	public function getAllEntries($offset, $entries_per_page, $search = '')
 	{
 		$dql = 'SELECT e FROM Entity\Entry e ';
 
@@ -59,10 +59,10 @@ class EntryRepository extends EntityRepository
 	 * @param	int		$entries_per_page
 	 * @return	array
 	 */
-	public function getLatestEntries($offset = 0, $entries_per_page = 20)
+	public function getLatestEntries($offset, $entries_per_page)
 	{
 		// Count the total number of results for pagination
-		$this->total_query_results = $this->countTotalEntries();
+		$this->total_query_results = $this->countApprovedEntries();
 
 		// Build the query with our offset and limit
 		$query_builder = $this->_em->createQueryBuilder();
@@ -91,7 +91,7 @@ class EntryRepository extends EntityRepository
 	public function getByRating($offset = 0, $entries_per_page = 20, $rating, $order_type = 'SUM')
 	{
 		// Count the total number of results for pagination
-		$this->total_query_results = $this->countTotalEntries();
+		$this->total_query_results = $this->countApprovedEntries();
 
 		// Build the query with our offset and limit
 		$query_builder = $this->_em->createQueryBuilder();
@@ -132,7 +132,7 @@ class EntryRepository extends EntityRepository
 	{
 		// Run the query and save the cache
 		$query = $this->_em->createQuery('SELECT COUNT(e.id) FROM Entity\Entry e WHERE e.moderated_by IS NULL');
-		$query->useResultCache(true, 60);
+		$query->useResultCache(true, self::RESULTS_CACHE_TTL);
 
 		return $query->getSingleScalarResult();
 	}
@@ -170,7 +170,7 @@ class EntryRepository extends EntityRepository
 	 *
 	 * @return int
 	 */
-	protected function countTotalEntries()
+	protected function countApprovedEntries()
 	{
 		$query = $this->_em->createQuery('SELECT COUNT(e.id) FROM Entity\Entry e WHERE e.approved = 1');
 

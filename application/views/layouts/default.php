@@ -75,6 +75,8 @@
 		</div>
 	</footer>
 
+	<?=$login_required_popover?>
+
     <script src="<?=URL::base();?>/basset/default.js"></script>
 	<?=Basset::inline('assets')->scripts();?>
 

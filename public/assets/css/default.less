@@ -6,13 +6,13 @@
 @content-border-colour: darken(@body-bg-colour, 10%);
 
 @base-text-colour: #333;
-@dark-grey: lighten(@base-text-colour, 15%);
+@dark-grey: lighten(@base-text-colour, 10%);
 
 @link-colour: #607890;
 @link-hover-colour: #036;
 
 @nav-hover-colour: #fff;
-@nav-colour: darken(@nav-hover-colour, 20%);
+@nav-colour: darken(@nav-hover-colour, 25%);
 
 
 // HTML Elements
@@ -47,6 +47,19 @@ h1 {
   padding-top: 3px;
 }
 
+h1 a {
+  color: lighten(@link-colour, 10%) !important;
+  padding-left: 4px;
+  text-decoration: none;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 1);
+  .transition-duration(0.6s);
+}
+
+h1 a:hover {
+  color: lighten(@link-colour, 15%) !important;
+  .transition-duration(0.3s);
+}
+
 h2 {
   font-size: 24px;
   padding: 0 6px 2px;
@@ -61,9 +74,9 @@ h4 {
   font-size: 14px;
 }
 
-h1, h2, h3, h4 {
+h1, h2, h3, h4, .entry .rating {
   color: @dark-grey;
-  font-family: 'Coustard', Verdana, sans-serif;
+  font-family: 'Coustard', Georgia, serif;
 }
 
 h2 a, h3 a, h4 a {
@@ -87,6 +100,10 @@ h2 a, h3 a, h4 a {
   background: url(../img/loading.gif) no-repeat right;
 }
 
+.login-required {
+    display: none;
+}
+
 form .error, form .success, form .help-block, form .help-inline {
   font-size: 12px;
 }
@@ -99,19 +116,6 @@ header {
   position: fixed;
   top: 0;
   .drop-shadow(0, 2px, 7px, 0.5);
-}
-
-header h1 a {
-  color: @link-colour !important;
-  padding-left: 4px;
-  text-decoration: none;
-  text-shadow: 1px 1px 1px rgba(255, 255, 255, 1);
-  .transition-duration(0.6s);
-}
-
-header h1 a:hover {
-  text-shadow: 1px 1px 2px rgba(161, 39, 209, 0.8);;
-  .transition-duration(0.3s);
 }
 
 // Navigation
@@ -128,7 +132,7 @@ header nav a, header nav a:visited {
   height: 16px;
   font-weight: bold;
   line-height: 16px;
-  padding: 13px 18px;
+  padding: 13px 8px 13px 44px;
   text-decoration: none;
   color: @nav-colour;
   .transition-duration(0.4s);
@@ -136,6 +140,14 @@ header nav a, header nav a:visited {
 
 header nav a:hover {
   color: @nav-hover-colour;
+}
+
+header nav .upload {
+  background: url(../img/upload.png) no-repeat 13px 14px;
+}
+
+header nav .upload:hover {
+  background-position: 13px -22px;
 }
 
 #account-navigation {
@@ -172,6 +184,7 @@ footer {
   margin: 0;
   padding: 0;
   list-style-type: none;
+  text-align: right;
 }
 
 #footer-links li {
@@ -188,8 +201,48 @@ footer {
   margin-top: 8px;
 }
 
+.submitted-by {
+    color: @dark-grey;
+    font-size: 11px;
+}
+
+.entry .rating {
+    margin: 12px 0 6px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
 .entry .entry-status {
   font-style: italic;
+}
+
+.entry .buttons {
+    float: right;
+    text-align: center;
+    padding: 4px 12px;
+}
+
+.entry .buttons a {
+    display: block;
+    width: 50px;
+    height: 34px;
+    padding: 8px 0;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    color: #fff;
+    text-decoration: none;
+}
+
+.entry .buttons a:hover, .entry .buttons a.active {
+    background-position: 0 -54px;
+}
+
+.entry .favourite {
+    background-image: url(../img/favourite.png);
+}
+
+.entry .comments {
+    background-image: url(../img/comments.png);
 }
 
 .entry-image {
@@ -207,11 +260,6 @@ footer {
 
 .my-entries .description {
   clear: left;
-}
-
-.submitted-by {
-  color: @dark-grey;
-  font-size: 11px;
 }
 
 .load-more {

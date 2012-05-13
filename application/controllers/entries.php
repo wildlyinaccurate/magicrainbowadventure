@@ -20,6 +20,8 @@ class Entries_Controller extends Base_Controller
 		$this->filter('before', 'auth')->only(array(
 			'submit',
 		));
+
+		Basset::inline('assets')->add('entries', 'assets/js/entries.js');
 	}
 
 	/**
@@ -111,10 +113,9 @@ class Entries_Controller extends Base_Controller
 		{
 			// Retrieve the image with cURL and store it in a temporary file
 			$entry_file_path = tempnam(sys_get_temp_dir(), Config::get('magicrainbowadventure.temp_file_prefix'));
-			$handle = fopen($entry_file_path, 'w+b');
 
 			$curl = new \EasyCurl(Input::get('image_url'));
-			$curl->execute(true, $handle);
+			$curl->execute(true, $entry_file_path);
 			$content_type = $curl->get_content_type();
 		}
 		else
@@ -128,7 +129,7 @@ class Entries_Controller extends Base_Controller
 		$extension = \Helpers\ArrayHelper::recursive_array_search($content_type, $mimes);
 
 		// Upload the file to Dropbox
-		$entry->uploadFile($entry_file_path, $extension);
+		$entry->setFile($entry_file_path, $extension);
 
 		if ($this->user->isAdmin())
 		{
@@ -181,139 +182,6 @@ class Entries_Controller extends Base_Controller
 				'entry' => $entry
 			));
 		}
-	}
-
-	/**
-	 * Output the attachment of an Entry
-	 *
-	 * @param	integer	$entry_id
-	 * @return	void
-	 */
-	public function thumbnail($entry_id = NULL)
-	{
-		// Make sure the Entry exists
-		if ( ! $entry_id || ! $entry = $this->em->find('\Entity\Entry', $entry_id))
-		{
-			show_404();
-		}
-
-		// Also make sure that this Entry belongs to the current User, or they are an Administrator
-		// This is to prevent unnecessary strain on the server from guests or bots generating thumbnails
-		if ($entry->getUser()->getId() != $this->user->getId() && ! $this->user->isAdmin())
-		{
-			show_404();
-		}
-
-		// Load the Image_moo library for resizing and cropping
-		$this->load->library('image_moo');
-
-		// Load the caching driver and see if the thumbnail is already cached
-		$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
-		$cache_id = "entries/thumbnail/{$entry_id}";
-
-		if ( ! $cache = $this->cache->get($cache_id))
-		{
-			$image_dir = $this->config->item('upload_directory');
-			$thumb_width = $this->config->item('thumb_width');
-			$thumb_height = $this->config->item('thumb_height');
-			$thumb_quality = $this->config->item('thumb_quality');
-
-			// Capture the output of Image_moo::save_dynamic() so that we can cache the thumbnail
-			ob_start();
-
-			$this->image_moo->load("{$image_dir}/{$entry->getFilePath()}")
-					->set_jpeg_quality($thumb_quality)
-					->resize_crop($thumb_width, $thumb_height)
-					->save_dynamic();
-
-			$thumbnail = ob_get_clean();
-
-			// We need to cache not only the thumbnail content, but the HTTP headers set
-			$cache = array(
-				'thumbnail' => $thumbnail,
-				'headers' => headers_list()
-			);
-
-			// Save the thumbnail to cache
-			$this->cache->save($cache_id, $cache, 7200);
-		}
-
-		// Set some headers and we're good to go!
-		foreach ($cache['headers'] as $header)
-		{
-			header($header);
-		}
-
-		die($cache['thumbnail']);
-	}
-
-	/**
-	 * Process the Entry file, whether it be an uploaded file or external link
-	 *
-	 * @return	array|bool
-	 */
-	private function _process_file()
-	{
-		if ($this->_uploaded_file())
-		{
-			if ( ! $upload_data = $this->_do_upload())
-			{
-				return false;
-			}
-			else
-			{
-				$file_name = $upload_data['file_name'];
-				$file_path = $upload_data['full_path'];
-			}
-		}
-		else
-		{
-			// _valid_image_url() has already done some of the work for us, including
-			// getting the content-type and loading the easy_curl library
-
-			// Figure out the extension to use based on the content type
-			require APPPATH . 'config/mimes.php';
-			$this->load->helper('advanced_array');
-			$extension = recursive_array_search($this->image_content_type, $mimes);
-
-			// Build a random file name
-			mt_srand();
-			$filename = md5(uniqid(mt_rand()));
-			$directory = $this->config->item('upload_tmp_directory');
-			$file_path = "{$directory}/{$filename}.{$extension}";
-
-			// Create a unique filename
-			// Easy_curl is already loaded from _valid_image_url()
-			if ( ! $this->easy_curl->url_to_file(Input::get('image_url'), $file_path))
-			{
-				$this->upload_error = Lang::line('general.url_to_file_error');
-				return false;
-			}
-			else
-			{
-				$file_name = "{$filename}.{$extension}";
-			}
-		}
-
-		// The image has been uploaded successfully - now see if it needs to be resized
-		if ( ! $this->_resize_image($file_path))
-		{
-			// Errors ocurred during the resize
-			return false;
-		}
-
-		// Everything went ok. Return the file name to be stored against the entry
-		return $file_name;
-	}
-
-	/**
-	 * Determine whether the user has uploaded a file
-	 *
-	 * @return	bool
-	 */
-	private function _uploaded_file()
-	{
-		return (isset($_FILES['userfile']) && $_FILES['userfile']['error'] != 4);
 	}
 
 }
