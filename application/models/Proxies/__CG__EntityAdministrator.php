@@ -78,12 +78,6 @@ class Administrator extends \Entity\Administrator implements \Doctrine\ORM\Proxy
         return parent::encryptPassword($password);
     }
 
-    public function authenticate()
-    {
-        $this->__load();
-        return parent::authenticate();
-    }
-
     public function isAdmin()
     {
         $this->__load();
@@ -153,6 +147,18 @@ class Administrator extends \Entity\Administrator implements \Doctrine\ORM\Proxy
         return parent::getSettings();
     }
 
+    public function addFavourite(\Entity\Entry $entry)
+    {
+        $this->__load();
+        return parent::addFavourite($entry);
+    }
+
+    public function getFavourites()
+    {
+        $this->__load();
+        return parent::getFavourites();
+    }
+
     public function addEntry(\Entity\Entry $entry)
     {
         $this->__load();
@@ -165,16 +171,22 @@ class Administrator extends \Entity\Administrator implements \Doctrine\ORM\Proxy
         return parent::getEntries();
     }
 
-    public function addEntryRating(\Entity\EntryRating $entry_rating)
+    public function addComment(\Entity\Comment $comment)
     {
         $this->__load();
-        return parent::addEntryRating($entry_rating);
+        return parent::addComment($comment);
     }
 
-    public function getEntryRatings()
+    public function getComments()
     {
         $this->__load();
-        return parent::getEntryRatings();
+        return parent::getComments();
+    }
+
+    public function addUserSetting(\Entity\UserSetting $settings)
+    {
+        $this->__load();
+        return parent::addUserSetting($settings);
     }
 
     public function setCreatedDate()
@@ -201,16 +213,10 @@ class Administrator extends \Entity\Administrator implements \Doctrine\ORM\Proxy
         return parent::getModifiedDate();
     }
 
-    public function toArray()
-    {
-        $this->__load();
-        return parent::toArray();
-    }
-
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'username', 'password', 'email', 'display_name', 'created_date', 'modified_date', 'settings', 'entries', 'entry_ratings', 'moderated_entries');
+        return array('__isInitialized__', 'id', 'username', 'password', 'email', 'display_name', 'created_date', 'modified_date', 'settings', 'entries', 'comments', 'favourites', 'moderated_entries');
     }
 
     public function __clone()

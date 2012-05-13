@@ -42,28 +42,16 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
     }
 
     
-    public function uploadFile($file, $extension)
+    public function setFile($file_path, $extension)
     {
         $this->__load();
-        return parent::uploadFile($file, $extension);
+        return parent::setFile($file_path, $extension);
     }
 
-    public function serialize()
+    public function getThumbnail($size = 'medium')
     {
         $this->__load();
-        return parent::serialize();
-    }
-
-    public function unserialize($data)
-    {
-        $this->__load();
-        return parent::unserialize($data);
-    }
-
-    public function getDropboxThumbnail($size = 'small')
-    {
-        $this->__load();
-        return parent::getDropboxThumbnail($size);
+        return parent::getThumbnail($size);
     }
 
     public function getId()
@@ -135,30 +123,6 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
         return parent::getDescription();
     }
 
-    public function setType($type)
-    {
-        $this->__load();
-        return parent::setType($type);
-    }
-
-    public function getType()
-    {
-        $this->__load();
-        return parent::getType();
-    }
-
-    public function addRating(\Entity\EntryRating $ratings)
-    {
-        $this->__load();
-        return parent::addRating($ratings);
-    }
-
-    public function getRatings()
-    {
-        $this->__load();
-        return parent::getRatings();
-    }
-
     public function setUser(\Entity\User $user)
     {
         $this->__load();
@@ -189,6 +153,18 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
         return parent::isApproved();
     }
 
+    public function addFavouritedBy(\Entity\User $user)
+    {
+        $this->__load();
+        return parent::addFavouritedBy($user);
+    }
+
+    public function getFavouritedBy()
+    {
+        $this->__load();
+        return parent::getFavouritedBy();
+    }
+
     public function setModeratedBy(\Entity\User $user)
     {
         $this->__load();
@@ -199,6 +175,30 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
     {
         $this->__load();
         return parent::getModeratedBy();
+    }
+
+    public function addTag(\Entity\Tag $tags)
+    {
+        $this->__load();
+        return parent::addTag($tags);
+    }
+
+    public function getTags()
+    {
+        $this->__load();
+        return parent::getTags();
+    }
+
+    public function addComment(\Entity\Comment $comment)
+    {
+        $this->__load();
+        return parent::addComment($comment);
+    }
+
+    public function getComments()
+    {
+        $this->__load();
+        return parent::getComments();
     }
 
     public function setCreatedDate()
@@ -225,16 +225,10 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
         return parent::getModifiedDate();
     }
 
-    public function toArray()
-    {
-        $this->__load();
-        return parent::toArray();
-    }
-
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'title', 'url_title', 'file_path', 'hash', 'description', 'type', 'approved', 'created_date', 'modified_date', 'ratings', 'user', 'moderated_by');
+        return array('__isInitialized__', 'id', 'title', 'url_title', 'file_path', 'hash', 'description', 'approved', 'created_date', 'modified_date', 'user', 'moderated_by', 'favourited_by', 'comments', 'tags');
     }
 
     public function __clone()

@@ -42,18 +42,6 @@ class User extends \Entity\User implements \Doctrine\ORM\Proxy\Proxy
     }
 
     
-    public function serialize()
-    {
-        $this->__load();
-        return parent::serialize();
-    }
-
-    public function unserialize($data)
-    {
-        $this->__load();
-        return parent::unserialize($data);
-    }
-
     public function setPassword($password)
     {
         $this->__load();
@@ -64,12 +52,6 @@ class User extends \Entity\User implements \Doctrine\ORM\Proxy\Proxy
     {
         $this->__load();
         return parent::encryptPassword($password);
-    }
-
-    public function authenticate()
-    {
-        $this->__load();
-        return parent::authenticate();
     }
 
     public function isAdmin()
@@ -123,10 +105,10 @@ class User extends \Entity\User implements \Doctrine\ORM\Proxy\Proxy
         return parent::setDisplayName($displayName);
     }
 
-    public function getDisplayName()
+    public function getDisplayName($fallbackToUsername = true)
     {
         $this->__load();
-        return parent::getDisplayName();
+        return parent::getDisplayName($fallbackToUsername);
     }
 
     public function addSetting(\Entity\UserSetting $setting)
@@ -141,6 +123,18 @@ class User extends \Entity\User implements \Doctrine\ORM\Proxy\Proxy
         return parent::getSettings();
     }
 
+    public function addFavourite(\Entity\Entry $entry)
+    {
+        $this->__load();
+        return parent::addFavourite($entry);
+    }
+
+    public function getFavourites()
+    {
+        $this->__load();
+        return parent::getFavourites();
+    }
+
     public function addEntry(\Entity\Entry $entry)
     {
         $this->__load();
@@ -153,16 +147,22 @@ class User extends \Entity\User implements \Doctrine\ORM\Proxy\Proxy
         return parent::getEntries();
     }
 
-    public function addEntryRating(\Entity\EntryRating $entry_rating)
+    public function addComment(\Entity\Comment $comment)
     {
         $this->__load();
-        return parent::addEntryRating($entry_rating);
+        return parent::addComment($comment);
     }
 
-    public function getEntryRatings()
+    public function getComments()
     {
         $this->__load();
-        return parent::getEntryRatings();
+        return parent::getComments();
+    }
+
+    public function addUserSetting(\Entity\UserSetting $settings)
+    {
+        $this->__load();
+        return parent::addUserSetting($settings);
     }
 
     public function setCreatedDate()
@@ -189,16 +189,10 @@ class User extends \Entity\User implements \Doctrine\ORM\Proxy\Proxy
         return parent::getModifiedDate();
     }
 
-    public function toArray()
-    {
-        $this->__load();
-        return parent::toArray();
-    }
-
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'username', 'password', 'email', 'display_name', 'created_date', 'modified_date', 'settings', 'entries', 'entry_ratings');
+        return array('__isInitialized__', 'id', 'username', 'password', 'email', 'display_name', 'created_date', 'modified_date', 'settings', 'entries', 'comments', 'favourites');
     }
 
     public function __clone()
