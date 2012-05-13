@@ -20,7 +20,7 @@ class User extends TimestampedModel
 	 * @Column(type="integer", nullable=false)
 	 * @GeneratedValue(strategy="AUTO")
 	 */
-	public $id;
+	protected $id;
 
 	/**
 	 * @Column(type="string", length=32, unique=true, nullable=false)
@@ -74,6 +74,19 @@ class User extends TimestampedModel
         $this->favourites = new \Doctrine\Common\Collections\ArrayCollection;
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection;
     }
+
+	/**
+	 * Laravel requires that the id property is public
+	 *
+	 * @param string $property
+	 */
+	public function __get($property)
+	{
+		if ($property === 'id')
+		{
+			return $this->id;
+		}
+	}
 
 	/**
 	 * Encrypt the password before we store it
@@ -324,4 +337,5 @@ class User extends TimestampedModel
         $this->settings[] = $settings;
         return $this;
     }
+
 }

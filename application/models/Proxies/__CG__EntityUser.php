@@ -42,6 +42,12 @@ class User extends \Entity\User implements \Doctrine\ORM\Proxy\Proxy
     }
 
     
+    public function __get($property)
+    {
+        $this->__load();
+        return parent::__get($property);
+    }
+
     public function setPassword($password)
     {
         $this->__load();
