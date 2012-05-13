@@ -45,9 +45,9 @@ class Entry extends TimestampedModel
 	protected $description;
 
 	/**
-	 * @Column(type="boolean", nullable=false)
+	 * @Column(type="smallint", nullable=false)
 	 */
-	protected $approved = false;
+	protected $approved = 0;
 
 	/**
 	 * @ManyToOne(targetEntity="User", inversedBy="entries", fetch="EAGER")
@@ -323,21 +323,20 @@ class Entry extends TimestampedModel
 	/**
 	 * Set user
 	 *
-	 * @param User $user
-	 * @return Entry
+	 * @param	User	$user
+	 * @return	Entry
 	 */
-	public function setUser(\Entity\User $user)
+	public function setUser(User $user)
 	{
 		$user->addEntry($this);
 		$this->user = $user;
-
 		return $this;
 	}
 
 	/**
 	 * Get user
 	 *
-	 * @return	\Entity\User
+	 * @return User
 	 */
 	public function getUser()
 	{
