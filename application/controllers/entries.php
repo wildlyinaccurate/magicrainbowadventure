@@ -159,6 +159,8 @@ class Entries_Controller extends Base_Controller
 			return Response::error(404);
 		}
 
+		$this->layout->with('content_layout', 'layouts/one-column');
+
 		// Try and find the Entry
 		$entry = $this->em->find('\Entity\Entry', $id);
 

@@ -55,6 +55,7 @@ class Base_Controller extends Controller
 			$this->layout->nest('account_menu', 'navigation/account-guest');
 		}
 
+		$this->layout->with('content_layout', 'layouts/two-column');
 		$this->layout->nest('navigation', 'navigation/default');
 		$this->layout->nest('login_required_popover', 'partials/login-required');
 	}
