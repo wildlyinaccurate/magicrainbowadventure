@@ -8,11 +8,14 @@ return array(
 	'change_password' => 'Change Password',
 
     // Messages
+	'dont_have_account' => "Don't have an account?",
     'settings_saved' => 'Your account settings have been saved.',
     'login_failed' => 'The username and password you entered were not correct.',
     'welcome_message' => 'Thanks for signing up!',
 
 	// Form labels
+	'label_login_username' => 'Username / Email Address',
+	'label_login_password' => 'Password',
 	'label_username' => 'Pick a username',
 	'label_password' => 'Choose your password',
 	'label_password_confirm' => 'Confirm your password',
