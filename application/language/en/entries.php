@@ -3,10 +3,9 @@
 return array(
 
 	// Titles
-	'vote_up' => 'Vote Up',
-	'vote_down' => 'Vote Down',
-	'favourite' => 'Add as Favourite',
-	'comments' => 'View Comments',
+	'comments' => 'Comments',
+	'button_favourite' => 'Add as Favourite',
+	'button_comments' => 'View Comments',
 
 	// Form labels
 	'label_title' => 'Give your entry a title',
@@ -15,6 +14,7 @@ return array(
 	'label_image_url' => '...Or link to an image',
 
 	// Mesages
+	'no_comments' => 'This entry has no comments.',
 	'entry_submit_success' => 'Your entry has been submitted and is awaiting moderation.',
 	'invalid_image_url' => 'The link you entered does not appear to be an image.',
 	'image_too_big' => 'This image is too big! Choose something that is smaller than %dMB.',
