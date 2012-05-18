@@ -40,6 +40,7 @@ class Entries_Controller extends Base_Controller
 
 		Basset::inline('assets')->add('lazyload', 'assets/js/lazyload.js');
 
+		$this->layout->with('split_articles', true);
 		$this->layout->title = Lang::line('general.latest_entries');
 		$this->layout->content = View::make('entries/index', array(
 			'entries' => $entries,

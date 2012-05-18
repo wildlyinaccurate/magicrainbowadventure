@@ -1,4 +1,4 @@
-<div class="entry">
+<article class="entry">
 	<p class="description"><?=$entry->getDescription()?></p>
 
     <?php if ( ! $entry->getModeratedBy()): ?>
@@ -6,4 +6,4 @@
     <?php else: ?>
         <p class="entry-status">This entry has been declined.</p>
     <?php endif; ?>
-</div>
+</article>

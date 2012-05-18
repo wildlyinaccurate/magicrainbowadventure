@@ -1,6 +1,8 @@
 <div class="row">
 	<div id="main" class="eightcol">
-		<?=$content?>
+		<section class="<?=($split_articles) ? 'split-articles' : ''?>">
+			<?=$content?>
+		</section>
 	</div> <!-- #main -->
 
 	<div id="sidebar" class="fourcol last">
