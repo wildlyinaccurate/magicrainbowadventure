@@ -30,6 +30,12 @@ class Base_Controller extends Controller
 	protected $em;
 
 	/**
+	 * Monolog Logger
+	 * @var \Monolog\Logger
+	 */
+	protected $log;
+
+	/**
 	 * Constructor ahoy!
 	 */
 	public function __construct()
@@ -43,6 +49,7 @@ class Base_Controller extends Controller
 
 		$this->em = IoC::resolve('doctrine::manager');
 		$this->dropbox = IoC::resolve('dropbox::api');
+		$this->log = IoC::resolve('log.global');
 
 		if (Auth::check())
 		{
