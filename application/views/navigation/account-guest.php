@@ -1,4 +1,4 @@
 <ul>
-	<li><?=HTML::link('account/login', 'Login')?></li>
-	<li><?=HTML::link('account/signup', 'Sign Up')?></li>
+	<li><?=HTML::link('account/login', Lang::line('general.log_in'))?></li>
+	<li><?=HTML::link('account/signup', Lang::line('general.sign_up'))?></li>
 </ul>
