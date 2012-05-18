@@ -16,5 +16,7 @@ return array(
 
 	// Mesages
 	'entry_submit_success' => 'Your entry has been submitted and is awaiting moderation.',
+	'invalid_image_url' => 'The link you entered does not appear to be an image.',
+	'image_too_big' => 'This image is too big! Choose something that is smaller than %dMB.',
 
 );

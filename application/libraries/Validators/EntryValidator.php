@@ -2,6 +2,13 @@
 
 namespace Validators;
 
+/**
+ * Entry Validator Class
+ *
+ * Provides validation methods relevant to creating and editing entries.
+ *
+ * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+ */
 class EntryValidator extends \Laravel\Validator
 {
 
@@ -12,6 +19,7 @@ class EntryValidator extends \Laravel\Validator
 	 * @param	string	$value
 	 * @param	array	$parameters
 	 * @return	bool
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
 	public function validate_valid_image_url($attribute, $value, $parameters)
 	{
@@ -21,17 +29,17 @@ class EntryValidator extends \Laravel\Validator
 
 		if ( ! $content_type || ! preg_match('/image\/(.+)/i', $content_type))
 		{
-			$this->errors->messages[$attribute][] = 'The link you entered does not appear to be an image.';
+			$this->errors->messages[$attribute][] = \Laravel\Lang::line('entries.invalid_image_url');
 
 			return false;
 		}
 
 		// Convert the maximum upload size to bytes
-		$max_upload_size = \Laravel\Config::get('magicrainbowadventure.max_upload_size') * 1024;
+		$max_upload_size = \Laravel\Config::get('magicrainbowadventure.max_upload_size');
 
-		if ($curl->get_content_length() > $max_upload_size)
+		if ($curl->get_content_length() > $max_upload_size * 1024)
 		{
-			$this->errors->messages[$attribute][] = 'This image is too big! Choose something that is smaller than ' . round($max_upload_size / 1024 / 1024) . 'MB.';
+			$this->errors->messages[$attribute][] = sprintf(\Laravel\Lang::line('entries.image_too_big'), round($max_upload_size / 1024));
 
 			return false;
 		}
