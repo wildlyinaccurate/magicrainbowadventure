@@ -31,14 +31,14 @@
 				<?=$errors->first('display_name', '<span class="error">:message</span>')?>
 			</div>
 		</div>
-	</div>
 
-	<div class="control-group">
-		<?=Form::label('current_password', Lang::line('account.label_current_password'), array('class' => 'control-label'))?>
+		<div class="control-group">
+			<?=Form::label('current_password', Lang::line('account.label_current_password'), array('class' => 'control-label'))?>
 
-		<div class="controls">
-			<?=Form::password('current_password')?>
-			<?=$errors->first('current_password', '<span class="error">:message</span>')?>
+			<div class="controls">
+				<?=Form::password('current_password')?>
+				<?=$errors->first('current_password', '<span class="error">:message</span>')?>
+			</div>
 		</div>
 
 	<?=Form::close()?>
