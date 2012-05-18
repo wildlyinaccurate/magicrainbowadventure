@@ -50,8 +50,7 @@
 		</div>
 
 		<?=View::make($content_layout, array(
-			'content' => $content,
-			'split_articles' => (isset($split_articles)) ? $split_articles : false,
+			'content' => $content
 		))?>
 
 	</div> <!-- #content -->

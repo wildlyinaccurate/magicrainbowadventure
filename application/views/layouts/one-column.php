@@ -1,7 +1,5 @@
 <div class="row">
 	<div id="main" class="twelvecol">
-		<section>
-			<?=$content?>
-		</section>
+		<?=$content?>
 	</div> <!-- #main -->
 </div>
