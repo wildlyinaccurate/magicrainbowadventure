@@ -47,6 +47,17 @@ class Entries_Controller extends Base_Controller
 	}
 
 	/**
+	 * Comment on an entry
+	 *
+	 * @param	int		$entry_id
+	 * @return	void
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	public function post_comment($entry_id)
+	{
+	}
+
+	/**
 	 * Show the entries submission form
 	 *
 	 * @return	void
