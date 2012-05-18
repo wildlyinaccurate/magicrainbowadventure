@@ -18,9 +18,11 @@ return array(
 	'label_password_confirm' => 'Confirm your password',
 	'label_email' => 'Enter your email address',
 	'label_display_name' => 'Choose a display name',
+	'label_current_password' => 'Enter your current password',
 	
 	// Form validation
 	'validation_password_same' => "The passwords you entered don't match",
 	'validation_current_password' => 'Your current password is incorrect',
+	'invalid_user_id' => 'Invalid user ID provided: %d',
 
 );

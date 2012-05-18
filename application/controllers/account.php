@@ -10,8 +10,6 @@
 class Account_Controller extends Base_Controller
 {
 
-	public $restful = true;
-
 	/**
 	 * Constructor
 	 */
@@ -81,9 +79,10 @@ class Account_Controller extends Base_Controller
 			'username' => "required|alpha_dash|max:32|unique:user,username,{$this->user->getId()}",
 			'email' => "required|email|unique:user,email,{$this->user->getId()}",
 			'display_name' => 'max:160',
+			'current_password' => "required|current_password_correct:{$this->user->getId()}",
 		);
 
-		$validation = Validator::make(Input::all(), $validation_rules);
+		$validation = \Validators\UserValidator::make(Input::all(), $validation_rules);
 
 		if ($validation->fails())
 		{
@@ -92,8 +91,12 @@ class Account_Controller extends Base_Controller
 		else
 		{
 			// Update the user's settings
+			$this->user->setUsername(Input::get('username'));
 			$this->user->setEmail(Input::get('email'));
 			$this->user->setDisplayName(Input::get('display_name'));
+
+			// Re-set the password in case the username has changed
+			$this->user->setPassword(Input::get('current_password'));
 
 			$this->em->persist($this->user);
 			$this->em->flush();
