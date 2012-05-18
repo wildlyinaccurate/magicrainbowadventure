@@ -42,18 +42,6 @@ class Administrator extends \Entity\Administrator implements \Doctrine\ORM\Proxy
     }
 
     
-    public function serialize()
-    {
-        $this->__load();
-        return parent::serialize();
-    }
-
-    public function unserialize($data)
-    {
-        $this->__load();
-        return parent::unserialize($data);
-    }
-
     public function addModeratedEntry(\Entity\Entry $entry)
     {
         $this->__load();
