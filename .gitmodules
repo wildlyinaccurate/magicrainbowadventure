@@ -7,3 +7,6 @@
 [submodule "public/assets/js/jquery-lazyload"]
 	path = public/assets/js/jquery-lazyload
 	url = git://github.com/wildlyinaccurate/jquery-lazyload.git
+[submodule "vendor/monolog"]
+	path = vendor/monolog
+	url = git://github.com/Seldaek/monolog.git

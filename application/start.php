@@ -170,3 +170,18 @@ Event::listen('laravel.started: dropbox', function()
 		'uid' => '28552199',
 	));
 });
+
+// Register an autoloader for the vendor directory
+Autoloader::namespaces(array(
+	'Monolog' => path('base') . 'vendor/monolog/src/Monolog',
+));
+
+// Monolog setup
+$rotating_file_handler = new \Monolog\Handler\RotatingFileHandler(path('storage') . 'logs/' . 'magicrainbowadventure-global.log');
+
+$log = new \Monolog\Logger('global');
+$log->pushHandler(new \Monolog\Handler\FingersCrossedHandler($rotating_file_handler));
+$log->pushProcessor(new \Monolog\Processor\IntrospectionProcessor);
+$log->pushProcessor(new \Monolog\Processor\WebProcessor);
+
+IoC::instance('log.global', $log);
