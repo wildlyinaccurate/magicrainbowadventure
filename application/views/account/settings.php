@@ -41,5 +41,15 @@
 			</div>
 		</div>
 
+		<div class="form-actions">
+			<?=HTML::link('account', Lang::line('general.cancel'), array('class' => 'btn'))?>
+			<button type="submit" name="save_settings" class="btn btn-primary">Save Settings</button>
+
+			<?php if (Session::has('success_message')): ?>
+				<span class="success"><?=Session::get('success_message')?></span>
+			<?php endif; ?>
+		</div>
+
+
 	<?=Form::close()?>
 </section>
