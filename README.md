@@ -1,8 +1,6 @@
 Magic Rainbow Adventure is a microblog powered by user-submitted content.
 
-## Installation
-
-### Requirements
+## Requirements
 
 * Memcached
 * PHP 5.3.1+
@@ -10,11 +8,31 @@ Magic Rainbow Adventure is a microblog powered by user-submitted content.
 	* PDO
 	* cURL
 	* Mcrypt
-	* GD
 	* Memcached
-* If using a web server other than Apache, `public/.htaccess` will need to be converted
+
+## Installation
+
+**1. Checkout from GitHub:**
+
+    git checkout git://github.com/wildlyinaccurate/magicrainbowadventure-laravel.git
+    git submodule update --init
+
+**2. Database setup:**
+
+Create an empty database and configure the connection settings in `application/config/database.php`. Run `php doctrine orm:schema-tool:create`.
+
+**3. Directory permissions**
+
+    chmod 777 storage/cache
+    chmod 777 storage/logs
+    chmod 777 public/uploads/MagicRainbowAdventure
+    chmod -R 777 application/models/Proxies
 
 ## Configuration
+
+### Database
+
+You can configure the database connection settings in `application/config/database.php`.
 
 ### Caching
 
