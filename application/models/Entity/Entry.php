@@ -6,7 +6,7 @@ namespace Entity;
  * Entry Model
  *
  * @Entity(repositoryClass="Entity\EntryRepository")
- * @Table(name="entry")
+ * @Table(name="entry", indexes={@index(name="entry_type_idx", columns={"type"})})
  * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
  */
 class Entry extends TimestampedModel
@@ -33,6 +33,11 @@ class Entry extends TimestampedModel
 	 * @Column(type="string", length=80, nullable=false)
 	 */
 	protected $file_path;
+
+	/**
+	 * @Column(type="string", length=6, nullable=false)
+	 */
+	protected $type = 'image';
 
 	/**
 	 * @Column(type="string", length=40, nullable=false)
@@ -88,17 +93,26 @@ class Entry extends TimestampedModel
 	 *
 	 * @var array
 	 */
-	private $thumbnail_sizes = array(
-		'medium',
-		'l',
-		'xl',
+	private static $thumbnail_sizes = array(
+		array(
+			'size' => 'medium',
+			'types' => 'image|gif'
+		),
+		array(
+			'size' => 'l',
+			'types' => 'image'
+		),
+		array(
+			'size' => 'xl',
+			'types' => 'image'
+		),
 	);
 
 	/**
 	 * Format to use when saving and retrieving thumbnails.
 	 * @var string
 	 */
-	private $thumbnail_format = 'JPEG';
+	private static $thumbnail_format = 'JPEG';
 
 	/**
 	 * Constructor
@@ -144,14 +158,22 @@ class Entry extends TimestampedModel
 		$dropbox = \IoC::resolve('dropbox::api');
 		$dropbox->putFile($file_path, $file_name, "Public/{$entry_file_path}");
 
-		// Retrieve various thumbnails and store them locally
-		foreach ($this->thumbnail_sizes as $size)
+		// Determine if the image is an animated GIF
+		if (\Helpers\ImageHelper::isAnimatedGif($file_path))
 		{
-			$this->_downloadThumbnail($size);
+			$this->type = 'gif';
 		}
 
-		// Remove cached thumbnails
-		\Cache::forget($this->_getThumbnailCacheKey());
+		// Retrieve various thumbnails and store them locally
+		foreach (self::$thumbnail_sizes as $thumbnail)
+		{
+			$thumbnail_types = explode('|', $thumbnail['types']);
+
+			if (in_array($this->type, $thumbnail_types))
+			{
+				$this->_downloadThumbnail($thumbnail['size']);
+			}
+		}
 
 		return $this;
 	}
@@ -165,7 +187,7 @@ class Entry extends TimestampedModel
 	 */
 	private function _getThumbnailPath($base, $size)
 	{
-		return dirname($base . "/{$this->file_path}") . "/{$size}/{$this->getHash()}." . strtolower($this->thumbnail_format);
+		return dirname($base . "/{$this->file_path}") . "/{$size}/{$this->getHash()}." . strtolower(self::$thumbnail_format);
 	}
 
 	/**
@@ -178,7 +200,7 @@ class Entry extends TimestampedModel
 	{
 		$dropbox = \IoC::resolve('dropbox::api');
 
-		$thumbnail = $dropbox->thumbnails("Public/{$this->file_path}", $this->thumbnail_format, $size);
+		$thumbnail = $dropbox->thumbnails("Public/{$this->file_path}", self::$thumbnail_format, $size);
 		$thumbnail_path = $this->_getThumbnailPath(\Config::get('magicrainbowadventure.thumbnail_cache_path'), $size);
 		$thumbnail_dir = dirname($thumbnail_path);
 
@@ -191,29 +213,14 @@ class Entry extends TimestampedModel
 	}
 
 	/**
-	 * Get the Entry's thumbnail as base64-encoded data
+	 * Get the public Dropbox URL for an Entry
 	 *
-	 * @param	string	$size
 	 * @return	string
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function getThumbnail($size = 'medium')
+	public function getDropboxURL()
 	{
-		$cache_key = $this->_getThumbnailCacheKey();
-
-		if ( ! \Cache::has($cache_key))
-		{
-			$thumbnail_path = $this->_getThumbnailPath(\Config::get('magicrainbowadventure.thumbnail_cache_path'), $size);
-
-			if ( ! file_exists($thumbnail_path))
-			{
-				$this->_downloadThumbnail($size);
-			}
-
-			$thumbnail_data = file_get_contents($thumbnail_path);
-			\Cache::forever($cache_key, base64_encode($thumbnail_data));
-		}
-
-		return \Cache::get($cache_key);
+		return 'http://dl.dropbox.com/u/' . \Config::get('dropbox::config.access_token.uid') . '/' . $this->getFilePath();
 	}
 
 	/**
@@ -224,7 +231,23 @@ class Entry extends TimestampedModel
 	 */
 	public function getThumbnailUrl($size)
 	{
-		return $this->_getThumbnailPath(\Config::get('magicrainbowadventure.thumbnail_cache_url'), $size);
+		foreach (self::$thumbnail_sizes as $thumbnail)
+		{
+			if ($thumbnail['size'] !== $size)
+			{
+				continue;
+			}
+
+			$thumbnail_types = explode('|', $thumbnail['types']);
+
+			if (in_array($this->type, $thumbnail_types))
+			{
+				return $this->_getThumbnailPath(\Config::get('magicrainbowadventure.thumbnail_cache_url'), $size);
+			}
+		}
+
+		// This entry doesn't have the requested thumbnail size; return the full-size URL
+		return $this->getDropboxURL();
 	}
 
 	/**
@@ -470,7 +493,7 @@ class Entry extends TimestampedModel
     /**
      * Get tags
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getTags()
     {

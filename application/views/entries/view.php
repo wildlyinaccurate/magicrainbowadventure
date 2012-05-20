@@ -1,5 +1,5 @@
 <section class="entry">
-	<a href="http://dl.dropbox.com/u/<?=Config::get('dropbox::config.access_token.uid')?>/<?=$entry->getFilePath()?>">
+	<a href="<?=$entry->getDropboxUrl()?>">
 		<?=HTML::image($entry->getThumbnailUrl('xl'), $entry->getTitle())?>
 	</a>
 
