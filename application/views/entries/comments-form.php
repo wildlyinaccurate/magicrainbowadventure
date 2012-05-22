@@ -1,4 +1,4 @@
-<?=Form::open('account/settings', 'POST', array('class' => 'form-horizontal'))?>
+<?=Form::open("entries/{$entry->getId()}/comment", 'POST', array('class' => 'form-horizontal'))?>
 
 	<?=Form::textarea('comment', Input::old('comment'), array('placeholder' => Lang::line('entries.label_comment')))?>
 
