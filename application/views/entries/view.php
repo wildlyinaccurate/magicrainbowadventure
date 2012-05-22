@@ -19,5 +19,4 @@
 	<?=View::make('entries/comments-form')->with(array(
 		'entry' => $entry,
 	))?>
-))
 </section>

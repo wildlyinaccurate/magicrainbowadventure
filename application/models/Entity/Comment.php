@@ -35,6 +35,16 @@ class Comment
 	protected $entry;
 
 	/**
+	 * @Column(type="smallint", nullable=false)
+	 */
+	protected $approved = 0;
+
+	/**
+	 * @ManyToOne(targetEntity="Administrator", inversedBy="moderated_comments", fetch="EXTRA_LAZY")
+	 */
+	protected $moderated_by;
+
+	/**
 	 * @param $id
 	 */
 	public function setId($id)

@@ -14,10 +14,7 @@
             <?=Form::label('entry_image', Lang::line('entries.label_description'), array('class' => 'control-label'))?>
 
             <div class="controls">
-                <?=Form::textarea('description', Input::old('description'), array(
-                    'placeholder' => Lang::line('entries.description'),
-                    'rows' => 4,
-                ))?>
+                <?=Form::textarea('description', Input::old('description'), array('placeholder' => Lang::line('entries.description')))?>
                 <?=$errors->first('description', '<span class="error">:message</span>')?>
             </div>
         </div>
@@ -42,7 +39,7 @@
         </div>
 
 		<div class="form-actions">
-			<button type="submit" name="submit_entry" class="btn btn-primary">Submit Entry</button>
+			<button type="submit" name="submit_entry" class="btn btn-primary"><?=Lang::line('entries.label_submit')?></button>
 		</div>
 
 	<?=Form::close()?>
