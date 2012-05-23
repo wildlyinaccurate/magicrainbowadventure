@@ -14,6 +14,7 @@ return array(
 	'label_image_url' => '...Or link to an image',
 	'label_submit' => 'Submit Entry',
 	'label_comment' => 'Leave a comment',
+	'label_submit_comment' => 'Submit Comment',
 
 	// Mesages
 	'no_comments' => 'Be the first to leave a comment!',
