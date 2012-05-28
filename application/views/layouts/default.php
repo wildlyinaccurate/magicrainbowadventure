@@ -68,7 +68,7 @@
 		</div>
 	</footer>
 
-	<?=$login_required_popover?>
+	<?=View::make('partials/login-required')?>
 
     <script src="<?=URL::base();?>/basset/default.js"></script>
 	<?=Basset::inline('assets')->scripts();?>
