@@ -47,6 +47,23 @@ class Entries_Controller extends Base_Controller
 	}
 
 	/**
+	 * Add an entry to the user's favourites
+	 *
+	 * @param	int		$entry_id
+	 * @param	string	$url_title
+	 * @return	void
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	public function post_favourite($id = null, $url_title = null)
+	{
+		if ( ! $id)
+		{
+			return Response::error(404);
+		}
+
+	}
+
+	/**
 	 * Comment on an entry
 	 *
 	 * @param	int		$entry_id
@@ -162,6 +179,7 @@ class Entries_Controller extends Base_Controller
 	 * @param	integer	$id
 	 * @param	string	$url_title
 	 * @return	\Laravel\Response
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
 	public function get_view($id = null, $url_title = null)
 	{

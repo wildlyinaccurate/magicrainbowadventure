@@ -4,7 +4,7 @@ return array(
 
 	// Titles
 	'log_in' => 'Log In',
-	'log_in_required' => 'You need to be logged in to do that.',
+	'login_required' => 'You need to be logged in to do that.',
 	'log_out' => 'Log Out',
 	'sign_up' => 'Sign Up',
 	'account' => 'My Account',

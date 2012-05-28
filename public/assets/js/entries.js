@@ -1,13 +1,27 @@
 var MRA_Entries = function() {
 
-    var login_required = $('.guest .comments, .guest .favourite');
+    var guest_buttons = $('.guest .favourite');
 
-    login_required.popover({
-        content: $('.login-required').text()
+    guest_buttons.popover({
+        content: $('.login-required').html(),
+        trigger: 'manual'
     });
 
-    login_required.click(function(event) {
-        login_required.popover('show');
+    guest_buttons.click(function(event) {
+        $(this).popover('show');
+        event.preventDefault();
+    });
+
+    var favourite_buttons = $(':not(.guest) .favourite');
+
+    favourite_buttons.click(function(event) {
+        $.ajax({
+            url: $(this).prop('href'),
+            type: 'POST',
+            data: {
+                favourite: ($(this).hasClass('active')) ? 0 : 1
+            }
+        });
 
         event.preventDefault();
     });

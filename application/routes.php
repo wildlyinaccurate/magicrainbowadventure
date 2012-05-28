@@ -37,6 +37,7 @@
 Route::get('/', 'entries@index');
 Route::get('login', 'account@login');
 Route::get('(:num)/(:any)', 'entries@view');
+Route::get('(:num)/(:any)/favourite', 'entries@favourite');
 Route::get('account/my-entries', 'account@my_entries');
 Route::post('entries/(:num)/comment', 'entries@comment');
 
