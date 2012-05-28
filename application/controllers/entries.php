@@ -19,6 +19,7 @@ class Entries_Controller extends Base_Controller
 
 		$this->filter('before', 'auth')->only(array(
 			'submit',
+			'favourite',
 		));
 
 		Basset::inline('assets')->add('entries', 'assets/js/entries.js');
@@ -49,18 +50,26 @@ class Entries_Controller extends Base_Controller
 	/**
 	 * Add an entry to the user's favourites
 	 *
-	 * @param	int		$entry_id
-	 * @param	string	$url_title
-	 * @return	void
+	 * @param	int		$id
+	 * @return	\Laravel\Redirect|\Laravel\Response
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function post_favourite($id = null, $url_title = null)
+	public function post_favourite($id)
 	{
-		if ( ! $id)
+		$entry = $this->em->find('Entity\Entry', $id);
+
+		if ( ! $entry)
 		{
-			return Response::error(404);
+			return Response::error('404');
 		}
 
+		if (Request::ajax())
+		{
+		}
+		else
+		{
+			return Redirect::to("{$entry->getId()}/{$entry->getUrlTitle()}");
+		}
 	}
 
 	/**
@@ -177,24 +186,18 @@ class Entries_Controller extends Base_Controller
 	 * View an Entry
 	 *
 	 * @param	integer	$id
-	 * @param	string	$url_title
 	 * @return	\Laravel\Response
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function get_view($id = null, $url_title = null)
+	public function get_view($id)
 	{
-		if ( ! $id)
-		{
-			return Response::error(404);
-		}
-
 		$this->layout->with('content_layout', 'layouts/one-column');
 
 		// Try and find the Entry
 		$entry = $this->em->find('\Entity\Entry', $id);
 
 		// Only show the entries if it has been approved, or if the user is the owner or an administrator
-		if ( ! $entry || ( ! $entry->isApproved() && ! $this->user->isAdmin() && $entry->getUser() != $this->user))
+		if ( ! $entry || ( ! $entry->isApproved() && ! $this->user->isAdmin() && $entry->getUser() !== $this->user))
 		{
 			$this->layout->title = Lang::line('general.not_found');
 			$this->layout->content = View::make('entries/not-found');
