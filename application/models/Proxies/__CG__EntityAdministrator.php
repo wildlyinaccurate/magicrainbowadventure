@@ -54,6 +54,18 @@ class Administrator extends \Entity\Administrator implements \Doctrine\ORM\Proxy
         return parent::getModeratedEntries();
     }
 
+    public function addModeratedComment(\Entity\Comment $comment)
+    {
+        $this->__load();
+        return parent::addModeratedComment($comment);
+    }
+
+    public function getModeratedComment()
+    {
+        $this->__load();
+        return parent::getModeratedComment();
+    }
+
     public function __get($property)
     {
         $this->__load();
@@ -210,7 +222,7 @@ class Administrator extends \Entity\Administrator implements \Doctrine\ORM\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'username', 'password', 'email', 'display_name', 'created_date', 'modified_date', 'settings', 'entries', 'comments', 'favourites', 'moderated_entries');
+        return array('__isInitialized__', 'id', 'username', 'password', 'email', 'display_name', 'created_date', 'modified_date', 'settings', 'entries', 'comments', 'favourites', 'moderated_entries', 'moderated_comments');
     }
 
     public function __clone()
