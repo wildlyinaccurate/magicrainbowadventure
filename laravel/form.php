@@ -51,7 +51,7 @@ class Form {
 	 * @param  bool     $https
 	 * @return string
 	 */
-	public static function open($action = null, $method = 'POST', $attributes = array(), $https = false)
+	public static function open($action = null, $method = 'POST', $attributes = array(), $https = null)
 	{
 		$method = strtoupper($method);
 
@@ -129,7 +129,7 @@ class Form {
 	 * @param  bool    $https
 	 * @return string
 	 */	
-	public static function open_for_files($action = null, $method = 'POST', $attributes = array(), $https = false)
+	public static function open_for_files($action = null, $method = 'POST', $attributes = array(), $https = null)
 	{
 		$attributes['enctype'] = 'multipart/form-data';
 
@@ -397,10 +397,37 @@ class Form {
 
 		foreach ($options as $value => $display)
 		{
-			$html[] = static::option($value, $display, $selected);
+			if (is_array($display)) 
+			{
+				$html[] = static::optgroup($display, $value, $selected);
+			}
+			else
+			{
+				$html[] = static::option($value, $display, $selected);
+			}
 		}
 
 		return '<select'.HTML::attributes($attributes).'>'.implode('', $html).'</select>';
+	}
+
+	/**
+	 * Create a HTML select element optgroup.
+	 *
+	 * @param  array   $options
+	 * @param  string  $label
+	 * @param  string  $selected
+	 * @return string
+	 */
+	protected static function optgroup($options, $label, $selected)
+	{
+		$html = array();
+
+		foreach ($options as $value => $display)
+		{
+			$html[] = static::option($value, $display, $selected);
+		}
+
+		return '<optgroup label="'.HTML::entities($label).'">'.implode('', $html).'</option>';
 	}
 
 	/**

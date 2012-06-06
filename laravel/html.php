@@ -46,6 +46,19 @@ class HTML {
 	}
 
 	/**
+	 * Convert HTML special characters.
+	 *
+	 * The encoding specified in the application configuration file will be used.
+	 *
+	 * @param  string  $value
+	 * @return string
+	 */
+	public static function specialchars($value)
+	{
+		return htmlspecialchars($value, ENT_QUOTES, Config::get('application.encoding'), false);
+	}
+
+	/**
 	 * Generate a link to a JavaScript file.
 	 *
 	 * <code>
@@ -62,7 +75,7 @@ class HTML {
 	 */
 	public static function script($url, $attributes = array())
 	{
-		$url = static::entities(URL::to_asset($url));
+		$url = URL::to_asset($url);
 
 		return '<script src="'.$url.'"'.static::attributes($attributes).'></script>'.PHP_EOL;
 	}
@@ -90,7 +103,7 @@ class HTML {
 
 		$attributes = $attributes + $defaults;
 
-		$url = static::entities(URL::to_asset($url));
+		$url = URL::to_asset($url);
 
 		return '<link href="'.$url.'"'.static::attributes($attributes).'>'.PHP_EOL;
 	}
@@ -124,9 +137,9 @@ class HTML {
 	 * @param  bool    $https
 	 * @return string
 	 */
-	public static function link($url, $title, $attributes = array(), $https = false)
+	public static function link($url, $title, $attributes = array(), $https = null)
 	{
-		$url = static::entities(URL::to($url, $https));
+		$url = URL::to($url, $https);
 
 		return '<a href="'.$url.'"'.static::attributes($attributes).'>'.static::entities($title).'</a>';
 	}
@@ -157,7 +170,7 @@ class HTML {
 	 */
 	public static function link_to_asset($url, $title, $attributes = array(), $https = null)
 	{
-		$url = static::entities(URL::to_asset($url, $https));
+		$url = URL::to_asset($url, $https);
 
 		return '<a href="'.$url.'"'.static::attributes($attributes).'>'.static::entities($title).'</a>';
 	}
@@ -267,7 +280,7 @@ class HTML {
 	{
 		$attributes['alt'] = $alt;
 
-		return '<img src="'.static::entities(URL::to_asset($url)).'"'.static::attributes($attributes).'>';
+		return '<img src="'.URL::to_asset($url).'"'.static::attributes($attributes).'>';
 	}
 
 	/**
@@ -306,6 +319,8 @@ class HTML {
 	{
 		$html = '';
 
+		if (count($list) == 0) return $html;
+
 		foreach ($list as $key => $value)
 		{
 			// If the value is an array, we will recurse the function so that we can
@@ -313,7 +328,14 @@ class HTML {
 			// lists may exist within nested lists, etc.
 			if (is_array($value))
 			{
-				$html .= static::listing($type, $value);
+				if (is_int($key))
+				{
+					$html .= static::listing($type, $value);
+				}
+				else
+				{
+					$html .= '<li>'.$key.static::listing($type, $value).'</li>';
+				}
 			}
 			else
 			{
