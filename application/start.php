@@ -187,6 +187,11 @@ Event::listen('laravel.started: dropbox', function()
 	));
 });
 
+// Register the MagicRainbowAdventure Auth driver
+Auth::extend('magicrainbowadventure', function() {
+	return new \Auth\Drivers\MagicRainbowAdventure;
+});
+
 // Register an autoloader for the vendor directory
 Autoloader::namespaces(array(
 	'Monolog' => path('base') . 'vendor/monolog/src/Monolog',

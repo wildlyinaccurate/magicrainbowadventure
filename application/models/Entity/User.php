@@ -58,7 +58,7 @@ class User extends TimestampedModel
 	protected $comments;
 
 	/**
-	 * @ManyToMany(targetEntity="Entry", mappedBy="favourites", cascade={"persist", "remove"})
+	 * @ManyToMany(targetEntity="Entry", mappedBy="favourited_by", cascade={"persist", "remove"})
 	 */
 	protected $favourites;
 
@@ -74,19 +74,6 @@ class User extends TimestampedModel
         $this->favourites = new \Doctrine\Common\Collections\ArrayCollection;
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection;
     }
-
-	/**
-	 * Laravel requires that the id property is public
-	 *
-	 * @param string $property
-	 */
-	public function __get($property)
-	{
-		if ($property === 'id')
-		{
-			return $this->id;
-		}
-	}
 
 	/**
 	 * Encrypt the password before we store it
@@ -239,7 +226,7 @@ class User extends TimestampedModel
     /**
      * Get all settings
      *
-     * @return	Doctrine\Common\Collections\Collection $settings
+     * @return	\Doctrine\Common\Collections\Collection $settings
      */
     public function getSettings()
     {
@@ -266,7 +253,7 @@ class User extends TimestampedModel
 	/**
 	 * Get favourites
 	 *
-	 * @return Doctrine\Common\Collections\Collection
+	 * @return \Doctrine\Common\Collections\Collection
 	 */
 	public function getFavourites()
 	{
@@ -292,7 +279,7 @@ class User extends TimestampedModel
     /**
      * Get all entries
      *
-     * @return	Doctrine\Common\Collections\Collection $entries
+     * @return	\Doctrine\Common\Collections\Collection $entries
      */
     public function getEntries()
     {
@@ -319,7 +306,7 @@ class User extends TimestampedModel
     /**
      * Get all comments
      *
-     * @return	Doctrine\Common\Collections\Collection $comments
+     * @return	\Doctrine\Common\Collections\Collection $comments
      */
     public function getComments()
     {

@@ -135,10 +135,13 @@ class Account_Controller extends Base_Controller
 	public function post_login()
 	{
 		// Attempt to log in
-		$identifier = Input::get('identifier');
-		$password = Input::get('password');
+		$login_attempt = array(
+			'username' => Input::get('identifier'),
+			'password' => Input::get('password'),
+			'remember' => true,
+		);
 
-		if ( ! Auth::attempt($identifier, $password, true))
+		if ( ! Auth::attempt($login_attempt))
 		{
 			return Redirect::to('login')->with_input()->with('error', Lang::line('account.login_failed'));
 		}
