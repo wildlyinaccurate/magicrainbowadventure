@@ -18,6 +18,7 @@ class ImageHelper
 	 * @param	string	$file_path
 	 * @return	bool
 	 * @author  Frank <frank@huddler.com>
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 * @link	http://www.php.net/manual/en/function.imagecreatefromgif.php#104473
 	 */
 	public static function isAnimatedGif($file_path)
