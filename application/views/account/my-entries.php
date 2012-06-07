@@ -6,7 +6,7 @@
 
 		<?php foreach ($entries as $entry): ?>
 			<tr>
-				<td><img src="<?='data:image/jpeg;base64,' . $entry->getThumbnail('large')?>" /></td>
+				<td><img src="<?=$entry->getThumbnailUrl('medium')?>" /></td>
 				<td><?=$entry->getTitle()?></td>
 				<td><?=$entry->getDescription()?></td>
 			</tr>
