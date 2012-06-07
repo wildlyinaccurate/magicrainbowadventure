@@ -1,25 +1,34 @@
 var MRA_Entries = function() {
 
-    var guest_buttons = $('.guest .favourite');
+    $('.entries').on('click', '.guest .favourite', function(event) {
+        $(this).popover({
+            content: $('.login-required').html(),
+            trigger: 'manual'
+        }).popover('show');
 
-    guest_buttons.popover({
-        content: $('.login-required').html(),
-        trigger: 'manual'
-    });
-
-    guest_buttons.click(function(event) {
-        $(this).popover('show');
         event.preventDefault();
     });
 
-    var favourite_buttons = $(':not(.guest) .favourite');
+    $('body:not(.guest) .entries').on('click', '.favourite', function(event) {
+        var button = $(this);
 
-    favourite_buttons.click(function(event) {
         $.ajax({
-            url: $(this).prop('href'),
+            url: button.prop('href'),
             type: 'POST',
             data: {
-                favourite: ($(this).hasClass('active')) ? 0 : 1
+                favourite: (button.hasClass('active')) ? 0 : 1
+            },
+            success: function(data, textStatus, jqXHR) {
+                button.attr('data-content', data.message)
+                    .popover({
+                        delay: {
+                            show: 0,
+                            hide: 3000
+                        }
+                    })
+                    .popover('show')
+                    .text(data.favourites_count)
+                    .toggleClass('active', data.favourite);
             }
         });
 

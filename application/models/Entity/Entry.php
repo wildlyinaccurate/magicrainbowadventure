@@ -127,17 +127,6 @@ class Entry extends TimestampedModel
 	}
 
 	/**
-	 * Return a cache key for this Entry's thumbnail
-	 *
-	 * @return	string
-	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
-	 */
-	private function _getThumbnailCacheKey()
-	{
-		return "/Entity/Entry/Thumbnail/{$this->hash}";
-	}
-
-	/**
 	 * Upload the Entry's file to Dropbox, and store various sized
 	 * thumbnails locally.
 	 *

@@ -48,7 +48,19 @@ class Entries_Controller extends Base_Controller
 	}
 
 	/**
-	 * Add an entry to the user's favourites
+	 * GET alias for post_favourite
+	 *
+	 * @param	int		$id
+	 * @return	\Laravel\Redirect|\Laravel\Response
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	public function get_favourite($id)
+	{
+		return $this->post_favourite($id);
+	}
+
+	/**
+	 * Add or remove an entry from the user's favourites
 	 *
 	 * @param	int		$id
 	 * @return	\Laravel\Redirect|\Laravel\Response
@@ -63,8 +75,29 @@ class Entries_Controller extends Base_Controller
 			return Response::error('404');
 		}
 
+		$favourite = Input::get('favourite');
+
+		if ($favourite)
+		{
+			$return_message = Lang::line('entries.added_to_favourites');
+			$this->user->addFavourite($entry);
+		}
+		else
+		{
+			$return_message = Lang::line('entries.removed_from_favourites');
+			$this->user->getFavourites()->removeElement($entry);
+			$entry->getFavouritedBy()->removeElement($this->user);
+		}
+
+		$this->em->flush();
+
 		if (Request::ajax())
 		{
+			return Response::json(array(
+				'message' => sprintf($return_message, $entry->getTitle()),
+				'favourites_count' => $entry->getFavouritedBy()->count(),
+				'favourite' => (bool) $favourite,
+			));
 		}
 		else
 		{

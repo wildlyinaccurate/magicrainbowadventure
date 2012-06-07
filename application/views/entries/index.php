@@ -5,13 +5,10 @@
 		<h3><?=HTML::link("{$entry->getId()}/{$entry->getUrlTitle()}", $entry->getTitle())?></h3>
 
 		<div class="buttons">
-			<?=HTML::link("{$entry->getId()}/{$entry->getUrlTitle()}/favourite", $entry->getFavouritedBy()->count(), array(
-				'class' => 'favourite',
+			<?php $active = (Auth::check() && Auth::user()->getFavourites()->contains($entry)); ?>
+			<?=HTML::link("{$entry->getId()}/{$entry->getUrlTitle()}/favourite?favourite=" . (int) ! $active, $entry->getFavouritedBy()->count(), array(
+				'class' => ($active) ? 'favourite active' : 'favourite',
 				'title' => Lang::line('entries.button_favourite'),
-			))?>
-			<?=HTML::link("{$entry->getId()}/{$entry->getUrlTitle()}", $entry->getComments()->count(), array(
-				'class' => 'comments',
-				'title' => Lang::line('entries.button_comments'),
 			))?>
 		</div>
 
