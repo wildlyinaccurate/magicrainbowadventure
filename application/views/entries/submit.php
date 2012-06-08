@@ -5,7 +5,7 @@
             <?=Form::label('title', Lang::line('entries.label_title'), array('class' => 'control-label'))?>
 
             <div class="controls">
-                <?=Form::text('title', Input::old('title'), array('maxlength' => 140, 'placeholder' => Lang::line('entries.title')))?>
+                <?=Form::text('title', Input::old('title'), array('maxlength' => 140))?>
                 <?=$errors->first('title', '<span class="error">:message</span>')?>
             </div>
         </div>
@@ -14,7 +14,7 @@
             <?=Form::label('entry_image', Lang::line('entries.label_description'), array('class' => 'control-label'))?>
 
             <div class="controls">
-                <?=Form::textarea('description', Input::old('description'), array('placeholder' => Lang::line('entries.description')))?>
+                <?=Form::textarea('description', Input::old('description'))?>
                 <?=$errors->first('description', '<span class="error">:message</span>')?>
             </div>
         </div>
@@ -33,7 +33,7 @@
             <?=Form::label('image_url', Lang::line('entries.label_image_url'), array('class' => 'control-label'))?>
 
             <div class="controls">
-                <?=Form::text('image_url', Input::old('image_url'), array('placeholder' => Lang::line('entries.link_to_image')))?>
+                <?=Form::text('image_url', Input::old('image_url'))?>
                 <?=$errors->first('image_url', '<span class="error">:message</span>')?>
             </div>
         </div>
