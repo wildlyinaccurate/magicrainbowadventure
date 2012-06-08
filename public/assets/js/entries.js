@@ -21,14 +21,15 @@ var MRA_Entries = function() {
             success: function(data, textStatus, jqXHR) {
                 button.attr('data-content', data.message)
                     .popover({
-                        delay: {
-                            show: 0,
-                            hide: 3000
-                        }
+                        trigger: 'manual'
                     })
                     .popover('show')
                     .text(data.favourites_count)
                     .toggleClass('active', data.favourite);
+
+                setTimeout(function() {
+                    button.popover('hide');
+                }, 5000);
             }
         });
 
