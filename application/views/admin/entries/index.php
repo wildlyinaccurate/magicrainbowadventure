@@ -1,7 +1,14 @@
-<section class="my-entries">
-	<p>You have submitted a total of <strong><?=count($entries)?></strong> entries.</p>
+<section class="admin">
 
 	<table class="table">
+		<thead>
+			<tr>
+				<th><?=Lang::line('admin/entries.thumbnail')?></th>
+				<th><?=Lang::line('admin/entries.title')?></th>
+				<th><?=Lang::line('admin/entries.description')?></th>
+			</tr>
+		</thead>
+
 		<tbody>
 		<?php foreach ($entries as $entry): ?>
 			<tr>
@@ -12,4 +19,5 @@
 		<?php endforeach; ?>
 		</tbody>
 	</table>
+
 </section>

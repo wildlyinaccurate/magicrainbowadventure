@@ -40,9 +40,21 @@ Route::get('(:num)/(:any)', 'entries@view');
 Route::any('(:num)/(:any)/favourite', 'entries@favourite');
 Route::get('account/my-entries', 'account@my_entries');
 Route::post('entries/(:num)/comment', 'entries@comment');
+Route::get('admin', 'admin.entries@index');
 
 // Register all controller routes
 Route::controller(Controller::detect());
+
+// Restrict access to the admin controllers
+Route::filter('admin_user', function()
+{
+	if ( ! Auth::check() || ! Auth::user()->isAdmin())
+	{
+		return Redirect::to('account');
+	}
+});
+
+Route::filter('pattern: admin*', 'admin_user');
 
 // Configure assets with Basset
 Bundle::start('basset');
