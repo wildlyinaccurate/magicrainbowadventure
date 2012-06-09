@@ -1,6 +1,6 @@
 var MRA_Entries = function() {
 
-    $('.entries').on('click', '.guest .favourite', function(event) {
+    $('body.guest').on('click', '.entry .favourite', function(event) {
         $(this).popover({
             content: $('.login-required').html(),
             trigger: 'manual'
@@ -9,7 +9,7 @@ var MRA_Entries = function() {
         event.preventDefault();
     });
 
-    $('body:not(.guest) .entries').on('click', '.favourite', function(event) {
+    $('body:not(.guest)').on('click', '.entry .favourite', function(event) {
         var button = $(this);
 
         $.ajax({
