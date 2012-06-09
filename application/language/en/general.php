@@ -9,11 +9,12 @@ return array(
 	'sign_up' => 'Sign Up',
 	'account' => 'My Account',
 	'submit_entry' => 'Upload',
-	'latest_entries' => 'Latest',
+	'latest_entries' => 'Latest Entries',
+	'latest_entries_nav' => 'Latest',
 
 	// Common words/phrases
 	'cancel' => 'Cancel',
-	
+
 	// Errors
 	'general_error' => 'Oh noes!',
 	'not_found' => 'You must be lost!',
