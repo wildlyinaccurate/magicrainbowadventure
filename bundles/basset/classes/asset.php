@@ -1,6 +1,6 @@
 <?php namespace Basset;
 
-use BadMethodCallException, URL, Basset, HTML;
+use BadMethodCallException, URL, Basset, HTML, \Laravel\Bundle;
 
 class Asset {
 
