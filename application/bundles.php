@@ -44,9 +44,13 @@ return array(
 	),
 	'basset' => array(
 		'handles' => 'basset',
-		'auto'    => true,
+		'auto' => true,
 	),
 	'dropbox' => array(
-		'auto'    => true,
+		'auto' => true,
+	),
+	'admin' => array(
+		'handles' => 'admin',
+		'auto' => true,
 	),
 );

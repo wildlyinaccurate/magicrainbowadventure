@@ -39,13 +39,12 @@ Route::get('login', 'account@login');
 Route::get('(:num)/(:any)', 'entries@view');
 Route::any('(:num)/(:any)/favourite', 'entries@favourite');
 Route::get('account/my-entries', 'account@my_entries');
-Route::post('entries/(:num)/comment', 'entries@comment');
-Route::get('admin', 'admin.entries@index');
+Route::get('admin', 'admin::entries@index');
 
 // Register all controller routes
 Route::controller(Controller::detect());
 
-// Restrict access to the admin controllers
+// Restrict access to the admin bundle
 Route::filter('admin_user', function()
 {
 	if ( ! Auth::check() || ! Auth::user()->isAdmin())
@@ -74,8 +73,8 @@ Basset::scripts('default', function($basset)
 {
 	$basset->directory('public/assets/js', function($basset)
 	{
-		$basset->add('jquery', 'jquery-1.7.2.min.js');
-		$basset->add('css3-mediaqueries', 'css3-mediaqueries.js');
+		$basset->add('jquery', 'jquery-1.7.2.min.js')
+			->add('css3-mediaqueries', 'css3-mediaqueries.js');
 	});
 });
 

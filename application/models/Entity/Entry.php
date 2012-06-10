@@ -340,6 +340,29 @@ class Entry extends TimestampedModel
 	}
 
 	/**
+	 * Set type
+	 *
+	 * @param string $type
+	 * @return	\Entity\Entry
+	 */
+	public function setType($type)
+	{
+		$this->type = $type;
+
+		return $this;
+	}
+
+	/**
+	 * Get type
+	 *
+	 * @return string
+	 */
+	public function getType()
+	{
+		return $this->type;
+	}
+
+	/**
 	 * Set description
 	 *
 	 * @param text $description
