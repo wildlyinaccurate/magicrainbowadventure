@@ -42,6 +42,7 @@ class Base_Controller extends Controller
 	{
 		if (Request::ajax())
 		{
+			$this->log->addDebug('AJAX request detected');
 			$this->layout = 'layouts/ajax';
 		}
 

@@ -194,6 +194,7 @@ Auth::extend('magicrainbowadventure', function() {
 
 // Register an autoloader for the vendor directory
 Autoloader::namespaces(array(
+	'MagicRainbowAdventure' => path('app') . 'MagicRainbowAdventure',
 	'Monolog' => path('base') . 'vendor/monolog/src/Monolog',
 ));
 
@@ -202,7 +203,7 @@ $rotating_file_handler = new \Monolog\Handler\RotatingFileHandler(path('storage'
 
 $log = new \Monolog\Logger('global');
 $log->pushHandler(new \Monolog\Handler\FingersCrossedHandler($rotating_file_handler));
-$log->pushProcessor(new \Monolog\Processor\IntrospectionProcessor);
 $log->pushProcessor(new \Monolog\Processor\WebProcessor);
+$log->pushProcessor(new \MagicRainbowAdventure\Logging\Processor\SessionProcessor);
 
 IoC::instance('log.global', $log);
