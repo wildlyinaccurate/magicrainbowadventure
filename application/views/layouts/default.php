@@ -34,7 +34,10 @@
     <header>
 		<div class="container" id="heading">
 			<div class="row">
-				<h1 class="fivecol"><?=HTML::link('/', 'Magic Rainbow Adventure!')?></h1>
+				<h1 class="fivecol">
+					<?=HTML::link('/', 'Magic Rainbow Adventure!')?>
+					<span class="label label-info">beta</span>
+				</h1>
 
 				<nav id="main-navigation" class="threecol"><?=$navigation?></nav>
 				<nav id="account-navigation" class="fourcol last"><?=$account_menu?></nav>

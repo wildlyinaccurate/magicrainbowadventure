@@ -18,6 +18,11 @@ class Admin_Entries_Controller extends Base_Controller
 		parent::__construct();
 
 		$this->layout->with('content_layout', 'layouts/one-column');
+
+		Basset::scripts('default', function($basset)
+		{
+			$basset->add('models/Entry', 'assets/js/models/Entry.js');
+		});
 	}
 
 	/**

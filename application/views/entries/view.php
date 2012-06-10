@@ -8,6 +8,7 @@
 		<?=HTML::link("{$entry->getId()}/{$entry->getUrlTitle()}/favourite?favourite=" . (int) ! $active, $entry->getFavouritedBy()->count(), array(
 		'class' => ($active) ? 'favourite active' : 'favourite',
 		'title' => Lang::line('entries.button_favourite'),
+		'data-placement' => 'left',
 	))?>
 	</div>
 

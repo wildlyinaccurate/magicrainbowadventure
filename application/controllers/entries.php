@@ -21,8 +21,6 @@ class Entries_Controller extends Base_Controller
 			'submit',
 			'favourite',
 		));
-
-		Basset::inline('assets')->add('entries', 'assets/js/entries.js');
 	}
 
 	/**
@@ -39,7 +37,13 @@ class Entries_Controller extends Base_Controller
 
 		$entries = $this->em->getRepository('Entity\Entry')->getLatestEntries($offset, $entries_per_page);
 
-		Basset::inline('assets')->add('lazyload', 'assets/js/lazyload.js');
+		Basset::inline('assets')->add('jquery-lazyload', 'assets/js/jquery-lazyload/jquery.lazyload.js')
+			->add('activity-indicator', 'assets/js/jquery.activity-indicator-1.0.0.min.js')
+			->add('bootstrap-transition', 'assets/js/bootstrap/bootstrap-transition.js')
+			->add('bootstrap-tooltip', 'assets/js/bootstrap/bootstrap-tooltip.js')
+			->add('bootstrap-popover', 'assets/js/bootstrap/bootstrap-popover.js')
+			->add('lazyload', 'assets/js/lazyload.js')
+			->add('entries', 'assets/js/entries.js');
 
 		$this->layout->title = Lang::line('general.latest_entries');
 		$this->layout->content = View::make('entries/index', array(
@@ -237,6 +241,11 @@ class Entries_Controller extends Base_Controller
 		}
 		elseif ($entry->isApproved() || $this->user->isAdmin())
 		{
+			Basset::inline('assets')->add('bootstrap-transition', 'assets/js/bootstrap/bootstrap-transition.js')
+				->add('bootstrap-tooltip', 'assets/js/bootstrap/bootstrap-tooltip.js')
+				->add('bootstrap-popover', 'assets/js/bootstrap/bootstrap-popover.js')
+				->add('entries', 'assets/js/entries.js');
+
 			$this->layout->title = $entry->getTitle();
 			$this->layout->content = View::make('entries/view', array(
 				'entry' => $entry
