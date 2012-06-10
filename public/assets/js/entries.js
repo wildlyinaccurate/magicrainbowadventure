@@ -1,10 +1,18 @@
 var MRA_Entries = function() {
 
+    var close_popover = function(element) {
+        setTimeout(function() {
+            element.popover('hide');
+        }, 5000);
+    };
+
     $('.entries').on('click', '.guest .favourite', function(event) {
         $(this).popover({
             content: $('.login-required').html(),
             trigger: 'manual'
         }).popover('show');
+
+        close_popover($(this));
 
         event.preventDefault();
     });
@@ -27,9 +35,7 @@ var MRA_Entries = function() {
                     .text(data.favourites_count)
                     .toggleClass('active', data.favourite);
 
-                setTimeout(function() {
-                    button.popover('hide');
-                }, 5000);
+                    close_popover(button);
             }
         });
 
