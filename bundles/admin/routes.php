@@ -17,10 +17,10 @@ Basset::styles('admin', function($basset)
 
 Basset::scripts('admin', function($basset)
 {
-	$basset->directory('admin::js', function($basset)
+	$basset->directory('public/assets/js/vendor', function($basset)
 	{
-		$basset->add('MagicRainbowAdventure', 'MagicRainbowAdventure.js')
-			->add('BaseRepository', 'models/BaseRepository.js')
-			->add('BaseModel', 'models/BaseModel.js');
+		$basset->add('JSON-js', 'JSON-js/json2.js')
+			->add('underscore', 'underscore/underscore-min.js')
+			->add('backbone', 'backbone/backbone-min.js');
 	});
 });

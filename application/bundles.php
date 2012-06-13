@@ -53,4 +53,8 @@ return array(
 		'handles' => 'admin',
 		'auto' => true,
 	),
+	'api' => array(
+		'handles' => 'api',
+		'auto' => true,
+	),
 );
