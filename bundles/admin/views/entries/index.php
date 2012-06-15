@@ -1,6 +1,6 @@
 <section class="admin">
 
-	<table class="table">
+	<table class="table entries">
 		<thead>
 			<tr>
 				<th><?=Lang::line('admin::entries.thumbnail')?></th>
@@ -8,16 +8,13 @@
 				<th><?=Lang::line('admin::entries.description')?></th>
 			</tr>
 		</thead>
-
-		<tbody>
-		<?php foreach ($entries as $entry): ?>
-			<tr class="entry">
-				<td><img src="<?=$entry->getThumbnailUrl('medium')?>" /></td>
-				<td><?=$entry->getTitle()?></td>
-				<td><?=$entry->getDescription()?></td>
-			</tr>
-		<?php endforeach; ?>
-		</tbody>
 	</table>
-
 </section>
+
+<script type="text/html" class="entry-template">
+	<tr>
+		<td><img src="<%= thumbnail_url %>" /></td>
+		<td><%= title %></td>
+		<td><%= description %></td>
+	</tr>
+</script>

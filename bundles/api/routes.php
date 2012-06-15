@@ -30,9 +30,10 @@ Route::get('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manage
 
 	foreach ($entries as $entry)
 	{
-		$return_json[] = array(
-			'entry' => $entity_serializer->toArray($entry),
-		);
+		$entry_array = $entity_serializer->toArray($entry);
+		$entry_array['thumbnail_url'] = $entry->getThumbnailUrl('medium');
+
+		$return_json[] = $entry_array;
 	}
 
 	return Response::json($return_json);
