@@ -22,6 +22,9 @@ class AdminBaseController extends \Base_Controller
 		// Log as much of the admin actions as possible
 		$this->log->pushHandler(new RotatingFileHandler(path('storage') . 'logs/' . 'magicrainbowadventure-admin.log'), Logger::INFO);
 
+		// Count all queries executed
+		$query_counter = new \MagicRainbowAdventure\Logging\QueryCounter;
+		$this->em->getConfiguration()->setSQLLogger($query_counter);
 	}
 
 }
