@@ -63,9 +63,23 @@ Basset::styles('magicrainbowadventure', function($basset)
 	$basset->directory('public/assets/css', function($basset)
 	{
 		$basset->add('reset', 'reset.css')
-			->add('1140gs', '1140.css')
-			->add('bootstrap', 'bootstrap.css')
-			->add('default', 'default.less');
+			->add('1140gs', 'vendor/1140.css');
+	});
+
+	$basset->directory('public/assets/css/vendor/bootstrap', function($basset)
+	{
+		$basset->add('bootstrap', 'bootstrap.css')
+			->add('bootstrap-buttons', 'buttons.css')
+			->add('bootstrap-forms', 'forms.css')
+			->add('bootstrap-labels-badges', 'labels-badges.css')
+			->add('bootstrap-tables', 'tables.css')
+			->add('bootstrap-tooltips-popovers', 'tooltips-popovers.css');
+	});
+
+	// Our styles take priority over everything else
+	$basset->directory('public/assets/css', function($basset)
+	{
+		$basset->add('default', 'default.less');
 	});
 });
 
