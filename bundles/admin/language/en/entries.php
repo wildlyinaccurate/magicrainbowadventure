@@ -11,8 +11,10 @@ return array(
 	'entry_rejected' => '"%s" has been rejected',
 
 	// Labels
-	'thumbnail' => 'Thumbnail',
+	'status' => 'Status',
 	'title' => 'Title',
 	'description' => 'Description',
+	'date_created' => 'Created',
+	'actions' => 'Actions',
 
 );

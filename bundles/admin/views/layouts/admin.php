@@ -59,6 +59,8 @@
 				Magic Rainbow Adventure Admin Interface<br />
 				<strong>You are <?=Request::ip()?>, <?=$_SERVER['HTTP_USER_AGENT']?></strong>
 			</p>
+
+			<p><?=IoC::resolve('doctrine::manager')->getConfiguration()->getSqlLogger()->queries?> queries executed.</p>
 		</div>
 	</div>
 </footer>
