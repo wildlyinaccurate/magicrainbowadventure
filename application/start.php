@@ -172,6 +172,15 @@ if ( ! Request::cli() and Config::get('session.driver') !== '')
 	Session::load();
 }
 
+// Doctrine memcache configuration
+IoC::register('doctrine::cache.provider', function()
+{
+	$memcached_driver = new Doctrine\Common\Cache\MemcachedCache();
+	$memcached_driver->setMemcached(Cache::driver()->memcache);
+
+	return $memcached_driver;
+});
+
 // Dropbox configuration
 Event::listen('laravel.started: dropbox', function()
 {
