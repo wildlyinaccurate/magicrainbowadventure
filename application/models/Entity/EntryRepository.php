@@ -2,7 +2,8 @@
 
 namespace Entity;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityRepository,
+	Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * EntryRepository
@@ -20,12 +21,6 @@ class EntryRepository extends EntityRepository
 	const RESULTS_CACHE_TTL = 600;
 
 	/**
-	 * Total number of query results (for pagination)
-	 * @var int
-	 */
-	private $total_query_results;
-
-	/**
 	 * Get all Entries
 	 *
 	 * @param	int		$offset
@@ -37,19 +32,18 @@ class EntryRepository extends EntityRepository
 	{
 		$dql = 'SELECT e FROM Entity\Entry e ';
 
-		if ($search)
+		if ($search !== '')
 		{
 			$dql .= "WHERE e.title LIKE '%{$search}%' OR e.description LIKE '%{$search}%' ";
 		}
 
 		$dql .= 'ORDER BY e.created_date DESC';
 
-		$query = $this->_em->createQuery($dql);
+		$query = $this->_em->createQuery($dql)
+			->setFirstResult($offset)
+			->setMaxResults($entries_per_page);
 
-		$this->total_query_results = \DoctrineExtensions\Paginate\Paginate::getTotalQueryResults($query);
-		$pagination = \DoctrineExtensions\Paginate\Paginate::getPaginateQuery($query, $offset, $entries_per_page);
-
-		return $pagination->getResult();
+		return new Paginator($query);
 	}
 
 	/**
@@ -76,51 +70,7 @@ class EntryRepository extends EntityRepository
 
 		$query = $query_builder->getQuery();
 
-		return $query->getResult();
-	}
-
-	/**
-	 * Get all Entries, sorted by an EntryRating column
-	 *
-	 * @param   int	 $offset
-	 * @param   int	 $entries_per_page
-	 * @param   string  $rating
-	 * @param   string  $order_type
-	 * @return  array
-	 */
-	public function getByRating($offset = 0, $entries_per_page = 20, $rating, $order_type = 'SUM')
-	{
-		// Count the total number of results for pagination
-		$this->total_query_results = $this->countApprovedEntries();
-
-		// Build the query with our offset and limit
-		$query_builder = $this->_em->createQueryBuilder();
-		$query_builder->select("e, {$order_type}(r.{$rating}) AS rating_value, COUNT(r.id) AS total_ratings")
-			->from('Entity\Entry', 'e')
-			->leftJoin('e.ratings', 'r')
-			->where('e.approved = 1')
-			->groupBy('e.id')
-			->addOrderBy('rating_value', 'DESC')
-			->addOrderBy('total_ratings', 'DESC')
-			->setFirstResult($offset)
-			->setMaxResults($entries_per_page);
-
-		$query = $query_builder->getQuery();
-
-		$this->total_query_results = \DoctrineExtensions\Paginate\Paginate::getTotalQueryResults($query);
-		$pagination = \DoctrineExtensions\Paginate\Paginate::getPaginateQuery($query, $offset, $entries_per_page);
-		$results = $query->getResult();
-
-		// Each 'result' is an array with two items: the actual result, and the rating_value aggregate field
-		// We'll loop through each result and build an array of Entity\Entry objects
-		$object_results = array();
-
-		foreach ($results as $index => $result)
-		{
-			$object_results[$index] = $result[0];
-		}
-
-		return $object_results;
+		return new Paginator($query);
 	}
 
 	/**
@@ -146,23 +96,11 @@ class EntryRepository extends EntityRepository
 	 */
 	public function getEntriesToModerate($offset = 0, $entries_per_page = 20)
 	{
-		$query = $this->_em->createQuery('SELECT e FROM Entity\Entry e WHERE e.moderated_by IS NULL ORDER BY e.created_date DESC');
+		$query = $this->_em->createQuery('SELECT e FROM Entity\Entry e WHERE e.moderated_by IS NULL ORDER BY e.created_date DESC')
+			->setFirstResult($offset)
+			->setMaxResults($entries_per_page);
 
-		$this->total_query_results = \DoctrineExtensions\Paginate\Paginate::getTotalQueryResults($query);
-		$pagination = \DoctrineExtensions\Paginate\Paginate::getPaginateQuery($query, $offset, $entries_per_page);
-
-		return $pagination->getResult();
-	}
-
-	/**
-	 * Get total query results (must be called AFTER a method that uses pagination
-	 * e.g. getLatestEntries)
-	 *
-	 * @return int
-	 */
-	public function getTotalQueryResults()
-	{
-		return $this->total_query_results;
+		return new Paginator($query);
 	}
 
 	/**
@@ -172,9 +110,8 @@ class EntryRepository extends EntityRepository
 	 */
 	protected function countApprovedEntries()
 	{
-		$query = $this->_em->createQuery('SELECT COUNT(e.id) FROM Entity\Entry e WHERE e.approved = 1');
-
-		return $query->getSingleScalarResult();
+		return $this->_em->createQuery('SELECT COUNT(e.id) FROM Entity\Entry e WHERE e.approved = 1')
+			->getSingleScalarResult();
 	}
 
 }
