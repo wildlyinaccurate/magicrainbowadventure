@@ -16,5 +16,10 @@ return array(
 	'description' => 'Description',
 	'date_created' => 'Created',
 	'actions' => 'Actions',
+	'awaiting_moderation' => 'Awaiting Moderation',
+
+	'edit' => 'Edit',
+	'approve' => 'Approve',
+	'decline' => 'Decline',
 
 );

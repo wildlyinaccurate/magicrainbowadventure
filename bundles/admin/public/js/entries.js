@@ -14,14 +14,23 @@ MagicRainbowAdmin.Entries = function() {
             self[property] = ko.observable(data[property]);
         }
 
-        self.statusText = ko.computed(function() {
-            if (self.moderated_by()) {
-                var verb = (self.approved()) ? 'Approved' : 'Declined';
-                return verb + ' by ' + self.moderated_by().display_name;
-            }
-
-            return 'Awaiting Moderation';
+        self.status = ko.computed(function() {
+            return (self.approved()) ? 'Approved' : 'Declined';
         });
+
+        self.moderatorDisplayName = ko.computed(function() {
+            return (self.moderated_by()) ? self.moderated_by().display_name : '';
+        });
+
+        self.toggleApproved = function() {
+            self.approved( ! self.approved());
+            self.moderated_by(MagicRainbowAdmin.getUser());
+            self.save();
+        }
+
+        self.save = function() {
+            MagicRainbowAdmin.API.post('entries/' + self.id(), { entry: ko.toJSON(self) });
+        }
     }
 
     function EntryViewModel() {

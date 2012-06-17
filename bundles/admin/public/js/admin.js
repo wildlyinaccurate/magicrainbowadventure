@@ -8,6 +8,22 @@
 
 var MagicRainbowAdmin = function() {
 
-    return {};
+	var self = this;
+
+	self.user = {};
+
+    return {
+
+    	setUser: function(id) {
+    		MagicRainbowAdmin.API.get('users/' + id, function(data) {
+    			self.user = data;
+    		});
+    	},
+
+    	getUser: function() {
+    		return self.user;
+    	}
+
+    };
 
 }();

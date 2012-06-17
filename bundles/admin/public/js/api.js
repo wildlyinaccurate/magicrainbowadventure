@@ -10,11 +10,10 @@ MagicRainbowAdmin.API = function() {
 
     var baseURL = '/api';
 
-    function makeCall(type, method, callback) {
-        callback = callback || function(){};
-
+    function makeCall(type, method, data, callback) {
         $.ajax({
             type: type,
+            data: data,
             url: baseURL + '/' + method,
             dataType: 'json',
             success: callback
@@ -23,15 +22,15 @@ MagicRainbowAdmin.API = function() {
 
     return {
         get: function(method, callback) {
-            makeCall('GET', method, callback);
+            makeCall('GET', method, null, callback);
         },
 
-        post: function(method, callback) {
-            makeCall('POST', method, callback);
+        post: function(method, data, callback) {
+            makeCall('POST', method, data, callback);
         },
 
         delete: function(method, callback) {
-            makeCall('DELETE', method, callback);
+            makeCall('DELETE', method, null, callback);
         }
     };
 

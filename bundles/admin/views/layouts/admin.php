@@ -68,5 +68,9 @@
 <script src="<?=URL::base();?>/basset/admin.js"></script>
 <?=Basset::inline('assets')->scripts();?>
 
+<script type="text/javascript">
+	MagicRainbowAdmin.setUser(<?=Auth::user()->getId()?>);
+</script>
+
 </body>
 </html>
