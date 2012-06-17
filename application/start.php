@@ -60,7 +60,6 @@ Laravel\Autoloader::$aliases = $aliases;
 
 Autoloader::map(array(
 	'Base_Controller' => path('app') . 'controllers/base.php',
-	'Pheanstalk' => path('vendor') . 'pheanstalk/classes/Pheanstalk.php',
 ));
 
 /*
@@ -220,7 +219,11 @@ $rotating_file_handler = new \Monolog\Handler\RotatingFileHandler(path('storage'
 
 $log = new \Monolog\Logger('global');
 $log->pushHandler(new \Monolog\Handler\FingersCrossedHandler($rotating_file_handler));
-$log->pushProcessor(new \Monolog\Processor\WebProcessor);
-$log->pushProcessor(new \MagicRainbowAdventure\Logging\Processor\SessionProcessor);
+
+if ( ! Request::cli())
+{
+	$log->pushProcessor(new \Monolog\Processor\WebProcessor);
+	$log->pushProcessor(new \MagicRainbowAdventure\Logging\Processor\SessionProcessor);
+}
 
 IoC::instance('log.global', $log);
