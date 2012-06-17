@@ -59,7 +59,14 @@ Route::get('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manage
 	foreach ($entries as $entry)
 	{
 		$entry_array = $entity_serializer->toArray($entry);
-		$entry_array['thumbnail_url'] = $entry->getThumbnailUrl('medium');
+
+		// Retrieve all of the thumbnail URLs
+		$entry_array['thumbnail_url'] = array();
+
+		foreach (\Entity\Entry::$thumbnail_sizes as $thumbnail)
+		{
+			$entry_array['thumbnail_url'][$thumbnail['size']] = $entry->getThumbnailUrl($thumbnail['size']);
+		}
 
 		$return_json[] = $entry_array;
 	}
