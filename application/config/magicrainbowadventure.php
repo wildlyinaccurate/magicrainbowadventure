@@ -20,7 +20,7 @@ return array(
 	|--------------------------------------------------------------------------
 	|
 	| max_upload_size
-	| The maximum size a file upload can be, in kilobytes (KB). Default: 8192 (8MB)
+	| The maximum size a file upload can be, in kilobytes (KB).
 	|
 	| thumbnail_cache_path
 	| The base path for cached thumbnails (stored locally).
@@ -36,7 +36,7 @@ return array(
 	| See http://www.php.net/manual/en/function.tempnam.php
 	|
 	*/
-	'max_upload_size' => '8192',
+	'max_upload_size' => '9216',
 	'thumbnail_cache_path' => path('public') . 'uploads',
 	'thumbnail_cache_url' => 'uploads',
 	'dropbox_base_path' => 'MagicRainbowAdventure',
