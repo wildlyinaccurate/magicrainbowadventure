@@ -10,6 +10,3 @@
 [submodule "vendor/monolog"]
 	path = vendor/monolog
 	url = git://github.com/Seldaek/monolog.git
-[submodule "vendor/pheanstalk"]
-	path = vendor/pheanstalk
-	url = git://github.com/pda/pheanstalk.git
