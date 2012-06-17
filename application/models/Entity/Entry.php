@@ -93,9 +93,13 @@ class Entry extends TimestampedModel
 	 *
 	 * @var array
 	 */
-	private static $thumbnail_sizes = array(
+	public static $thumbnail_sizes = array(
 		array(
 			'size' => 'medium',
+			'types' => 'image|gif'
+		),
+		array(
+			'size' => 'large',
 			'types' => 'image|gif'
 		),
 		array(
