@@ -108,11 +108,22 @@ class EntryRepository extends EntityRepository
 	}
 
 	/**
+	 * Count the total number of Entries in the database
+	 *
+	 * @return int
+	 */
+	public function countAllEntries()
+	{
+		return $this->_em->createQuery('SELECT COUNT(e.id) FROM Entity\Entry e')
+			->getSingleScalarResult();
+	}
+
+	/**
 	 * Count the total number of approved Entries in the database
 	 *
 	 * @return int
 	 */
-	protected function countApprovedEntries()
+	public function countApprovedEntries()
 	{
 		return $this->_em->createQuery('SELECT COUNT(e.id) FROM Entity\Entry e WHERE e.approved = 1')
 			->getSingleScalarResult();
