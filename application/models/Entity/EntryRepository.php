@@ -18,10 +18,10 @@ class EntryRepository extends EntityRepository
 	 * Result cache TTL for entry queries (latest, by rating, etc)
 	 * @var int
 	 */
-	const RESULTS_CACHE_TTL = 600;
+	const RESULTS_CACHE_TTL = 60;
 
 	/**
-	 * Get all Entries
+	 * Get all Entries, including declined entries.
 	 *
 	 * @param	int		$offset
 	 * @param	int		$entries_per_page
@@ -30,18 +30,22 @@ class EntryRepository extends EntityRepository
 	 */
 	public function getAllEntries($offset, $entries_per_page, $search = '')
 	{
-		$dql = 'SELECT e FROM Entity\Entry e ';
+		$query_builder = $this->_em->createQueryBuilder();
+		$query_builder->select('e, u, m')
+			->from('Entity\Entry', 'e')
+			->join('e.user', 'u')
+			->leftJoin('e.moderated_by', 'm')
+			->addOrderBy('e.created_date', 'DESC')
+			->setFirstResult($offset)
+			->setMaxResults($entries_per_page);
 
 		if ($search !== '')
 		{
-			$dql .= "WHERE e.title LIKE '%{$search}%' OR e.description LIKE '%{$search}%' ";
+			$query_builder->addWhere("WHERE e.title LIKE :search OR e.description LIKE :search")
+				->setParameter('search', "%{$search}%");
 		}
 
-		$dql .= 'ORDER BY e.created_date DESC';
-
-		$query = $this->_em->createQuery($dql)
-			->setFirstResult($offset)
-			->setMaxResults($entries_per_page);
+		$query = $query_builder->getQuery();
 
 		return new Paginator($query);
 	}
