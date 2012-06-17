@@ -2,7 +2,8 @@
 
 namespace Entity;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityRepository,
+	Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * UserRepository
@@ -26,6 +27,28 @@ class UserRepository extends EntityRepository
 			->getResult();
 
 		return (empty($user)) ? null : $user[0];
+	}
+
+	/**
+	 * Get all Users
+	 *
+	 * @param	int		$offset
+	 * @param	int		$entries_per_page
+	 * @param	string	$search
+	 * @return	array
+	 */
+	public function getAllUsers($offset, $entries_per_page)
+	{
+		$query_builder = $this->_em->createQueryBuilder();
+		$query_builder->select('u')
+			->from('Entity\User', 'u')
+			->addOrderBy('u.username', 'DESC')
+			->setFirstResult($offset)
+			->setMaxResults($entries_per_page);
+
+		$query = $query_builder->getQuery();
+
+		return new Paginator($query);
 	}
 
 }
