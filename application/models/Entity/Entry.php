@@ -171,11 +171,12 @@ class Entry extends TimestampedModel
 		foreach (self::$thumbnail_sizes as $thumbnail)
 		{
 			$thumbnail_types = explode('|', $thumbnail['types']);
+			$size = $thumbnail['size'];
 
 			if (in_array($this->type, $thumbnail_types))
 			{
-				$thumbnail = $dropbox->thumbnails("Public/{$this->file_path}", self::$thumbnail_format, $thumbnail['size']);
-				$thumbnail_path = $this->_getThumbnailPath(\Config::get('magicrainbowadventure.thumbnail_cache_path'), $thumbnail['size']);
+				$thumbnail = $dropbox->thumbnails("Public/{$this->file_path}", self::$thumbnail_format, $size);
+				$thumbnail_path = $this->_getThumbnailPath(\Config::get('magicrainbowadventure.thumbnail_cache_path'), $size);
 				$thumbnail_dir = dirname($thumbnail_path);
 
 				if ( ! is_dir($thumbnail_dir))
