@@ -11,7 +11,7 @@ namespace Entity;
  */
 class UserSetting extends TimestampedModel
 {
-	
+
 	/**
 	 * @Id
 	 * @Column(type="integer", nullable=false)
@@ -35,7 +35,7 @@ class UserSetting extends TimestampedModel
 	protected $value;
 
 	/**
-	 * @ManyToOne(targetEntity="User", inversedBy="settings", fetch="EXTRA_LAZY")
+	 * @ManyToOne(targetEntity="User", inversedBy="settings")
 	 */
 	protected $user;
 
@@ -133,7 +133,7 @@ class UserSetting extends TimestampedModel
     {
         $this->user = $user;
 		$user->getSettings()->add($this);
-		
+
         return $this;
     }
 

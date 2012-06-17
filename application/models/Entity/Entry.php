@@ -65,7 +65,7 @@ class Entry extends TimestampedModel
 	protected $moderated_by;
 
 	/**
-	 * @ManyToMany(targetEntity="User", inversedBy="favourites")
+	 * @ManyToMany(targetEntity="User", inversedBy="favourites", fetch="EXTRA_LAZY")
 	 * @JoinTable(name="entry_favourites",
 	 *      joinColumns={@JoinColumn(name="entry_id", referencedColumnName="id")},
 	 *      inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="id")}
@@ -74,7 +74,7 @@ class Entry extends TimestampedModel
 	protected $favourited_by;
 
 	/**
-	 * @OneToMany(targetEntity="Comment", mappedBy="user", cascade={"persist", "remove"})
+	 * @OneToMany(targetEntity="Comment", mappedBy="user", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
 	 */
 	protected $comments;
 

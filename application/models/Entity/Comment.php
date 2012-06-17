@@ -25,7 +25,7 @@ class Comment
 	protected $content;
 
 	/**
-	 * @ManyToOne(targetEntity="User", inversedBy="comments")
+	 * @ManyToOne(targetEntity="User", inversedBy="comments", fetch="EAGER")
 	 */
 	protected $user;
 
@@ -40,7 +40,7 @@ class Comment
 	protected $approved = 0;
 
 	/**
-	 * @ManyToOne(targetEntity="Administrator", inversedBy="moderated_comments", fetch="EXTRA_LAZY")
+	 * @ManyToOne(targetEntity="Administrator", inversedBy="moderated_comments")
 	 */
 	protected $moderated_by;
 

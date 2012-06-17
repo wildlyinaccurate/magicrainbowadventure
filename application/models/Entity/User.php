@@ -53,12 +53,12 @@ class User extends TimestampedModel
 	protected $entries;
 
 	/**
-	 * @OneToMany(targetEntity="Comment", mappedBy="user", cascade={"persist", "remove"})
+	 * @OneToMany(targetEntity="Comment", mappedBy="user", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
 	 */
 	protected $comments;
 
 	/**
-	 * @ManyToMany(targetEntity="Entry", mappedBy="favourited_by", cascade={"persist", "remove"})
+	 * @ManyToMany(targetEntity="Entry", mappedBy="favourited_by", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
 	 */
 	protected $favourites;
 
