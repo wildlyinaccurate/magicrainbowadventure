@@ -14,6 +14,7 @@ return array(
 
 	// Common words/phrases
 	'cancel' => 'Cancel',
+	'close' => 'Close',
 
 	// Errors
 	'general_error' => 'Oh noes!',

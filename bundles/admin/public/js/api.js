@@ -8,13 +8,20 @@
 
 MagicRainbowAdmin.API = function() {
 
-    var baseURL = '/api';
+    var self = this;
+
+    self.baseURL = '/api';
+    self.perPage = null;
 
     function makeCall(type, method, data, callback) {
+        if (self.perPage !== null && ! data.per_page) {
+            data.per_page = self.perPage;
+        }
+
         $.ajax({
             type: type,
             data: data,
-            url: baseURL + '/' + method,
+            url: self.baseURL + '/' + method,
             dataType: 'json',
             success: callback
         });
@@ -31,6 +38,10 @@ MagicRainbowAdmin.API = function() {
 
         delete: function(method, callback) {
             makeCall('DELETE', method, null, callback);
+        },
+
+        setPerPage: function(perPage) {
+            self.perPage = perPage;
         }
     };
 

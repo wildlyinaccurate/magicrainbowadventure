@@ -9,6 +9,7 @@ MagicRainbowAdmin.Entries = function() {
 
     function Entry(data) {
         var self = this;
+        var edit_container = $('.entry-info');
 
         for (property in data) {
             self[property] = ko.observable(data[property]);
@@ -28,6 +29,13 @@ MagicRainbowAdmin.Entries = function() {
             self.save();
         }
 
+        // Open the edit modal
+        self.edit = function() {
+            ko.applyBindings(self, edit_container[0]);
+            edit_container.modal('show');
+        }
+
+        // Save the entry via the API
         self.save = function() {
             MagicRainbowAdmin.API.post('entries/' + self.id(), { entry: ko.toJSON(self) });
         }
@@ -47,6 +55,11 @@ MagicRainbowAdmin.Entries = function() {
         });
     }
 
-    ko.applyBindings(new EntryViewModel());
+    ko.applyBindings(new EntryViewModel(), $('.entries')[0]);
+
+    $('.entry-info').modal({
+        show: false,
+        keyboard: false
+    });
 
 }();

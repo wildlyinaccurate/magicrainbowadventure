@@ -70,6 +70,10 @@
 
 <script type="text/javascript">
 	MagicRainbowAdmin.setUser(<?=Auth::user()->getId()?>);
+
+	<?php if (isset($per_page)): ?>
+		MagicRainbowAdmin.API.setPerPage(<?=$per_page?>);
+	<?php endif; ?>
 </script>
 
 </body>

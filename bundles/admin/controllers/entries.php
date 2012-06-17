@@ -26,10 +26,17 @@ class Admin_Entries_Controller extends \MagicRainbowAdmin\Controllers\AdminBaseC
 	 */
 	public function get_index()
 	{
+		$per_page = 1;
+		$entries = $this->em->getRepository('Entity\Entry')->getAllEntries(0, $per_page);
+		$paginator = Paginator::make(array(), $entries->count(), $per_page);
+
 		Basset::inline('assets')->add('entries', 'bundles/admin/js/entries.js');
 
 		$this->layout->title = Lang::line('admin::entries.moderate_entries');
-		$this->layout->content = View::make('admin::entries/index');
+		$this->layout->content = View::make('admin::entries/index', array(
+			'paginator' => $paginator,
+			'per_page' => $per_page,
+		));
 	}
 
 }
