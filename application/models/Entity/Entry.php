@@ -153,18 +153,39 @@ class Entry extends TimestampedModel
 			$this->type = 'gif';
 		}
 
-		// Retrieve various thumbnails and store them locally
+		$this->downloadThumbnails();
+
+		return $this;
+	}
+
+	/**
+	 * Download all of the thumbnails for this entry
+	 *
+	 * @return	void
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	public function downloadThumbnails()
+	{
+		$dropbox = \IoC::resolve('dropbox::api');
+
 		foreach (self::$thumbnail_sizes as $thumbnail)
 		{
 			$thumbnail_types = explode('|', $thumbnail['types']);
 
 			if (in_array($this->type, $thumbnail_types))
 			{
-				$this->_downloadThumbnail($thumbnail['size']);
+				$thumbnail = $dropbox->thumbnails("Public/{$this->file_path}", self::$thumbnail_format, $thumbnail['size']);
+				$thumbnail_path = $this->_getThumbnailPath(\Config::get('magicrainbowadventure.thumbnail_cache_path'), $thumbnail['size']);
+				$thumbnail_dir = dirname($thumbnail_path);
+
+				if ( ! is_dir($thumbnail_dir))
+				{
+					mkdir($thumbnail_dir, 0777, true);
+				}
+
+				file_put_contents($thumbnail_path, $thumbnail['data']);
 			}
 		}
-
-		return $this;
 	}
 
 	/**
@@ -177,28 +198,6 @@ class Entry extends TimestampedModel
 	private function _getThumbnailPath($base, $size)
 	{
 		return dirname($base . "/{$this->file_path}") . "/{$size}/{$this->getHash()}." . strtolower(self::$thumbnail_format);
-	}
-
-	/**
-	 * Download a thumbnail from Dropbox and store it locally
-	 *
-	 * @param	string	$size
-	 * @return	void
-	 */
-	private function _downloadThumbnail($size)
-	{
-		$dropbox = \IoC::resolve('dropbox::api');
-
-		$thumbnail = $dropbox->thumbnails("Public/{$this->file_path}", self::$thumbnail_format, $size);
-		$thumbnail_path = $this->_getThumbnailPath(\Config::get('magicrainbowadventure.thumbnail_cache_path'), $size);
-		$thumbnail_dir = dirname($thumbnail_path);
-
-		if ( ! is_dir($thumbnail_dir))
-		{
-			mkdir($thumbnail_dir, 0777, true);
-		}
-
-		file_put_contents($thumbnail_path, $thumbnail['data']);
 	}
 
 	/**
