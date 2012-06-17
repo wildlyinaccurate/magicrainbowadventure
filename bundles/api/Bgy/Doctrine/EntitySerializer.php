@@ -33,9 +33,20 @@ class EntitySerializer
      */
     protected $_em;
 
-    public function __construct($em)
+    /**
+     * @var int
+     */
+    protected $_recursionDepth = 0;
+
+    /**
+     * @var int
+     */
+    protected $_maxRecursionDepth = 0;
+
+    public function __construct($em, $maxRecursionDepth = 0)
     {
         $this->setEntityManager($em);
+        $this->_maxRecursionDepth = $maxRecursionDepth;
     }
 
     /**
@@ -83,12 +94,20 @@ class EntitySerializer
                 }
             } elseif ($mapping['isOwningSide'] && $mapping['type'] & ClassMetadata::TO_ONE) {
                 if (null !== $metadata->reflFields[$field]->getValue($entity)) {
-                    $data[$key] = $this->getEntityManager()
-                        ->getUnitOfWork()
-                        ->getEntityIdentifier(
+                    if ($this->_recursionDepth < $this->_maxRecursionDepth) {
+                        $this->_recursionDepth++;
+                        $data[$key] = $this->_serializeEntity(
                             $metadata->reflFields[$field]
                                 ->getValue($entity)
                             );
+                    } else {
+                        $data[$key] = $this->getEntityManager()
+                            ->getUnitOfWork()
+                            ->getEntityIdentifier(
+                                $metadata->reflFields[$field]
+                                    ->getValue($entity)
+                                );
+                    }
                 } else {
                     // In some case the relationship may not exist, but we want
                     // to know about it
