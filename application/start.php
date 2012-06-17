@@ -59,7 +59,8 @@ Laravel\Autoloader::$aliases = $aliases;
 */
 
 Autoloader::map(array(
-	'Base_Controller' => path('app').'controllers/base.php',
+	'Base_Controller' => path('app') . 'controllers/base.php',
+	'Pheanstalk' => path('vendor') . 'pheanstalk/classes/Pheanstalk.php',
 ));
 
 /*
@@ -172,14 +173,27 @@ if ( ! Request::cli() and Config::get('session.driver') !== '')
 	Session::load();
 }
 
-// Doctrine memcache configuration
-IoC::register('doctrine::cache.provider', function()
-{
-	$memcached_driver = new Doctrine\Common\Cache\MemcachedCache();
-	$memcached_driver->setMemcached(Cache::driver()->memcache);
+// Register autoloaders
+Autoloader::namespaces(array(
+	'MagicRainbowAdventure' => path('app') . 'MagicRainbowAdventure',
+	'Monolog' => path('base') . 'vendor/monolog/src/Monolog',
+));
 
-	return $memcached_driver;
-});
+// Doctrine memcache configuration
+//IoC::register('doctrine::cache.provider', function()
+//{
+//	$memcached_driver = new Doctrine\Common\Cache\MemcachedCache();
+//	$memcached_driver->setMemcached(Cache::driver()->memcache);
+//
+//	return $memcached_driver;
+//});
+
+Bundle::start('doctrine');
+
+// Count all queries executed
+$em = IoC::resolve('doctrine::manager');
+$query_counter = new \MagicRainbowAdventure\Logging\QueryCounter;
+$em->getConfiguration()->setSQLLogger($query_counter);
 
 // Dropbox configuration
 Event::listen('laravel.started: dropbox', function()
@@ -200,12 +214,6 @@ Event::listen('laravel.started: dropbox', function()
 Auth::extend('magicrainbowadventure', function() {
 	return new \Auth\Drivers\MagicRainbowAdventure;
 });
-
-// Register an autoloader for the vendor directory
-Autoloader::namespaces(array(
-	'MagicRainbowAdventure' => path('app') . 'MagicRainbowAdventure',
-	'Monolog' => path('base') . 'vendor/monolog/src/Monolog',
-));
 
 // Monolog setup
 $rotating_file_handler = new \Monolog\Handler\RotatingFileHandler(path('storage') . 'logs/' . 'magicrainbowadventure-global.log');

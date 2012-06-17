@@ -35,7 +35,7 @@
 
 return array(
 	'doctrine' => array(
-		'auto' => true,
+		'auto' => false,
 		'autoloads' => array(
 			'map' => array(
 				'Doctrine\Migration' => '(:bundle)/migration.php',

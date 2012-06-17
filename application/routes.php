@@ -152,7 +152,10 @@ Route::filter('before', function()
 
 Route::filter('after', function($response)
 {
-	// Do stuff after every request to your application...
+	$em = IoC::resolve('doctrine::manager');
+	$log = IoC::resolve('log.global');
+
+	$log->addInfo("{$em->getConfiguration()->getSQLLogger()->queries} queries executed.");
 });
 
 Route::filter('csrf', function()
