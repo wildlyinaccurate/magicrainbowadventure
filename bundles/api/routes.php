@@ -1,5 +1,7 @@
 <?php
 
+use Bgy\Doctrine\EntitySerializer;
+
 /**
  * Magic Rainbow Adventure API Bundle
  *
@@ -8,11 +10,15 @@
  * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
 
+/** @var $entity_manager \Doctrine\ORM\EntityManager */
 $entity_manager = IoC::resolve('doctrine::manager');
 
+/**
+ * Retrieve one or many entries
+ */
 Route::get('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manager)
 {
-	$entity_serializer = new \Bgy\Doctrine\EntitySerializer($entity_manager);
+	$entity_serializer = new EntitySerializer($entity_manager, 1);
 
 	if ($id !== null)
 	{
