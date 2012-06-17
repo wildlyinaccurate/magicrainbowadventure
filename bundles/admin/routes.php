@@ -20,19 +20,14 @@ Basset::scripts('admin', function($basset)
 {
 	$basset->directory('public/assets/js/vendor', function($basset)
 	{
-		$basset->add('JSON-js', 'JSON-js/json2.js')
-			->add('underscore', 'underscore/underscore-min.js')
-			->add('backbone', 'backbone/backbone-min.js');
-	});
-
-	$basset->directory('public/assets/js/vendor/bootstrap', function($basset)
-	{
-		$basset->add('bootstrap-button', 'button.js')
-			->add('bootstrap-dropdown', 'dropdown.js');
+		$basset->add('knockout', 'knockout/knockout-2.1.0.js')
+			->add('bootstrap-button', 'bootstrap/button.js')
+			->add('bootstrap-dropdown', 'bootstrap/dropdown.js');
 	});
 
 	$basset->directory('admin::js', function($basset)
 	{
-		$basset->add('admin', 'admin.js');
+		$basset->add('admin', 'admin.js')
+			->add('api', 'api.js');
 	});
 });

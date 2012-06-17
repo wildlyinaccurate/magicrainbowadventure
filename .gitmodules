@@ -10,12 +10,3 @@
 [submodule "vendor/monolog"]
 	path = vendor/monolog
 	url = git://github.com/Seldaek/monolog.git
-[submodule "public/assets/js/vendor/underscore"]
-	path = public/assets/js/vendor/underscore
-	url = git://github.com/documentcloud/underscore.git
-[submodule "public/assets/js/vendor/backbone"]
-	path = public/assets/js/vendor/backbone
-	url = git://github.com/documentcloud/backbone.git
-[submodule "public/assets/js/vendor/JSON-js"]
-	path = public/assets/js/vendor/JSON-js
-	url = git://github.com/douglascrockford/JSON-js.git

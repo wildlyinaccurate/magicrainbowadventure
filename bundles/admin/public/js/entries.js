@@ -1,37 +1,43 @@
-var Entry = Backbone.Model.extend({});
+/**
+ * Magic Rainbow Adventure Admin Interface
+ *
+ * Entry Management
+ *
+ * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+ */
+MagicRainbowAdmin.Entries = function() {
 
-var EntryCollection = Backbone.Collection.extend({
-	model: Entry,
-	url: '/api/entries'
-});
+    function Entry(data) {
+        var self = this;
 
-var EntryView = Backbone.View.extend({
-    template: $('.entry-template').html(),
+        for (property in data) {
+            self[property] = ko.observable(data[property]);
+        }
 
-    render: function() {
-        this.el = _.template(this.template, this.model.toJSON());
+        self.statusText = ko.computed(function() {
+            if (self.moderated_by()) {
+                var verb = (self.approved()) ? 'Approved' : 'Declined';
+                return verb + ' by ' + self.moderated_by().display_name;
+            }
 
-        return this;
+            return 'Awaiting Moderation';
+        });
     }
-});
 
-var AppView = Backbone.View.extend({
-    tagName: 'tbody',
+    function EntryViewModel() {
+        var self = this;
 
-    initialize: function() {
-        this.entries = new EntryCollection();
-        this.entries.bind('all', this.render, this);
-        this.entries.fetch();
-    },
+        self.entries = ko.observableArray([]);
 
-    render: function() {
-        this.entries.each(function(entry) {
-            $(this.el).append(new EntryView({model: entry}).render().el);
-        }, this);
+        MagicRainbowAdmin.API.get('entries', function(data) {
+            var mappedEntries = $.map(data, function(entry_data) {
+                return new Entry(entry_data);
+            });
 
-        return this;
+            self.entries(mappedEntries);
+        });
     }
-})
 
-var app = new AppView();
-$('.entries').append(app.render().el);
+    ko.applyBindings(new EntryViewModel());
+
+}();
