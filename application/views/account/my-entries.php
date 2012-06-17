@@ -5,7 +5,7 @@
 		<tbody>
 		<?php foreach ($entries as $entry): ?>
 			<tr>
-				<td><img src="<?=$entry->getThumbnailUrl('medium')?>" /></td>
+				<td><img src="/<?=$entry->getThumbnailUrl('medium')?>" /></td>
 				<td><?=$entry->getTitle()?></td>
 				<td><?=$entry->getDescription()?></td>
 			</tr>
