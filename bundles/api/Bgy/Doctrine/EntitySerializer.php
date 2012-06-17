@@ -100,6 +100,7 @@ class EntitySerializer
                             $metadata->reflFields[$field]
                                 ->getValue($entity)
                             );
+                        $this->_recursionDepth--;
                     } else {
                         $data[$key] = $this->getEntityManager()
                             ->getUnitOfWork()
