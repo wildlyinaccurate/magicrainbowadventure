@@ -54,6 +54,7 @@ Route::filter('admin_user', function()
 });
 
 Route::filter('pattern: admin*', 'admin_user');
+Route::filter('pattern: api*', 'admin_user');
 
 // Configure assets with Basset
 Bundle::start('basset');
