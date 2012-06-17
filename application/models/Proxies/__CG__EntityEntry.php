@@ -48,10 +48,16 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
         return parent::setFile($file_path, $extension);
     }
 
-    public function getThumbnail($size = 'medium')
+    public function getDropboxURL()
     {
         $this->__load();
-        return parent::getThumbnail($size);
+        return parent::getDropboxURL();
+    }
+
+    public function getThumbnailUrl($size)
+    {
+        $this->__load();
+        return parent::getThumbnailUrl($size);
     }
 
     public function getId()
@@ -109,6 +115,18 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
     {
         $this->__load();
         return parent::getFilePath();
+    }
+
+    public function setType($type)
+    {
+        $this->__load();
+        return parent::setType($type);
+    }
+
+    public function getType()
+    {
+        $this->__load();
+        return parent::getType();
     }
 
     public function setDescription($description)
@@ -228,7 +246,7 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'title', 'url_title', 'file_path', 'hash', 'description', 'approved', 'created_date', 'modified_date', 'user', 'moderated_by', 'favourited_by', 'comments', 'tags');
+        return array('__isInitialized__', 'id', 'title', 'url_title', 'file_path', 'type', 'hash', 'description', 'approved', 'created_date', 'modified_date', 'user', 'moderated_by', 'favourited_by', 'comments', 'tags');
     }
 
     public function __clone()
@@ -240,7 +258,7 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
             if ($original === null) {
                 throw new \Doctrine\ORM\EntityNotFoundException();
             }
-            foreach ($class->reflFields AS $field => $reflProperty) {
+            foreach ($class->reflFields as $field => $reflProperty) {
                 $reflProperty->setValue($this, $reflProperty->getValue($original));
             }
             unset($this->_entityPersister, $this->_identifier);

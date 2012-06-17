@@ -96,7 +96,7 @@ class Comment extends \Entity\Comment implements \Doctrine\ORM\Proxy\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'content', 'user', 'entry');
+        return array('__isInitialized__', 'id', 'content', 'approved', 'user', 'entry', 'moderated_by');
     }
 
     public function __clone()
@@ -108,7 +108,7 @@ class Comment extends \Entity\Comment implements \Doctrine\ORM\Proxy\Proxy
             if ($original === null) {
                 throw new \Doctrine\ORM\EntityNotFoundException();
             }
-            foreach ($class->reflFields AS $field => $reflProperty) {
+            foreach ($class->reflFields as $field => $reflProperty) {
                 $reflProperty->setValue($this, $reflProperty->getValue($original));
             }
             unset($this->_entityPersister, $this->_identifier);

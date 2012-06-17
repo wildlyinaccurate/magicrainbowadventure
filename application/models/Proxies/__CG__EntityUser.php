@@ -42,12 +42,6 @@ class User extends \Entity\User implements \Doctrine\ORM\Proxy\Proxy
     }
 
     
-    public function __get($property)
-    {
-        $this->__load();
-        return parent::__get($property);
-    }
-
     public function setPassword($password)
     {
         $this->__load();
@@ -210,7 +204,7 @@ class User extends \Entity\User implements \Doctrine\ORM\Proxy\Proxy
             if ($original === null) {
                 throw new \Doctrine\ORM\EntityNotFoundException();
             }
-            foreach ($class->reflFields AS $field => $reflProperty) {
+            foreach ($class->reflFields as $field => $reflProperty) {
                 $reflProperty->setValue($this, $reflProperty->getValue($original));
             }
             unset($this->_entityPersister, $this->_identifier);
