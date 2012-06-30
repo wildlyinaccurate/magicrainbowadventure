@@ -28,12 +28,12 @@ class Bcrypt
 	{
 		if (version_compare(PHP_VERSION, '5.3') < 0)
 		{
-			throw new Exception('Bcrypt requires PHP 5.3 or above');
+			throw new \Exception('Bcrypt requires PHP 5.3 or above');
 		}
 
 		if ( ! function_exists('openssl_random_pseudo_bytes'))
 		{
-			throw new Exception('Bcrypt requires openssl PHP extension');
+			throw new \Exception('Bcrypt requires openssl PHP extension');
 		}
 
 		if ($work_factor < 4 || $work_factor > 31)
@@ -60,7 +60,7 @@ class Bcrypt
 	{
 		if (version_compare(PHP_VERSION, '5.3') < 0)
 		{
-			throw new Exception('Bcrypt requires PHP 5.3 or above');
+			throw new \Exception('Bcrypt requires PHP 5.3 or above');
 		}
 
 		if (self::is_legacy_hash($stored_hash))
@@ -71,7 +71,7 @@ class Bcrypt
 			}
 			else
 			{
-				throw new Exception('Unsupported hash format');
+				throw new \Exception('Unsupported hash format');
 			}
 		}
 
