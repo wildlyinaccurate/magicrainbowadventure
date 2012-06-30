@@ -72,10 +72,16 @@ class Administrator extends \Entity\Administrator implements \Doctrine\ORM\Proxy
         return parent::setPassword($password);
     }
 
-    public function encryptPassword($password)
+    public function hashPassword($password)
     {
         $this->__load();
-        return parent::encryptPassword($password);
+        return parent::hashPassword($password);
+    }
+
+    public function checkPassword($password)
+    {
+        $this->__load();
+        return parent::checkPassword($password);
     }
 
     public function isAdmin()

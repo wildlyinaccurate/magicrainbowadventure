@@ -48,6 +48,12 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
         return parent::setFile($file_path, $extension);
     }
 
+    public function downloadThumbnails()
+    {
+        $this->__load();
+        return parent::downloadThumbnails();
+    }
+
     public function getDropboxURL()
     {
         $this->__load();
