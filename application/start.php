@@ -174,6 +174,7 @@ if ( ! Request::cli() and Config::get('session.driver') !== '')
 
 // Register autoloaders
 Autoloader::namespaces(array(
+	'MagicRainbowAdventure\\Tests' => path('app') . 'tests/MagicRainbowAdventure/Tests',
 	'MagicRainbowAdventure' => path('app') . 'MagicRainbowAdventure',
 	'Monolog' => path('base') . 'vendor/monolog/src/Monolog',
 ));
