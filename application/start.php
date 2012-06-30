@@ -211,7 +211,7 @@ Event::listen('laravel.started: dropbox', function()
 
 // Register the MagicRainbowAdventure Auth driver
 Auth::extend('magicrainbowadventure', function() {
-	return new \Auth\Drivers\MagicRainbowAdventure;
+	return new \Auth\Drivers\MagicRainbowAuthDriver;
 });
 
 // Monolog setup
