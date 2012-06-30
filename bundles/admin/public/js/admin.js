@@ -14,6 +14,8 @@ var MagicRainbowAdmin = function() {
 
     return {
 
+        Models: {},
+
     	setUser: function(id) {
     		MagicRainbowAdmin.API.get('users/' + id, function(data) {
     			self.user = data;
