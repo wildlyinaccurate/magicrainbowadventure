@@ -60,6 +60,12 @@ Route::get('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manage
 	{
 		$entry_array = $entity_serializer->toArray($entry);
 
+		// Manually include the moderator data because EntitySerializer doesn't include it
+		if ($entry->getModeratedBy() !== null)
+		{
+			$entry_array['moderated_by'] = $entity_serializer->toArray($entry->getModeratedBy());
+		}
+
 		// Retrieve all of the thumbnail URLs
 		$entry_array['thumbnail_url'] = array();
 
