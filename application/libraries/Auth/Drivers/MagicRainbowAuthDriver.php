@@ -10,7 +10,7 @@ namespace Auth\Drivers;
  *
  * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class MagicRainbowAdventure extends \Laravel\Auth\Drivers\Driver
+class MagicRainbowAuthDriver extends \Laravel\Auth\Drivers\Driver
 {
 
 	/**
@@ -24,7 +24,7 @@ class MagicRainbowAdventure extends \Laravel\Auth\Drivers\Driver
 	{
 		$user = \Laravel\IoC::resolve('doctrine::manager')->getRepository('Entity\User')->findUser($arguments['username']);
 
-		if ($user !== null && $user->getPassword() === $user->encryptPassword($arguments['password']))
+		if ($user !== null && $user->checkPassword($arguments['password']))
 		{
 			return $this->login($user->getId(), array_get($arguments, 'remember'));
 		}

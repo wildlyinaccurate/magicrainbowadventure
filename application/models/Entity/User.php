@@ -15,6 +15,8 @@ namespace Entity;
 class User extends TimestampedModel
 {
 
+    const ENCRYPTION_WORK_FACTOR = 12;
+
 	/**
 	 * @Id
 	 * @Column(type="integer", nullable=false)
@@ -28,7 +30,7 @@ class User extends TimestampedModel
 	protected $username;
 
 	/**
-	 * @Column(type="string", length=128, nullable=false)
+	 * @Column(type="string", length=60, nullable=false)
 	 */
 	protected $password;
 
@@ -84,28 +86,33 @@ class User extends TimestampedModel
 	 */
 	public function setPassword($password)
 	{
-		$this->password = $this->encryptPassword($password);
+		$this->password = $this->hashPassword($password);
         return $this;
 	}
 
 	/**
-	 * Encrypt the user's password, using their username as a salt
+	 * Hash the user's password
 	 *
-	 * @static
 	 * @param	string	$password
 	 * @return	string
-	 * @throws \BadMethodCallException
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function encryptPassword($password)
+	public function hashPassword($password)
 	{
-		if ( ! $this->username)
-		{
-			throw new \BadMethodCallException('User password cannot be encrypted until username has been set.');
-		}
-
-		return hash('sha512', $password . $this->username);
+		return \MagicRainbowAdventure\Encryption\Bcrypt::hash($password, self::ENCRYPTION_WORK_FACTOR);
 	}
+
+    /**
+     * Check if the password provided is the user's password
+     *
+     * @param   string  $password
+     * @return  bool
+     * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+     */
+    public function checkPassword($password)
+    {
+        return \MagicRainbowAdventure\Encryption\Bcrypt::check($password, $this->getPassword());
+    }
 
 	/**
 	 * Returns TRUE if the user is an administrator
