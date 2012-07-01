@@ -5,7 +5,7 @@ namespace MagicRainbowAdventure\Tests\Entity;
 use \Entity\User;
 use \Entity\Administrator;
 
-class UserTest extends \MagicRainbowAdventure\Tests\BaseTestCase
+class UserTest extends \MagicRainbowAdventure\Tests\EntityTestCase
 {
 
 	protected $user;

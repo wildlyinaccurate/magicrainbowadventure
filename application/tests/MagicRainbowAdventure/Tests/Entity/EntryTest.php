@@ -4,7 +4,7 @@ namespace MagicRainbowAdventure\Tests\Entity;
 
 use \Entity\Entry;
 
-class EntryTest extends \MagicRainbowAdventure\Tests\BaseTestCase
+class EntryTest extends \MagicRainbowAdventure\Tests\EntityTestCase
 {
 
 	protected $entry;
