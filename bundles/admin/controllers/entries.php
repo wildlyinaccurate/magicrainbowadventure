@@ -1,5 +1,7 @@
 <?php
 
+use \MagicRainbowAdventure\Tools\Pagination\Paginator;
+
 /**
  * Admin Entries Controller
  *
@@ -26,8 +28,11 @@ class Admin_Entries_Controller extends \MagicRainbowAdmin\Controllers\AdminBaseC
 	 */
 	public function get_index()
 	{
-		$per_page = 1;
-		$entries = $this->em->getRepository('Entity\Entry')->getAllEntries(0, $per_page);
+		$page = Input::get('page', 1);
+		$per_page = 10;
+		$offset = $per_page * ($page - 1);
+
+		$entries = $this->em->getRepository('Entity\Entry')->getAllEntries($offset, $per_page);
 		$paginator = Paginator::make(array(), $entries->count(), $per_page);
 
 		Basset::inline('assets')->add('models/entry', 'bundles/admin/js/models/entry.js')

@@ -33,8 +33,12 @@
 		</tbody>
 	</table>
 
-	<?=$paginator->links(1)?>
+	<?=$paginator->links()?>
 </section>
+
+<script type="text/javascript">
+	MagicRainbowAdmin_API_perPage = <?=$per_page?>;
+</script>
 
 <div class="entry-info modal hide fade">
 	<div class="modal-header">

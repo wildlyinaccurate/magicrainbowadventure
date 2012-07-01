@@ -10,13 +10,19 @@ MagicRainbowAdmin.API = function() {
 
     var self = this;
 
+    // Little bit hacky - perPage can be set in this global variable
+    self.perPage = (typeof MagicRainbowAdmin_API_perPage === undefined) ? null : MagicRainbowAdmin_API_perPage;
+    self.page = 1;
     self.baseURL = '/api';
-    self.perPage = null;
 
     function makeCall(type, method, data, callback) {
+        data = data || {};
+
         if (self.perPage !== null && ! data.per_page) {
             data.per_page = self.perPage;
         }
+
+        data.page = self.page;
 
         $.ajax({
             type: type,
@@ -38,6 +44,10 @@ MagicRainbowAdmin.API = function() {
 
         delete: function(method, callback) {
             makeCall('DELETE', method, null, callback);
+        },
+
+        setPage: function(page) {
+            self.page = page;
         },
 
         setPerPage: function(perPage) {

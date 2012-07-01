@@ -9,6 +9,7 @@ $.extend(MagicRainbowAdmin.Models, {
 
     Entry: function(data) {
         var self = this;
+        var edit_clone = self;
         var edit_container = $('.entry-info');
 
         data.user = new MagicRainbowAdmin.Models.User(data.user);
@@ -37,13 +38,15 @@ $.extend(MagicRainbowAdmin.Models, {
 
         // Open the edit modal
         self.edit = function() {
+            edit_clone = $.extend({}, self);
             ko.cleanNode(edit_container[0]);
-            ko.applyBindings(self, edit_container[0]);
+            ko.applyBindings(edit_clone, edit_container[0]);
             edit_container.modal('show');
         }
 
         // Save the entry via the API
         self.save = function() {
+            self = edit_clone;
             MagicRainbowAdmin.API.post('entries/' + self.id(), { entry: ko.toJSON(self) });
         }
     },
