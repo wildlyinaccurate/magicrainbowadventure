@@ -152,7 +152,7 @@ class Entry extends TimestampedModel
 		$dropbox->putFile($file_path, $file_name, "Public/{$entry_file_path}");
 
 		// Determine if the image is an animated GIF
-		if (\Helpers\ImageHelper::isAnimatedGif($file_path))
+		if (\MagicRainbowAdventure\Helpers\ImageHelper::isAnimatedGif($file_path))
 		{
 			$this->type = 'gif';
 		}

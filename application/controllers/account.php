@@ -82,7 +82,7 @@ class Account_Controller extends Base_Controller
 			'current_password' => "required|current_password_correct:{$this->user->getId()}",
 		);
 
-		$validation = \Validators\UserValidator::make(Input::all(), $validation_rules);
+		$validation = \MagicRainbowAdventure\Validation\UserValidator::make(Input::all(), $validation_rules);
 
 		if ($validation->fails())
 		{

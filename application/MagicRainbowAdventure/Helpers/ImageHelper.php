@@ -1,6 +1,6 @@
 <?php
 
-namespace Helpers;
+namespace MagicRainbowAdventure\Helpers;
 
 /**
  * Image Helper Class
