@@ -2,19 +2,18 @@
 
 namespace MagicRainbowAdventure\Tests;
 
+use MagicRainbowAdventure\Tests\Mocks\Dropbox\DropboxApiMock;
+
 /**
  * Magic Rainbow Adventure Base Test Case
  *
- * Provides access to common components
+ * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
-{
-
-	protected $em;
+abstract class BaseTestCase extends \PHPUnit_Framework_TestCase {
 
 	public function __construct()
 	{
-		$this->em = \IoC::resolve('doctrine::manager');
+		\Laravel\IoC::instance('dropbox::api', new DropboxApiMock);
 	}
 
 }
