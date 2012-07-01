@@ -47,7 +47,7 @@ return array(
 		'auto' => true,
 	),
 	'dropbox' => array(
-		'auto' => true,
+		'auto' => false,
 	),
 	'admin' => array(
 		'handles' => 'admin',
