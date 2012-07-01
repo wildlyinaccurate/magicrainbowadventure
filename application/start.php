@@ -209,7 +209,7 @@ Bundle::start('dropbox');
 
 // Register the MagicRainbowAdventure Auth driver
 Auth::extend('magicrainbowadventure', function() {
-	return new \Auth\Drivers\MagicRainbowAuthDriver;
+	return new \MagicRainbowAdventure\Auth\Drivers\MagicRainbowAuthDriver;
 });
 
 // Monolog setup
