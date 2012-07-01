@@ -31,7 +31,7 @@ class Entries_Controller extends Base_Controller
 	 */
 	public function get_index()
 	{
-		$page = Input::get('page') ?: 1;
+		$page = Input::get('page', 1);
 		$entries_per_page = Config::get('magicrainbowadventure.entries_page_page');
 		$offset = $entries_per_page * ($page - 1);
 
