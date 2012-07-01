@@ -28,7 +28,7 @@ abstract class ControllerTestCase extends BaseTestCase
 			'REQUEST_METHOD' => $method,
 		));
 
-		$response = \Laravel\Routing\Controller::call('account@signup', $parameters);
+		return \Laravel\Routing\Controller::call('account@signup', $parameters);
 	}
 
 }
