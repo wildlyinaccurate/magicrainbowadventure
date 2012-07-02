@@ -81,7 +81,9 @@ class Runner extends Task {
 		// us to flexibly run tests for any setup.
 		$path = path('base').'phpunit.xml';
 
-		passthru('phpunit --configuration '.$path);
+		$args = array_slice($_SERVER['argv'], 2);
+
+		passthru("phpunit --configuration {$path} ".implode(' ', $args));
 
 		@unlink($path);
 	}
@@ -96,7 +98,12 @@ class Runner extends Task {
 	{
 		$path = path('sys').'cli/tasks/test/';
 
-		$stub = File::get($path.'stub.xml');
+		$stub = File::get(path('app').'tests/stub.xml');
+
+		if ($stub === null)
+		{
+			$stub = File::get($path.'stub.xml');
+		}
 
 		// The PHPUnit bootstrap file contains several items that are swapped
 		// at test time. This allows us to point PHPUnit at a few different
