@@ -1,0 +1,32 @@
+user:
+  -
+    id: 1
+    username: 'admin'
+    password: '$2a$12$Gf9TsU.StTXjcz9ohJzgvevYBU.HqtBlIO9VisHz.mKnHeAcGZa1q'
+    email: 'admin@magicrainbowadventure.com'
+    display_name: 'Administrator'
+    created_date: '2012-06-15 20:24:41'
+    type: 'administrator'
+  -
+    id: 2
+    username: 'user'
+    password: '$2a$12$DICnDgyGsVcqbYvSxoXQnO80h5BkLnNkhmkshz1VX9u3n8wQ5Mn9C'
+    email: 'user@magicrainbowadventure.com'
+    display_name: 'New User'
+    created_date: '2012-07-04 18:59:59'
+    type: 'user'
+
+entry:
+  -
+    id: 1
+    user_id: 2
+    moderated_by_id: 1
+    title: 'I\'m outta here!'
+    url_title: 'im-outa-here'
+    file_path: 'MagicRainbowAdventure/2012/06/d75f2aa5ada221c6881941b915fe8bb1440000b8.gif'
+    type: 'gif'
+    hash: 'd75f2aa5ada221c6881941b915fe8bb1440000b8'
+    description: ''
+    approved: true
+    created_date: '2012-06-16 13:40:22'
+    modified_date: '2012-06-17 15:21:31'
