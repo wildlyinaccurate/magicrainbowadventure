@@ -3,12 +3,21 @@
 namespace MagicRainbowAdventure\Tests;
 
 /**
- * Magic Rainbow Adventure Entity Test Case
+ * Magic Rainbow Adventure Controller Test Case
  *
  * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
 abstract class ControllerTestCase extends BaseTestCase
 {
+
+	/**
+	 * The Laravel session must be re-loaded before each test, otherwise
+	 * the session state is retained across multiple tests.
+	 */
+	public function setUp()
+	{
+		\Laravel\Session::load();
+	}
 
 	/**
 	 * Call a controller method.
@@ -28,7 +37,21 @@ abstract class ControllerTestCase extends BaseTestCase
 			'REQUEST_METHOD' => $method,
 		));
 
-		return \Laravel\Routing\Controller::call('account@signup', $parameters);
+		return \Laravel\Routing\Controller::call($destination, $parameters);
+	}
+
+	/**
+	 * Alias for call()
+	 *
+	 * @param	string	$destination
+	 * @param	array	$parameters
+	 * @param	string	$method
+	 * @return	\Laravel\Response
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	public function get($destination, $parameters = array())
+	{
+		return $this->call($destination, $parameters, 'GET');
 	}
 
 	/**
