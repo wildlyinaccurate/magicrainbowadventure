@@ -14,19 +14,19 @@
 			<tr data-bind="attr: { class: status }">
 				<td><img data-bind="attr: { src: thumbnail_url().medium }" /></td>
 				<td class="status">
-					<span data-bind="visible: moderated_by">
-						<span class="verb" data-bind="text: status"></span> by <a href="#" data-bind="text: moderatorDisplayName, click: user.edit"></a>
+					<span data-bind="if: moderated_by() !== null">
+						<span class="verb" data-bind="text: status"></span> by <a href="#" class="text-overflow" data-bind="text: moderated_by().getDisplayName(), click: moderated_by().edit"></a>
 					</span>
-					<span data-bind="visible: moderated_by() == null"><?=Lang::line('admin::entries.awaiting_moderation')?></span>
+					<span data-bind="visible: moderated_by() === null"><?=Lang::line('admin::entries.awaiting_moderation')?></span>
 				</td>
 				<td data-bind="text: title"></td>
 				<td data-bind="text: description"></td>
 				<td>
-					<span data-bind="text: created_date().date"></span> by <a href="#" data-bind="text: user().display_name, click: user().edit"></a>
+					<span data-bind="text: created_date().date"></span> by <a href="#" class="text-overflow" data-bind="text: user().getDisplayName(), click: user().edit"></a>
 				</td>
-				<td>
-					<button class="btn btn-success" data-bind="visible: approved() == 0, click: toggleApproved"><?=Lang::line('admin::entries.approve')?></button>
-					<button class="btn btn-danger" data-bind="visible: approved, click: toggleApproved"><?=Lang::line('admin::entries.decline')?></button>
+				<td class="actions">
+					<button class="btn btn-success" data-bind="visible: moderated_by() === null, click: toggleApproved"><?=Lang::line('admin::entries.approve')?></button>
+					<button class="btn btn-danger" data-bind="visible: moderated_by() === null, click: toggleApproved"><?=Lang::line('admin::entries.decline')?></button>
 					<button class="btn" data-bind="click: edit"><?=Lang::line('admin::entries.edit')?></button>
 				</td>
 			</tr>
@@ -73,7 +73,6 @@
 		</div>
 	</form>
 </div>
-
 
 <div class="user-info modal hide fade">
 	<div class="modal-header">

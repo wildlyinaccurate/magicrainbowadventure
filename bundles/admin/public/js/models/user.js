@@ -20,6 +20,10 @@ $.extend(MagicRainbowAdmin.Models, {
             ko.applyBindings(self, edit_container[0]);
             edit_container.modal('show');
         }
+
+        self.getDisplayName = function() {
+            return self.display_name() || self.username();
+        }
     },
 
     UserViewModel: function() {
