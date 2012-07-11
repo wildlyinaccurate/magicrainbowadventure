@@ -1,6 +1,6 @@
 <?php
 
-namespace Auth\Drivers;
+namespace MagicRainbowAdventure\Auth\Drivers;
 
 /**
  * MagicRainbowAdventure Auth Driver

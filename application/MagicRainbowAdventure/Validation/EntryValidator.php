@@ -1,6 +1,6 @@
 <?php
 
-namespace Validators;
+namespace MagicRainbowAdventure\Validation;
 
 /**
  * Entry Validator Class

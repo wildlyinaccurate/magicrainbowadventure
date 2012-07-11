@@ -8,7 +8,7 @@
  *
  * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-namespace MagicRainbowAdventure\Tests\Mocks\Dropbox;
+namespace MagicRainbowAdventure\Tests\Mocks;
 
 class DropboxApiMock
 {

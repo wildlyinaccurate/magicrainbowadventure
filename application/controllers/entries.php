@@ -110,17 +110,6 @@ class Entries_Controller extends Base_Controller
 	}
 
 	/**
-	 * Comment on an entry
-	 *
-	 * @param	int		$entry_id
-	 * @return	void
-	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
-	 */
-	public function post_comment($entry_id)
-	{
-	}
-
-	/**
 	 * Show the entries submission form
 	 *
 	 * @return	void
@@ -164,7 +153,7 @@ class Entries_Controller extends Base_Controller
 			$validation_rules['entry_image'] = 'image|max:' . Config::get('magicrainbowadventure.max_upload_size');
 		}
 
-		$validation = \Validators\EntryValidator::make(Input::all(), $validation_rules, $validation_messages);
+		$validation = \MagicRainbowAdventure\Validation\EntryValidator::make(Input::all(), $validation_rules, $validation_messages);
 
 		if ($validation->fails())
 		{
@@ -200,7 +189,7 @@ class Entries_Controller extends Base_Controller
 
 		// Determine the extension of the file so that we can save it correctly
 		$mimes = Config::get('mimes');
-		$extension = \Helpers\ArrayHelper::recursive_array_search($content_type, $mimes);
+		$extension = \MagicRainbowAdventure\Helpers\ArrayHelper::recursive_array_search($content_type, $mimes);
 
 		// Upload the file to Dropbox
 		$entry->setFile($entry_file_path, $extension);

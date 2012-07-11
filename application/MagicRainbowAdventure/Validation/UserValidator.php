@@ -1,6 +1,6 @@
 <?php
 
-namespace Validators;
+namespace MagicRainbowAdventure\Validation;
 
 /**
  * User Validation Class
@@ -33,7 +33,7 @@ class UserValidator extends \Laravel\Validator
 			$log->addError(sprintf(\Laravel\Lang::line('account.invalid_user_id'), $parameters[0]));
 		}
 
-		if ($user === null || $user->getPassword() !== $user->encryptPassword($value))
+		if ($user === null || ! $user->checkPassword($value))
 		{
 			$this->errors->messages[$attribute][] = \Laravel\Lang::line('account.validation_current_password');
 

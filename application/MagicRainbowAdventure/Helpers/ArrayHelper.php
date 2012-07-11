@@ -1,6 +1,6 @@
 <?php
 
-namespace Helpers;
+namespace MagicRainbowAdventure\Helpers;
 
 /**
  * Array Helper Class

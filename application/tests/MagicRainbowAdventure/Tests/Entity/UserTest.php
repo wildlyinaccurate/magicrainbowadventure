@@ -19,7 +19,7 @@ class UserTest extends \MagicRainbowAdventure\Tests\EntityTestCase
 	{
 		$password = 'password';
 		$this->user->setPassword($password);
-		$this->assertEquals($password, $this->user->checkPassword($password));
+		$this->assertTrue($this->user->checkPassword($password));
 	}
 
 	public function testDisplayName()

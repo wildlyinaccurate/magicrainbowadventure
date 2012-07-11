@@ -3,12 +3,21 @@
 namespace MagicRainbowAdventure\Tests;
 
 /**
- * Magic Rainbow Adventure Entity Test Case
+ * Magic Rainbow Adventure Controller Test Case
  *
  * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
 abstract class ControllerTestCase extends BaseTestCase
 {
+
+	/**
+	 * The Laravel session must be re-loaded before each test, otherwise
+	 * the session state is retained across multiple tests.
+	 */
+	public function setUp()
+	{
+		\Laravel\Session::load();
+	}
 
 	/**
 	 * Call a controller method.
@@ -22,13 +31,43 @@ abstract class ControllerTestCase extends BaseTestCase
 	 * @return	\Laravel\Response
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function call($destination, $parameters, $method = 'GET')
+	public function call($destination, $parameters = array(), $method = 'GET')
 	{
 		\Laravel\Request::foundation()->server->add(array(
 			'REQUEST_METHOD' => $method,
 		));
 
-		$response = \Laravel\Routing\Controller::call('account@signup', $parameters);
+		return \Laravel\Routing\Controller::call($destination, $parameters);
+	}
+
+	/**
+	 * Alias for call()
+	 *
+	 * @param	string	$destination
+	 * @param	array	$parameters
+	 * @param	string	$method
+	 * @return	\Laravel\Response
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	public function get($destination, $parameters = array())
+	{
+		return $this->call($destination, $parameters, 'GET');
+	}
+
+	/**
+	 * Make a POST request to a controller method
+	 *
+	 * @param	string	$destination
+	 * @param	array	$post_data
+	 * @param	array	$parameters
+	 * @return	\Laravel\Response
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	public function post($destination, $post_data, $parameters = array())
+	{
+		\Laravel\Request::foundation()->request->add($post_data);
+
+		return $this->call($destination, $parameters, 'POST');
 	}
 
 }
