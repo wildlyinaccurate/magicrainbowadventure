@@ -116,6 +116,14 @@ h2 a, h3 a, h4 a {
   display: none;
 }
 
+.text-overflow {
+  max-width: 110px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 form .error, form .success, form .help-block, form .help-inline {
   font-size: 12px;
 }
@@ -169,6 +177,10 @@ header nav .upload:hover {
 
 #account-navigation a {
   padding: 13px 16px;
+}
+
+#account-navigation .display-name {
+  max-width: 200px;
 }
 
 // Content
