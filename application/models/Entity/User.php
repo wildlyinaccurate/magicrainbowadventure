@@ -40,7 +40,7 @@ class User extends TimestampedModel
 	protected $email;
 
 	/**
-	 * @Column(type="string", length=160, nullable=true)
+	 * @Column(type="string", length=40, nullable=true)
 	 */
 	protected $display_name;
 

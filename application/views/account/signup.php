@@ -43,7 +43,7 @@
 			<?=Form::label('display_name', Lang::line('account.label_display_name'), array('class' => 'control-label'))?>
 
 			<div class="controls">
-				<?=Form::text('display_name', Input::old('display_name'), array('maxlength' => 160))?>
+				<?=Form::text('display_name', Input::old('display_name'), array('maxlength' => 40))?>
 				<?=$errors->first('display_name', '<span class="error">:message</span>')?>
 			</div>
 		</div>

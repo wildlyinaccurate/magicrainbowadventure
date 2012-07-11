@@ -78,7 +78,7 @@ class Account_Controller extends Base_Controller
 		$validation_rules = array(
 			'username' => "required|alpha_dash|max:32|unique:user,username,{$this->user->getId()}",
 			'email' => "required|email|unique:user,email,{$this->user->getId()}",
-			'display_name' => 'max:160',
+			'display_name' => 'max:40',
 			'current_password' => "required|current_password_correct:{$this->user->getId()}",
 		);
 
