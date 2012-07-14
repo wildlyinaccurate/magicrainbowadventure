@@ -40,9 +40,6 @@ return array(
 			'map' => array(
 				'Doctrine\Migration' => '(:bundle)/migration.php',
 			),
-			'namespaces' => array(
-				'DoctrineExtensions' => '(:bundle)/lib/DoctrineExtensions',
-			),
 		),
 	),
 	'basset' => array(
