@@ -33,7 +33,7 @@ class Base_Controller extends Controller
 	 * Monolog Logger
 	 * @var \Monolog\Logger
 	 */
-	protected $log;
+	protected $logger;
 
 	/**
 	 * Constructor ahoy!
@@ -49,7 +49,7 @@ class Base_Controller extends Controller
 
 		$this->em = IoC::resolve('doctrine::manager');
 		$this->dropbox = IoC::resolve('dropbox::api');
-		$this->log = IoC::resolve('log.global');
+		$this->logger = IoC::resolve('magicrainbowadventure.logger');
 
 		if (Auth::check())
 		{
@@ -64,6 +64,22 @@ class Base_Controller extends Controller
 
 		$this->layout->with('content_layout', 'layouts/two-column');
 		$this->layout->nest('navigation', 'navigation/default');
+
+		// Check for session messages
+		$alerts = array();
+
+		foreach (array('info', 'success', 'error') as $level)
+		{
+			if (Session::has("alert.{$level}"))
+			{
+				$alerts[] = array(
+					'level' => $level,
+					'message' => Session::get("alert.{$level}"),
+				);
+			}
+		}
+
+		$this->layout->with('alerts', $alerts);
 	}
 
 	/**

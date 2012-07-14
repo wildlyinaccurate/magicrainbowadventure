@@ -215,13 +215,22 @@ Auth::extend('magicrainbowadventure', function() {
 // Monolog setup
 $rotating_file_handler = new \Monolog\Handler\RotatingFileHandler(path('storage') . 'logs/' . 'magicrainbowadventure-global.log');
 
-$log = new \Monolog\Logger('global');
-$log->pushHandler(new \Monolog\Handler\FingersCrossedHandler($rotating_file_handler));
+$logger = new \Monolog\Logger('global');
+$logger->pushHandler(new \Monolog\Handler\FingersCrossedHandler($rotating_file_handler));
 
 if ( ! Request::cli())
 {
-	$log->pushProcessor(new \Monolog\Processor\WebProcessor);
-	$log->pushProcessor(new \MagicRainbowAdventure\Logging\Processor\SessionProcessor);
+	$logger->pushProcessor(new \Monolog\Processor\WebProcessor);
+	$logger->pushProcessor(new \MagicRainbowAdventure\Logging\Processor\SessionProcessor);
 }
 
-IoC::instance('log.global', $log);
+IoC::instance('magicrainbowadventure.logger', $logger);
+
+// Listen for laravel's log event
+Event::listen('laravel.log', function($type, $message) use ($logger)
+{
+	// Create a method name like 'addError'
+	$method_name = 'add' . ucfirst($type);
+
+	$logger->$method_name($message);
+});

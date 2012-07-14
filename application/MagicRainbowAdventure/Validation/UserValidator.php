@@ -29,8 +29,8 @@ class UserValidator extends \Laravel\Validator
 
 		if ($user === null)
 		{
-			$log = \IoC::resolve('log.global');
-			$log->addError(sprintf(\Laravel\Lang::line('account.invalid_user_id'), $parameters[0]));
+			$logger = \IoC::resolve('magicrainbowadventure.logger');
+			$logger->addError(sprintf(\Laravel\Lang::line('account.invalid_user_id'), $parameters[0]));
 		}
 
 		if ($user === null || ! $user->checkPassword($value))

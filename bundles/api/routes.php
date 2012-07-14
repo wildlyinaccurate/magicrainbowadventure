@@ -12,16 +12,15 @@ use Bgy\Doctrine\EntitySerializer,
  * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
 
-$log = IoC::resolve('log.global');
+$logger = IoC::resolve('magicrainbowadventure.logger');
 $entity_manager = IoC::resolve('doctrine::manager');
 
 /**
  * Add a log handler for every api call
  */
-Route::filter('push_api_logger', function()
+Route::filter('push_api_logger', function() use ($logger)
 {
-	$log = IoC::resolve('log.global');
-	$log->pushHandler(new RotatingFileHandler(path('storage') . 'logs/' . 'magicrainbowadventure-api.log'), Logger::INFO);
+	$logger->pushHandler(new RotatingFileHandler(path('storage') . 'logs/' . 'magicrainbowadventure-api.log'), Logger::INFO);
 });
 
 Route::filter('pattern: api/*', 'push_api_logger');
@@ -29,7 +28,7 @@ Route::filter('pattern: api/*', 'push_api_logger');
 /**
  * Retrieve one or many entries
  */
-Route::get('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manager, $log)
+Route::get('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manager, $logger)
 {
 	$entity_serializer = new EntitySerializer($entity_manager, 1);
 
@@ -77,7 +76,7 @@ Route::get('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manage
 		$return_json[] = $entry_array;
 	}
 
-	$log->addDebug('Returning ' . count($return_json) . ' results.');
+	$logger->addDebug('Returning ' . count($return_json) . ' results.');
 
 	return Response::json($return_json);
 });
@@ -85,7 +84,7 @@ Route::get('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manage
 /**
  * Create or update an entry
  */
-Route::post('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manager, $log)
+Route::post('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manager, $logger)
 {
 	$entity_serializer = new EntitySerializer($entity_manager, 1);
 
@@ -124,7 +123,7 @@ Route::post('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manag
 /**
  * Retrieve one or many users
  */
-Route::get('(:bundle)/users/(:num?)', function($id = null) use ($entity_manager, $log)
+Route::get('(:bundle)/users/(:num?)', function($id = null) use ($entity_manager, $logger)
 {
 	$entity_serializer = new EntitySerializer($entity_manager, 0);
 
@@ -154,7 +153,7 @@ Route::get('(:bundle)/users/(:num?)', function($id = null) use ($entity_manager,
 		$return_json[] = $entity_serializer->toArray($user);
 	}
 
-	$log->addDebug('Returning ' . count($return_json) . ' results.');
+	$logger->addDebug('Returning ' . count($return_json) . ' results.');
 
 	return Response::json($return_json);
 });
