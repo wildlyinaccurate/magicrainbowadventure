@@ -20,7 +20,7 @@ class AdminBaseController extends \Base_Controller
 		parent::__construct();
 
 		// Log as much of the admin actions as possible
-		$this->log->pushHandler(new RotatingFileHandler(path('storage') . 'logs/' . 'magicrainbowadventure-admin.log'), Logger::INFO);
+		$this->logger->pushHandler(new RotatingFileHandler(path('storage') . 'logs/' . 'magicrainbowadventure-admin.log'), Logger::INFO);
 	}
 
 }
