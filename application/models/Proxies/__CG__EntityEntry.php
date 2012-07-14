@@ -42,30 +42,6 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
     }
 
     
-    public function setFile($file_path, $extension)
-    {
-        $this->__load();
-        return parent::setFile($file_path, $extension);
-    }
-
-    public function downloadThumbnails()
-    {
-        $this->__load();
-        return parent::downloadThumbnails();
-    }
-
-    public function getDropboxURL()
-    {
-        $this->__load();
-        return parent::getDropboxURL();
-    }
-
-    public function getThumbnailUrl($size)
-    {
-        $this->__load();
-        return parent::getThumbnailUrl($size);
-    }
-
     public function getId()
     {
         if ($this->__isInitialized__ === false) {
@@ -121,6 +97,30 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
     {
         $this->__load();
         return parent::getFilePath();
+    }
+
+    public function setimageWidth($imageWidth)
+    {
+        $this->__load();
+        return parent::setimageWidth($imageWidth);
+    }
+
+    public function getimageWidth()
+    {
+        $this->__load();
+        return parent::getimageWidth();
+    }
+
+    public function setImageHeight($imageHeight)
+    {
+        $this->__load();
+        return parent::setImageHeight($imageHeight);
+    }
+
+    public function getImageHeight()
+    {
+        $this->__load();
+        return parent::getImageHeight();
     }
 
     public function setType($type)
@@ -213,18 +213,6 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
         return parent::getTags();
     }
 
-    public function addComment(\Entity\Comment $comment)
-    {
-        $this->__load();
-        return parent::addComment($comment);
-    }
-
-    public function getComments()
-    {
-        $this->__load();
-        return parent::getComments();
-    }
-
     public function setCreatedDate()
     {
         $this->__load();
@@ -252,7 +240,7 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'title', 'url_title', 'file_path', 'type', 'hash', 'description', 'approved', 'created_date', 'modified_date', 'user', 'moderated_by', 'favourited_by', 'comments', 'tags');
+        return array('__isInitialized__', 'id', 'title', 'url_title', 'file_path', 'type', 'image_width', 'image_height', 'hash', 'description', 'approved', 'created_date', 'modified_date', 'user', 'moderated_by', 'favourited_by', 'tags');
     }
 
     public function __clone()

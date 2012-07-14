@@ -54,18 +54,6 @@ class Administrator extends \Entity\Administrator implements \Doctrine\ORM\Proxy
         return parent::getModeratedEntries();
     }
 
-    public function addModeratedComment(\Entity\Comment $comment)
-    {
-        $this->__load();
-        return parent::addModeratedComment($comment);
-    }
-
-    public function getModeratedComment()
-    {
-        $this->__load();
-        return parent::getModeratedComment();
-    }
-
     public function setPassword($password)
     {
         $this->__load();
@@ -177,18 +165,6 @@ class Administrator extends \Entity\Administrator implements \Doctrine\ORM\Proxy
         return parent::getEntries();
     }
 
-    public function addComment(\Entity\Comment $comment)
-    {
-        $this->__load();
-        return parent::addComment($comment);
-    }
-
-    public function getComments()
-    {
-        $this->__load();
-        return parent::getComments();
-    }
-
     public function addUserSetting(\Entity\UserSetting $settings)
     {
         $this->__load();
@@ -222,7 +198,7 @@ class Administrator extends \Entity\Administrator implements \Doctrine\ORM\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'username', 'password', 'email', 'display_name', 'created_date', 'modified_date', 'settings', 'entries', 'comments', 'favourites', 'moderated_entries', 'moderated_comments');
+        return array('__isInitialized__', 'id', 'username', 'password', 'email', 'display_name', 'created_date', 'modified_date', 'settings', 'entries', 'favourites', 'moderated_entries');
     }
 
     public function __clone()

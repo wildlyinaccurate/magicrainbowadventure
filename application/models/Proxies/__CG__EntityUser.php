@@ -153,18 +153,6 @@ class User extends \Entity\User implements \Doctrine\ORM\Proxy\Proxy
         return parent::getEntries();
     }
 
-    public function addComment(\Entity\Comment $comment)
-    {
-        $this->__load();
-        return parent::addComment($comment);
-    }
-
-    public function getComments()
-    {
-        $this->__load();
-        return parent::getComments();
-    }
-
     public function addUserSetting(\Entity\UserSetting $settings)
     {
         $this->__load();
@@ -198,7 +186,7 @@ class User extends \Entity\User implements \Doctrine\ORM\Proxy\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'username', 'password', 'email', 'display_name', 'created_date', 'modified_date', 'settings', 'entries', 'comments', 'favourites');
+        return array('__isInitialized__', 'id', 'username', 'password', 'email', 'display_name', 'created_date', 'modified_date', 'settings', 'entries', 'favourites');
     }
 
     public function __clone()
