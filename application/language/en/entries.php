@@ -23,5 +23,6 @@ return array(
 	'image_too_big' => 'This image is too big! Choose something that is smaller than %dMB.',
 	'added_to_favourites' => '"%s" has been added to your favourites.',
 	'removed_from_favourites' => '"%s" has been removed from your favourites.',
+	'process_error' => 'Your entry cannot be processed right now. Please try again later.',
 
 );

@@ -68,9 +68,9 @@ Route::get('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manage
 		// Retrieve all of the thumbnail URLs
 		$entry_array['thumbnail_url'] = array();
 
-		foreach (\Entity\Entry::$thumbnail_sizes as $thumbnail)
+		foreach (\Config::get('magicrainbowadventure.entry_thumbnails') as $name => $thumbnail)
 		{
-			$entry_array['thumbnail_url'][$thumbnail['size']] = $entry->getThumbnailUrl($thumbnail['size']);
+			$entry_array['thumbnail_url'][$name] = $entry->getThumbnailUrl($name);
 		}
 
 		$return_json[] = $entry_array;

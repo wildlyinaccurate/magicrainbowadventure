@@ -13,7 +13,7 @@
 		</div>
 
 		<a href="<?=URL::to("{$entry->getId()}/{$entry->getUrlTitle()}")?>">
-			<?=HTML::image($entry->getThumbnailUrl('l'), $entry->getTitle())?>
+			<?=HTML::image($entry->getThumbnailUrl('medium'), $entry->getTitle())?>
 		</a>
 
 		<p class="description"><?=nl2br($entry->getDescription())?></p>

@@ -24,7 +24,7 @@ class EntryValidator extends \Laravel\Validator
 	public function validate_valid_image_url($attribute, $value, $parameters)
 	{
 		// Make sure the supplied URL is actually an image
-		$curl = new \EasyCurl($value);
+		$curl = new \MagicRainbowAdventure\Tools\Curl($value);
 		$content_type = $curl->get_content_type($value);
 
 		if ( ! $content_type || ! preg_match('/image\/(.+)/i', $content_type))

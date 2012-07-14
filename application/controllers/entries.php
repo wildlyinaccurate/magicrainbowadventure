@@ -1,5 +1,10 @@
 <?php
 
+use \MagicRainbowAdventure\Validation\EntryValidator,
+	\MagicRainbowAdventure\Processors\EntryImageProcessor,
+	\MagicRainbowAdventure\Exception\EntryImageProcessorException,
+	\MagicRainbowAdventure\Tools\EntryThumbnailTool;
+
 /**
  * Entries Controller
  *
@@ -153,14 +158,13 @@ class Entries_Controller extends Base_Controller
 			$validation_rules['entry_image'] = 'image|max:' . Config::get('magicrainbowadventure.max_upload_size');
 		}
 
-		$validation = \MagicRainbowAdventure\Validation\EntryValidator::make(Input::all(), $validation_rules, $validation_messages);
+		$validation = EntryValidator::make(Input::all(), $validation_rules, $validation_messages);
 
 		if ($validation->fails())
 		{
 			if (isset($validation->errors->messages['image_url']) && count($validation->errors->messages['image_url']) === 1)
 			{
-				// In this case we know that the image_url field has failed
-				// the 'required' validation. We'll set a custom message instead.
+				// The image_url field has failed the 'required' validation, so we'll set a custom message.
 				$validation->errors->messages['image_url'][0] = $validation_messages['valid_image_url'];
 			}
 
@@ -172,40 +176,51 @@ class Entries_Controller extends Base_Controller
 			->setDescription(Input::get('description'))
 			->setUser($this->user);
 
-		if (Input::get('image_url') !== '')
-		{
-			// Retrieve the image with cURL and store it in a temporary file
-			$entry_file_path = tempnam(sys_get_temp_dir(), Config::get('magicrainbowadventure.temp_file_prefix'));
-
-			$curl = new \EasyCurl(Input::get('image_url'));
-			$curl->execute(true, $entry_file_path);
-			$content_type = $curl->get_content_type();
-		}
-		else
-		{
-			$entry_file_path = Input::file('entry_image.tmp_name');
-			$content_type = Input::file('entry_image.type');
-		}
-
-		// Determine the extension of the file so that we can save it correctly
-		$mimes = Config::get('mimes');
-		$extension = \MagicRainbowAdventure\Helpers\ArrayHelper::recursive_array_search($content_type, $mimes);
-
-		// Upload the file to Dropbox
-		$entry->setFile($entry_file_path, $extension);
-
 		if ($this->user->isAdmin())
 		{
-			// Administrators don't need their entries approved
+			// Automatically approve anything sumitted by an admin
 			$entry->setApproved(true)
 				->setModeratedBy($this->user);
 		}
 
+		$processor = new EntryImageProcessor(Config::get('magicrainbowadventure.entry_uploads_path'));
+
+		try
+		{
+			if (Input::get('image_url') !== '')
+			{
+				$this->logger->addInfo('Processing entry image from URL: ' . Input::get('image_url'));
+				$processor->fromUrl(Input::get('image_url'));
+			}
+			else
+			{
+				$this->logger->addInfo('Processing entry image from file: ' . serialize(Input::file()));
+				$processor->fromFile(Input::file('entry_image.tmp_name'));
+			}
+		}
+		catch (EntryImageProcessorException $e)
+		{
+			$this->logger->addError('Unable to process entry image.');
+
+			return Redirect::to('entries/submit')->with_input()->with('alert.error', Lang::line('entries.process_error'));
+		}
+
+		$image_dimensions = $processor->getImageDimensions();
+
+		$entry->setFilePath($processor->getFilePath())
+			->setHash($processor->getFileHash())
+			->setImageWidth($image_dimensions['width'])
+			->setImageHeight($image_dimensions['height']);
+
+		// Generate the thumbnails
+		$thumbnail_sizes = Config::get('magicrainbowadventure.entry_thumbnails');
+		$thumbnail_tool = new EntryThumbnailTool($entry);
+		$thumbnail_tool->generateFromArray($thumbnail_sizes);
+
 		$this->em->persist($entry);
 		$this->em->flush();
 
-		return Redirect::to("{$entry->getId()}/{$entry->getUrlTitle()}")
-						->with('success_message', Lang::line('entries.entry_submit_success'));
+		return Redirect::to("{$entry->getId()}/{$entry->getUrlTitle()}")->with('success_message', Lang::line('entries.entry_submit_success'));
 	}
 
 	/**

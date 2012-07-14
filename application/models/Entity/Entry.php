@@ -40,6 +40,16 @@ class Entry extends TimestampedModel
 	protected $type = 'image';
 
 	/**
+	 * @Column(type="integer", nullable=false)
+	 */
+	protected $image_width;
+
+	/**
+	 * @Column(type="integer", nullable=false)
+	 */
+	protected $image_height;
+
+	/**
 	 * @Column(type="string", length=40, nullable=false)
 	 */
 	protected $hash;
@@ -83,35 +93,10 @@ class Entry extends TimestampedModel
 	protected $tags;
 
 	/**
-	 * When the Entry's file is set, thumbnails in these sizes will be retrieved
-	 * from Dropbox and stored locally.
-	 *
-	 * @var array
+	 * Thumbnail tool for getting thumbnail paths and URLs
+	 * @var	\MagicRainbowAdventure\Tools\EntryThumbnailTool
 	 */
-	public static $thumbnail_sizes = array(
-		array(
-			'size' => 'medium',
-			'types' => 'image|gif'
-		),
-		array(
-			'size' => 'large',
-			'types' => 'image|gif'
-		),
-		array(
-			'size' => 'l',
-			'types' => 'image'
-		),
-		array(
-			'size' => 'xl',
-			'types' => 'image'
-		),
-	);
-
-	/**
-	 * Format to use when saving and retrieving thumbnails.
-	 * @var string
-	 */
-	private static $thumbnail_format = 'JPEG';
+	private $thumbnail_tool;
 
 	/**
 	 * Constructor
@@ -120,122 +105,26 @@ class Entry extends TimestampedModel
 	{
 		parent::__construct();
 
-		$this->comments = new \Doctrine\Common\Collections\ArrayCollection;
 		$this->tags = new \Doctrine\Common\Collections\ArrayCollection;
 		$this->favourited_by = new \Doctrine\Common\Collections\ArrayCollection;
 	}
 
 	/**
-	 * Upload the Entry's file to Dropbox, and store various sized
-	 * thumbnails locally.
-	 *
-	 * @param  string 	$file_path
-	 * @param  string 	$extension
-	 * @return Entry
-	 */
-	public function setFile($file_path, $extension)
-	{
-		$file_hash = hash_file('sha1', $file_path);
-		$file_name = "{$file_hash}.{$extension}";
-		$entry_file_path = \Config::get('magicrainbowadventure.dropbox_base_path') . '/' . date('Y/m');
-
-		$this->setHash($file_hash)
-			->setFilePath("{$entry_file_path}/{$file_name}");
-
-		// Upload the file to dropbox
-		$dropbox = \IoC::resolve('dropbox::api');
-		$dropbox->putFile($file_path, $file_name, "Public/{$entry_file_path}");
-
-		// Determine if the image is an animated GIF
-		if (\MagicRainbowAdventure\Helpers\ImageHelper::isAnimatedGif($file_path))
-		{
-			$this->type = 'gif';
-		}
-
-		$this->downloadThumbnails();
-
-		return $this;
-	}
-
-	/**
-	 * Download all of the thumbnails for this entry
-	 *
-	 * @return	void
-	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
-	 */
-	public function downloadThumbnails()
-	{
-		$dropbox = \IoC::resolve('dropbox::api');
-
-		foreach (self::$thumbnail_sizes as $thumbnail)
-		{
-			$thumbnail_types = explode('|', $thumbnail['types']);
-			$size = $thumbnail['size'];
-
-			if (in_array($this->type, $thumbnail_types))
-			{
-				$thumbnail = $dropbox->thumbnails("Public/{$this->file_path}", self::$thumbnail_format, $size);
-				$thumbnail_path = $this->_getThumbnailPath(\Config::get('magicrainbowadventure.thumbnail_cache_path'), $size);
-				$thumbnail_dir = dirname($thumbnail_path);
-
-				if ( ! is_dir($thumbnail_dir))
-				{
-					mkdir($thumbnail_dir, 0777, true);
-				}
-
-				file_put_contents($thumbnail_path, $thumbnail['data']);
-			}
-		}
-	}
-
-	/**
-	 * Build the thumbnail directory from a base path
-	 *
-	 * @param	string	$base
-	 * @param	string	$size
-	 * @return	string
-	 */
-	private function _getThumbnailPath($base, $size)
-	{
-		return dirname($base . "/{$this->file_path}") . "/{$size}/{$this->getHash()}." . strtolower(self::$thumbnail_format);
-	}
-
-	/**
-	 * Get the public Dropbox URL for an Entry
-	 *
-	 * @return	string
-	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
-	 */
-	public function getDropboxURL()
-	{
-		return 'http://dl.dropbox.com/u/' . \Config::get('dropbox::config.access_token.uid') . '/' . $this->getFilePath();
-	}
-
-	/**
-	 * Get the public URL for a thumbnail.
+	 * Return the URL for a thumbnail. If no size is provided, the URL for
+	 * the full-size image will be returned.
 	 *
 	 * @param	string	$size
 	 * @return	string
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function getThumbnailUrl($size)
+	public function getThumbnailUrl($size = null)
 	{
-		foreach (self::$thumbnail_sizes as $thumbnail)
+		if ($this->thumbnail_tool === null)
 		{
-			if ($thumbnail['size'] !== $size)
-			{
-				continue;
-			}
-
-			$thumbnail_types = explode('|', $thumbnail['types']);
-
-			if (in_array($this->type, $thumbnail_types))
-			{
-				return $this->_getThumbnailPath(\Config::get('magicrainbowadventure.thumbnail_cache_url'), $size);
-			}
+			$this->thumbnail_tool = new \MagicRainbowAdventure\Tools\EntryThumbnailTool($this);
 		}
 
-		// This entry doesn't have the requested thumbnail size; return the full-size URL
-		return $this->getDropboxURL();
+		return $this->thumbnail_tool->getThumbnailUrl($size);
 	}
 
 	/**
@@ -325,6 +214,7 @@ class Entry extends TimestampedModel
 	public function setFilePath($filePath)
 	{
 		$this->file_path = $filePath;
+
 		return $this;
 	}
 
@@ -336,6 +226,52 @@ class Entry extends TimestampedModel
 	public function getFilePath()
 	{
 		return $this->file_path;
+	}
+
+	/**
+	 * Set image_width
+	 *
+	 * @param	int		$imageWidth
+	 * @return	\Entity\Entry
+	 */
+	public function setimageWidth($imageWidth)
+	{
+		$this->image_width = $imageWidth;
+
+		return $this;
+	}
+
+	/**
+	 * Get image_width
+	 *
+	 * @return	int
+	 */
+	public function getimageWidth()
+	{
+		return $this->image_width;
+	}
+
+	/**
+	 * Set image_height
+	 *
+	 * @param	int		$imageHeight
+	 * @return	\Entity\Entry
+	 */
+	public function setImageHeight($imageHeight)
+	{
+		$this->image_height = $imageHeight;
+
+		return $this;
+	}
+
+	/**
+	 * Get image_height
+	 *
+	 * @return	int
+	 */
+	public function getImageHeight()
+	{
+		return $this->image_height;
 	}
 
 	/**

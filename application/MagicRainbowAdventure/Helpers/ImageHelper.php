@@ -13,6 +13,18 @@ class ImageHelper
 {
 
 	/**
+	 * Determine the extension to use, based on MIME type
+	 *
+	 * @param	string	$mime
+	 * @return	string
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	public static function getExtensionFromMime($mime)
+	{
+		return ArrayHelper::recursive_array_search($mime, \Laravel\Config::get('mimes'));
+	}
+
+	/**
 	 * Determine whether or not the given file is an animated GIF.
 	 *
 	 * @param	string	$file_path

@@ -57,4 +57,7 @@ return array(
 		'handles' => 'api',
 		'auto' => true,
 	),
+	'resizer' => array(
+		'auto' => true,
+	),
 );

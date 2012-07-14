@@ -12,7 +12,7 @@
 		</thead>
 		<tbody data-bind="foreach: entries">
 			<tr data-bind="attr: { class: status }">
-				<td><img data-bind="attr: { src: thumbnail_url().medium }" /></td>
+				<td><img data-bind="attr: { src: thumbnail_url().thumbnail }" /></td>
 				<td class="status">
 					<span data-bind="if: moderated_by() !== null">
 						<span class="verb" data-bind="text: status"></span> by <a href="#" class="text-overflow" data-bind="text: moderated_by().getDisplayName(), click: moderated_by().edit"></a>
@@ -48,7 +48,7 @@
 
 	<form>
 		<div class="modal-body">
-			<img class="preview" data-bind="attr: { src: thumbnail_url().large }" />
+			<img class="preview" data-bind="attr: { src: thumbnail_url().preview }" />
 
 			<div class="control-group">
 				<?=Form::label('title', Lang::line('admin::entries.title'), array('class' => 'control-label'))?>

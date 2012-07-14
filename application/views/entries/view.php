@@ -1,6 +1,6 @@
 <section class="entry">
-	<a href="<?=$entry->getDropboxUrl()?>">
-		<?=HTML::image($entry->getThumbnailUrl('xl'), $entry->getTitle())?>
+	<a href="<?=$entry->getThumbnailUrl()?>">
+		<?=HTML::image($entry->getThumbnailUrl('large'), $entry->getTitle())?>
 	</a>
 
 	<div class="buttons">
