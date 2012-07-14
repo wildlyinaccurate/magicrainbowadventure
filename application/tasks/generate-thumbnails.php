@@ -52,7 +52,7 @@ class Generate_Thumbnails_Task
 			$thumbnail_tool = new EntryThumbnailTool($entry);
 			$thumbnail_tool->generateFromArray($thumbnail_sizes);
 
-			if ($index > 0 && $index % $notify == 0)
+			if ($index > 0 && $notify > 0 && $index % $notify == 0)
 			{
 				echo "\t{$index} / {$total_entries}\n";
 			}
