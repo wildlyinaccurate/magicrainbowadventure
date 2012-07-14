@@ -74,11 +74,6 @@ class Entry extends TimestampedModel
 	protected $favourited_by;
 
 	/**
-	 * @OneToMany(targetEntity="Comment", mappedBy="user", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
-	 */
-	protected $comments;
-
-	/**
 	 * @ManyToMany(targetEntity="Tag", inversedBy="entries")
 	 * @JoinTable(name="entry_tags",
 	 *      joinColumns={@JoinColumn(name="entry_id", referencedColumnName="id")},
@@ -515,32 +510,5 @@ class Entry extends TimestampedModel
     {
         return $this->tags;
     }
-
-	/**
-	 * Add comment
-	 *
-	 * @param	\Entity\Comment 	$comment
-	 * @return	\Entity\User
-	 */
-	public function addComment(\Entity\Comment $comment)
-	{
-		if ( ! $this->comments->contains($comment))
-		{
-			$this->comments[] = $comment;
-			$comment->setUser($this);
-		}
-
-		return $this;
-	}
-
-	/**
-	 * Get all comments
-	 *
-	 * @return	Doctrine\Common\Collections\Collection $comments
-	 */
-	public function getComments()
-	{
-		return $this->comments;
-	}
 
 }

@@ -17,11 +17,6 @@ class Administrator extends User
 	protected $moderated_entries;
 
 	/**
-	 * @OneToMany(targetEntity="Comment", mappedBy="moderated_by", fetch="EXTRA_LAZY")
-	 */
-	protected $moderated_comments;
-
-	/**
 	 * Constructor
 	 */
 	public function __construct()
@@ -29,7 +24,6 @@ class Administrator extends User
 		parent::__construct();
 
 		$this->moderated_entries = new \Doctrine\Common\Collections\ArrayCollection;
-		$this->moderated_comments = new \Doctrine\Common\Collections\ArrayCollection;
 	}
 
 	/**
@@ -52,28 +46,6 @@ class Administrator extends User
 	public function getModeratedEntries()
 	{
 		return $this->moderated_entries;
-	}
-
-	/**
-	 * Add approved comment
-	 *
-	 * @param	\Entity\Comment 	$comment
-	 * @return	\Entity\Administrator
-	 */
-	public function addModeratedComment(\Entity\Comment $comment)
-	{
-		$this->moderated_comments[] = $entry;
-		return $this;
-	}
-
-	/**
-	 * Get all comments
-	 *
-	 * @return	Doctrine\Common\Collections\Collection $comments
-	 */
-	public function getModeratedComment()
-	{
-		return $this->moderated_comments;
 	}
 
 }

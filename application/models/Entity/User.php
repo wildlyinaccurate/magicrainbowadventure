@@ -55,11 +55,6 @@ class User extends TimestampedModel
 	protected $entries;
 
 	/**
-	 * @OneToMany(targetEntity="Comment", mappedBy="user", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
-	 */
-	protected $comments;
-
-	/**
 	 * @ManyToMany(targetEntity="Entry", mappedBy="favourited_by", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
 	 */
 	protected $favourites;
@@ -74,7 +69,6 @@ class User extends TimestampedModel
         $this->settings = new \Doctrine\Common\Collections\ArrayCollection;
         $this->entries = new \Doctrine\Common\Collections\ArrayCollection;
         $this->favourites = new \Doctrine\Common\Collections\ArrayCollection;
-        $this->comments = new \Doctrine\Common\Collections\ArrayCollection;
     }
 
 	/**
@@ -291,33 +285,6 @@ class User extends TimestampedModel
     public function getEntries()
     {
         return $this->entries;
-    }
-
-    /**
-     * Add comment
-     *
-     * @param	\Entity\Comment 	$comment
-     * @return	\Entity\User
-     */
-	public function addComment(\Entity\Comment $comment)
-	{
-		if ( ! $this->comments->contains($comment))
-		{
-			$this->comments[] = $comment;
-			$comment->setUser($this);
-		}
-
-        return $this;
-    }
-
-    /**
-     * Get all comments
-     *
-     * @return	\Doctrine\Common\Collections\Collection $comments
-     */
-    public function getComments()
-    {
-        return $this->comments;
     }
 
     /**
