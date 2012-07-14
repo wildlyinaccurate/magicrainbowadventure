@@ -46,8 +46,16 @@
 	</header>
 
     <div id="content" class="container">
+
 		<div class="row">
 			<div class="twelvecol">
+				<?php foreach ($alerts as $alert): ?>
+					<div class="alert alert-<?php echo $alert['level']; ?>">
+						<button type="button" class="close" data-dismiss="alert">×</button>
+						<?php echo $alert['message']; ?>
+					</div>
+				<?php endforeach; ?>
+
 				<h2><?=$title?></h2>
 			</div>
 		</div>
