@@ -156,9 +156,9 @@ Route::filter('before', function()
 Route::filter('after', function($response)
 {
 	$em = IoC::resolve('doctrine::manager');
-	$log = IoC::resolve('log.global');
+	$logger = IoC::resolve('magicrainbowadventure.logger');
 
-	$log->addInfo("{$em->getConfiguration()->getSQLLogger()->queries} queries executed.");
+	$logger->addInfo("{$em->getConfiguration()->getSQLLogger()->queries} queries executed.");
 });
 
 Route::filter('csrf', function()
