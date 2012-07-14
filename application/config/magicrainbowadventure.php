@@ -49,6 +49,7 @@ return array(
 		'preview' => array(
 			'width' => 280,
 			'height' => 400,
+			'crop' => true,
 			'quality' => 70,
 		),
 		'medium' => array(
