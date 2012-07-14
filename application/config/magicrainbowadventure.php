@@ -26,10 +26,6 @@ return array(
 	| entry_uploads_url
 	| The URL for accessing entry images. Can be relative.
 	|
-	| temp_file_prefix
-	| The prefix given to tempnam() when handling external images.
-	| See http://www.php.net/manual/en/function.tempnam.php
-	|
 	| entry_thumbnails
 	| An array of thumbnails to generate for each entry, with the format:
 	|	name => max_width
@@ -38,13 +34,13 @@ return array(
 	'max_upload_size' => '9216',
 	'entry_uploads_path' => path('public') . 'entry',
 	'entry_uploads_url' => '/entry',
-	'temp_file_prefix' => 'MRA',
 	'entry_thumbnails' => array(
 		'thumbnail' => array(
 			'width' => 62,
 			'height' => 62,
 			'crop' => true,
 			'quality' => 70,
+			'gif' => true,
 		),
 		'preview' => array(
 			'width' => 280,

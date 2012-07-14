@@ -64,6 +64,7 @@ class EntryThumbnailTool
 	 * 			'height' => 100,
 	 * 			'crop' => true, // Optional, default = false
 	 * 			'quality' => 80, // Optional, default = 90
+	 * 			'gif' => false, // Optional. Unless this is true, thumbnails aren't generated for animated gifs
 	 *   	)
 	 * 	)
 	 *
@@ -85,19 +86,27 @@ class EntryThumbnailTool
 	/**
 	 * Generate a thumbnail
 	 *
+	 * $options is an array that can contain:
+	 * 	crop (bool):	Whether to crop the image to the exact dimensions specified
+	 * 	quality (int):	The quality of the saved thumbnail
+	 * 	gif (bool):		Whether or not
+	 *
 	 * @param	string	$name
 	 * @param	int		$width
 	 * @param	int		$height
-	 * @param	bool	$crop
-	 * @param	int		$quality
+	 * @param	array	$options
 	 * @return	void
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function generate($name, $width, $height, $crop = false, $quality = null)
+	public function generate($name, $width, $height, $options = array())
 	{
-		if ($quality === null)
+		$quality = array_get($options, 'quality', $this->default_quality);
+		$crop = array_get($options, 'crop', false);
+		$gif = array_get($options, 'gif', false);
+
+		if ( ! $gif)
 		{
-			$quality = $this->default_quality;
+			return;
 		}
 
 		$resize_option = ($crop) ? 'crop' : 'landscape';
