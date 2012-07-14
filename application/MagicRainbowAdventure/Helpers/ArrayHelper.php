@@ -20,7 +20,7 @@ class ArrayHelper
 	 * @return	mixed|bool
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public static function recursive_array_search($needle, $haystack, $strict = true)
+	public static function recursive_array_search($needle, $haystack, $strict = false)
 	{
 		$iterator = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($haystack), \RecursiveIteratorIterator::SELF_FIRST);
 
