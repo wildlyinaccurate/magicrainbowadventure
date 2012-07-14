@@ -70,6 +70,7 @@ Basset::styles('magicrainbowadventure', function($basset)
 	$basset->directory('public/assets/css/vendor/bootstrap', function($basset)
 	{
 		$basset->add('bootstrap', 'bootstrap.css')
+			->add('bootstrap-alerts', 'alerts.css')
 			->add('bootstrap-buttons', 'buttons.css')
 			->add('bootstrap-forms', 'forms.css')
 			->add('bootstrap-labels-badges', 'labels-badges.css')
@@ -89,7 +90,8 @@ Basset::scripts('default', function($basset)
 	$basset->directory('public/assets/js', function($basset)
 	{
 		$basset->add('jquery', 'jquery-1.7.2.min.js')
-			->add('css3-mediaqueries', 'css3-mediaqueries.js');
+			->add('css3-mediaqueries', 'css3-mediaqueries.js')
+			->add('bootstrap-alert', 'vendor/bootstrap/alert.js');
 	});
 });
 
