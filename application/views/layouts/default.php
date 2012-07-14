@@ -27,7 +27,6 @@
 	  })();
 	</script>
 </head>
-<?php flush(); ?>
 
 <body class="<?=(Auth::check()) ? 'logged-in' : 'guest'?>">
 
