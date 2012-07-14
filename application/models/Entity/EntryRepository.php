@@ -51,6 +51,23 @@ class EntryRepository extends EntityRepository
 	}
 
 	/**
+	 * Perform a WHERE IN query to retrieve multiple entries by ID
+	 *
+	 * @param	array	$ids
+	 * @return	array
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	public function getWhereIdIn(array $ids)
+	{
+		$query_builder = $this->_em->createQueryBuilder();
+		$query_builder->select('e')
+			->from('Entity\Entry', 'e')
+			->add('where', $query_builder->expr()->in('e.id', $ids));
+
+		return $query_builder->getQuery()->getResult();
+	}
+
+	/**
 	 * Return the latest approved Entries
 	 *
 	 * @param	int		$offset
