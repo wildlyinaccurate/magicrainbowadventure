@@ -1,6 +1,8 @@
 <?php
 
-use \MagicRainbowAdventure\Tools\EntryThumbnailTool;
+use MagicRainbowAdventure\Task\EntryTask,
+	MagicRainbowAdventure\Tools\EntryThumbnailTool,
+	MagicRainbowAdventure\Helpers\ImageHelper;
 
 /**
  * Generate Thumbnails Task
@@ -9,54 +11,74 @@ use \MagicRainbowAdventure\Tools\EntryThumbnailTool;
  * 	generate-thumbnails
  * 		(Re-)generate the thumbnails for ALL entries
  *
- * 	generate-thumbnails ID [ID...]
+ * 	generate-thumbnails ID [ID ...]
  * 		(Re-)generate the thumbnails for specific entries
+ *
+ *
+ * 	generate-thumbnails:detect-gifs
+ * 		Loop through ALL entries and identify any animated GIFs
+ *
+ * 	generate-thumbnails:detect-gifs	ID [ID ...]
+ * 		For all specified entries, identify any animated GIFs
+ *
  *
  * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class Generate_Thumbnails_Task
+class Generate_Thumbnails_Task extends EntryTask
 {
 
 	/**
 	 * Run the generate-thumbnails task
 	 *
-	 * @param	array	$args
+	 * @param	array	$entry_ids
 	 * @return	void
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function run($args)
+	public function run($entry_ids)
 	{
 		Bundle::start('resizer');
-
 		$thumbnail_sizes = Config::get('magicrainbowadventure.entry_thumbnails');
-		$em = IoC::resolve('doctrine::manager');
 
-		// Treat the arguments as entry IDs
-		if (empty($args))
-		{
-			// Generate thumbnails for all entries
-			$entries = $em->getRepository('\Entity\Entry')->findAll();
-		}
-		else
-		{
-			$entries = $em->getRepository('\Entity\Entry')->getWhereIdIn($args);
-		}
+		echo "Generating thumbnails...\n";
 
-		$total_entries = count($entries);
-		$notify = round($total_entries / 10);
-
-		echo "Generating thumbnails for {$total_entries} entries...\n";
-
-		foreach ($entries as $index => $entry)
+		$this->_process_entries($entry_ids, function($entry) use ($thumbnail_sizes)
 		{
 			$thumbnail_tool = new EntryThumbnailTool($entry);
 			$thumbnail_tool->generateFromArray($thumbnail_sizes);
+		});
 
-			if ($index > 0 && $notify > 0 && $index % $notify == 0)
+		echo "Done!";
+	}
+
+
+	/**
+	 * Run the generate-thumbnails:detect_gifs task
+	 *
+	 * @param	array	$entry_ids
+	 * @return	void
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	public function detect_gifs($entry_ids)
+	{
+		echo "Detecting animated GIFs...\n";
+
+		$em = \Laravel\IoC::resolve('doctrine::manager');
+		$base_path = \Laravel\Config::get('magicrainbowadventure.entry_uploads_path');
+
+		$this->_process_entries($entry_ids, function($entry, $index) use ($em, $base_path)
+		{
+			$type = (ImageHelper::isAnimatedGif($base_path . '/' . $entry->getFilePath())) ? 'gif' : 'image';
+			$entry->setType($type);
+			$em->persist($entry);
+
+			if ($index % 100 == 0)
 			{
-				echo "\t{$index} / {$total_entries}\n";
+				// Flush the EntityManager every 100 operations
+				$em->flush();
 			}
-		}
+		});
+
+		$em->flush();
 
 		echo "Done!";
 	}
