@@ -42,6 +42,12 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
     }
 
     
+    public function getThumbnailUrl($size = NULL)
+    {
+        $this->__load();
+        return parent::getThumbnailUrl($size);
+    }
+
     public function getId()
     {
         if ($this->__isInitialized__ === false) {
