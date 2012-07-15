@@ -38,7 +38,7 @@ return array(
 		'thumbnail' => array(
 			'width' => 62,
 			'height' => 62,
-			'crop' => true,
+			'resize' => 'crop',
 			'quality' => 70,
 			'gif' => true,
 		),
@@ -50,11 +50,11 @@ return array(
 		),
 		'medium' => array(
 			'width' => 640,
-			'height' => 2560,
+			'height' => 1920,
 		),
 		'large' => array(
 			'width' => 1010,
-			'height' => 8080,
+			'height' => 3030 ,
 			'quality' => 92,
 		),
 	),

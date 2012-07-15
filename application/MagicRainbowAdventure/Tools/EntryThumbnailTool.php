@@ -29,6 +29,18 @@ class EntryThumbnailTool
 	public $original_image_path;
 
 	/**
+	 * Width of the original image
+	 * @var	int
+	 */
+	public $original_width;
+
+	/**
+	 * Height of the original image
+	 * @var	int
+	 */
+	public $original_height;
+
+	/**
 	 * Resizer instance
 	 * @var	\Resizer
 	 */
@@ -39,6 +51,12 @@ class EntryThumbnailTool
 	 * @var	int
 	 */
 	private $default_quality = 85;
+
+	/**
+	 * Default resize option
+	 * @var	string
+	 */
+	private $default_resize_option = 'auto';
 
 	/**
 	 * Constructor ahoy!
@@ -52,6 +70,10 @@ class EntryThumbnailTool
 		$this->base_path = \Config::get('magicrainbowadventure.entry_uploads_path');
 		$this->original_image_path = $this->base_path . '/' . $entry->getFilePath();
 		$this->resizer = new \Resizer($this->original_image_path);
+
+		$image_size = getimagesize($this->original_image_path);
+		$this->original_width = $image_size[0];
+		$this->original_height = $image_size[1];
 	}
 
 	/**
@@ -62,7 +84,7 @@ class EntryThumbnailTool
 	 * 		thumbnail_name => array(
 	 * 			'width' => 100,
 	 * 			'height' => 100,
-	 * 			'crop' => true, // Optional, default = false
+	 * 			'resize' => 'crop', // Optional. 'exact', 'portrait', 'landscape', 'auto' or 'crop'
 	 * 			'quality' => 80, // Optional, default = 90
 	 * 			'gif' => false, // Optional. Unless this is true, thumbnails aren't generated for animated gifs
 	 *   	)
@@ -76,13 +98,7 @@ class EntryThumbnailTool
 	{
 		foreach ($thumbnails as $name => $thumbnail)
 		{
-			$options = array(
-				'quality' => array_get($thumbnail, 'quality', $this->default_quality),
-				'crop' => array_get($thumbnail, 'crop', false),
-				'gif' => array_get($thumbnail, 'gif', false),
-			);
-
-			$this->generate($name, $thumbnail['width'], $thumbnail['height'], $options);
+			$this->generate($name, $thumbnail['width'], $thumbnail['height'], $thumbnail);
 		}
 	}
 
@@ -104,7 +120,7 @@ class EntryThumbnailTool
 	public function generate($name, $width, $height, $options = array())
 	{
 		$quality = array_get($options, 'quality', $this->default_quality);
-		$crop = array_get($options, 'crop', false);
+		$resize_option = array_get($options, 'resize', $this->default_resize_option);
 		$gif = array_get($options, 'gif', false);
 
 		if ($this->entry->getType() === 'gif' && ! $gif)
@@ -113,7 +129,14 @@ class EntryThumbnailTool
 			return;
 		}
 
-		$resize_option = ($crop) ? 'crop' : 'landscape';
+		// Calculate the correct resized dimensions
+		if ($resize_option !== 'crop')
+		{
+			$resized_dimensions = ImageResizeCalculator::getResizedDimensions($this->original_width, $this->original_height, $width, $height);
+			$width = $resized_dimensions['width'];
+			$height = $resized_dimensions['height'];
+		}
+
 		$thumbnail_path = $this->getThumbnailPath($name);
 		$thumbnail_dir = dirname($thumbnail_path);
 
