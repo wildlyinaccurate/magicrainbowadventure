@@ -34,7 +34,7 @@ class EntryTask
 		}
 
 		$total_entries = count($entries);
-		$notify = pow(10, floor(log10($total_entries / 1.5)));
+		$notify = max(pow(10, floor(log10($total_entries / 1.5))), 1);
 
 		foreach ($entries as $index => $entry)
 		{
