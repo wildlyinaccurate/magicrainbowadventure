@@ -17,6 +17,7 @@ return array(
 	'date_created' => 'Created',
 	'actions' => 'Actions',
 	'awaiting_moderation' => 'Awaiting Moderation',
+	'original_size' => 'Original size: ',
 
 	'edit' => 'Edit',
 	'approve' => 'Approve',

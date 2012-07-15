@@ -4,7 +4,7 @@
 		<h3 data-bind="text: title"></h3>
 	</div>
 
-	<form>
+	<form data-bind="attr: { class: status }">
 		<div class="modal-body">
 			<img class="preview" data-bind="attr: { src: thumbnail_url().preview }" />
 
@@ -23,6 +23,20 @@
 					<?=Form::textarea('description', '', array('data-bind' => 'value: description'))?>
 				</div>
 			</div>
+
+			<ul class="control-group">
+				<li>
+					Created on <span data-bind="text: created_date().date"></span>
+					by <a href="#" class="text-overflow" data-bind="text: user().getDisplayName(), click: user().edit"></a>
+				</li>
+
+				<li>
+					<span data-bind="if: moderated_by() !== null" class="status">
+						<span class="verb" data-bind="text: status"></span> by <a href="#" class="text-overflow" data-bind="text: moderated_by().getDisplayName(), click: moderated_by().edit"></a>
+					</span>
+					<span data-bind="visible: moderated_by() === null"><?=Lang::line('admin::entries.awaiting_moderation')?></span>
+				</li>
+			</ul>
 		</div>
 
 		<div class="modal-footer">

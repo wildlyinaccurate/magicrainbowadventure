@@ -30,6 +30,10 @@ $.extend(MagicRainbowAdmin.Models, {
             return (self.moderated_by() !== null) ? self.moderated_by().display_name() : '';
         });
 
+        self.originalSize = ko.computed(function() {
+            return self.image_width() + ' x ' + self.image_height();
+        });
+
         self.toggleApproved = function() {
             self.approved( ! self.approved());
             self.moderated_by = new MagicRainbowAdmin.Models.User(MagicRainbowAdmin.getUser());

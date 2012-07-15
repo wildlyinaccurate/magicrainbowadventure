@@ -12,7 +12,11 @@
 		</thead>
 		<tbody data-bind="foreach: entries">
 			<tr data-bind="attr: { class: status }">
-				<td><img data-bind="attr: { src: thumbnail_url().thumbnail }" /></td>
+				<td>
+					<a href="#" data-bind="click: edit">
+						<img data-bind="attr: { src: thumbnail_url().thumbnail, title: '<?=Lang::line('admin::entries.original_size')?>' + originalSize() }" />
+					</a>
+				</td>
 				<td class="status">
 					<span data-bind="if: moderated_by() !== null">
 						<span class="verb" data-bind="text: status"></span> by <a href="#" class="text-overflow" data-bind="text: moderated_by().getDisplayName(), click: moderated_by().edit"></a>
