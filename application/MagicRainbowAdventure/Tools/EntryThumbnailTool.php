@@ -76,10 +76,13 @@ class EntryThumbnailTool
 	{
 		foreach ($thumbnails as $name => $thumbnail)
 		{
-			$crop = (isset($thumbnail['crop']) && $thumbnail['crop'] === true);
-			$quality = (isset($thumbnail['quality'])) ? $thumbnail['quality'] : $this->default_quality;
+			$options = array(
+				'quality' => array_get($thumbnail, 'quality', $this->default_quality),
+				'crop' => array_get($thumbnail, 'crop', false),
+				'gif' => array_get($thumbnail, 'gif', false),
+			);
 
-			$this->generate($name, $thumbnail['width'], $thumbnail['height'], $crop, $quality);
+			$this->generate($name, $thumbnail['width'], $thumbnail['height'], $options);
 		}
 	}
 
