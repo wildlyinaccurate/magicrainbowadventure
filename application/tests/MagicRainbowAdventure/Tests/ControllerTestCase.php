@@ -7,7 +7,7 @@ namespace MagicRainbowAdventure\Tests;
  *
  * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-abstract class ControllerTestCase extends BaseTestCase
+abstract class ControllerTestCase extends FunctionalTestCase
 {
 
 	/**
