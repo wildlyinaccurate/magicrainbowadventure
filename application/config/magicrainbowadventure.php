@@ -45,8 +45,9 @@ return array(
 		'preview' => array(
 			'width' => 280,
 			'height' => 400,
-			'crop' => true,
+			'resize' => 'crop',
 			'quality' => 70,
+			'gif' => true,
 		),
 		'medium' => array(
 			'width' => 640,
