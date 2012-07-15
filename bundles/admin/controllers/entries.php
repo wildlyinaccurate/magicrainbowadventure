@@ -32,8 +32,7 @@ class Admin_Entries_Controller extends \MagicRainbowAdmin\Controllers\AdminBaseC
 		$per_page = 10;
 		$offset = $per_page * ($page - 1);
 
-		$entries = $this->em->getRepository('Entity\Entry')->getAllEntries($offset, $per_page);
-		$paginator = Paginator::make(array(), $entries->count(), $per_page);
+		$paginator = Paginator::make(array(), $this->em->getRepository('Entity\Entry')->countAllEntries(), $per_page);
 
 		Basset::inline('assets')->add('models/entry', 'bundles/admin/js/models/entry.js')
 			->add('models/user', 'bundles/admin/js/models/user.js')
