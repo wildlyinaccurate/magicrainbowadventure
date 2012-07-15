@@ -139,6 +139,7 @@ class EntryImageProcessor
 		// Name the file based on a hash of the contents
 		$this->file_hash = hash_file('sha1', $original_file_path);
 		$this->file_path = $this->generateFilePath("{$this->file_hash}.{$extension}");
+		$this->checkDuplicate();
 
 		// Move the file to it's new destination
 		rename($original_file_path, $this->base_path . '/' . $this->file_path);
@@ -162,6 +163,7 @@ class EntryImageProcessor
 		// Name the file based on a hash of the contents
 		$this->file_hash = hash('sha1', $image_contents);
 		$this->file_path = $this->generateFilePath("{$this->file_hash}.{$extension}");
+		$this->checkDuplicate();
 
 		// Save the file
 		$handle = fopen($this->base_path . '/' . $this->file_path, 'wb');
@@ -188,6 +190,24 @@ class EntryImageProcessor
 		}
 
 		return "{$file_path}/{$file_name}";
+	}
+
+	/**
+	 * Check the database for an entry with the same file hash
+	 *
+	 * @throws	EntryImageProcessorException
+	 * @return	void
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	private function checkDuplicate()
+	{
+		$em = \Laravel\IoC::resolve('doctrine::manager');
+		$duplicate = $em->getRepository('Entity\Entry')->findOneByHash($this->file_hash);
+
+		if ($duplicate !== null)
+		{
+			throw new EntryImageProcessorException('Duplicate entry found.', EntryImageProcessorException::DUPLICATE_ENTRY, $duplicate);
+		}
 	}
 
 }

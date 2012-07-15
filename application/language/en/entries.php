@@ -24,5 +24,6 @@ return array(
 	'added_to_favourites' => '"%s" has been added to your favourites.',
 	'removed_from_favourites' => '"%s" has been removed from your favourites.',
 	'process_error' => 'Your entry cannot be processed right now. Please try again later.',
+	'duplicate_entry' => 'This image has already been uploaded!',
 
 );

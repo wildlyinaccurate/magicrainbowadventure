@@ -201,9 +201,18 @@ class Entries_Controller extends Base_Controller
 		}
 		catch (EntryImageProcessorException $e)
 		{
-			$this->logger->addError('Unable to process entry image.');
+			if ($e->getCode() === EntryImageProcessorException::DUPLICATE_ENTRY)
+			{
+				$this->logger->addInfo(sprintf('Duplicate entry uploaded. Existing entry ID: %d', $e->getEntry()->getId()));
+				$error = Lang::line('entries.duplicate_entry');
+			}
+			else
+			{
+				$this->logger->addError('Unable to process entry image.');
+				$error = Lang::line('entries.process_error');
+			}
 
-			return Redirect::to('entries/submit')->with_input()->with('alert.error', Lang::line('entries.process_error'));
+			return Redirect::to('entries/submit')->with_input()->with('alert.error', $error);
 		}
 
 		$image_dimensions = $processor->getImageDimensions();
