@@ -1,9 +1,10 @@
 <?php
 
-use \MagicRainbowAdventure\Validation\EntryValidator,
-	\MagicRainbowAdventure\Processors\EntryImageProcessor,
-	\MagicRainbowAdventure\Exception\EntryImageProcessorException,
-	\MagicRainbowAdventure\Tools\EntryThumbnailTool;
+use MagicRainbowAdventure\Validation\EntryValidator,
+	MagicRainbowAdventure\Processors\EntryImageProcessor,
+	MagicRainbowAdventure\Exception\EntryImageProcessorException,
+	MagicRainbowAdventure\Tools\EntryThumbnailTool,
+	MagicRainbowAdventure\Helpers\ImageHelper;
 
 /**
  * Entries Controller

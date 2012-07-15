@@ -104,8 +104,9 @@ class EntryThumbnailTool
 		$crop = array_get($options, 'crop', false);
 		$gif = array_get($options, 'gif', false);
 
-		if ( ! $gif)
+		if ($this->entry->getType() === 'gif' && ! $gif)
 		{
+			// Don't generate thumbnails for animated gifs unless explicitly told so
 			return;
 		}
 

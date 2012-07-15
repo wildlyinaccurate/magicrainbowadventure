@@ -2,6 +2,8 @@
 
 namespace Entity;
 
+use MagicRainbowAdventure\Helpers\ImageHelper;
+
 /**
  * Entry Model
  *
@@ -37,7 +39,7 @@ class Entry extends TimestampedModel
 	/**
 	 * @Column(type="string", length=6, nullable=false)
 	 */
-	protected $type = 'image';
+	protected $type;
 
 	/**
 	 * @Column(type="integer", nullable=false)
@@ -208,12 +210,17 @@ class Entry extends TimestampedModel
 	/**
 	 * Set file_path
 	 *
+	 * At the same time, determine whether this is an animated GIF
+	 *
 	 * @param string $filePath
 	 * @return	\Entity\Entry
 	 */
 	public function setFilePath($filePath)
 	{
 		$this->file_path = $filePath;
+
+		$base_path = \Config::get('magicrainbowadventure.entry_uploads_path');
+		$this->type = (ImageHelper::isAnimatedGif($base_path . '/' . $filePath)) ? 'gif' : 'image';
 
 		return $this;
 	}
