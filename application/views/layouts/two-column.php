@@ -4,8 +4,15 @@
 	</div> <!-- #main -->
 
 	<div id="sidebar" class="fourcol last">
-		<section class="lipsum">
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed egestas est eu massa lobortis ut vulputate nisl tristique. Aliquam dictum elementum imperdiet. Duis convallis tempus diam a rutrum. Maecenas diam odio, ultrices at porta sit amet, mattis eget neque. Praesent elit tortor, euismod vitae volutpat in, tristique nec odio. Curabitur sit amet felis purus, eu venenatis mi. Praesent non sem metus. Nulla placerat porttitor elit eget facilisis. Suspendisse tempor pulvinar metus, at posuere nibh tincidunt suscipit. In hac habitasse platea dictumst.</p>
+		<section>
+			<script type="text/javascript"><!--
+				google_ad_client = "ca-pub-5620145070273164";
+				/* Magic Rainbow Adventure Sidebar */
+				google_ad_slot = "8881360341";
+				google_ad_width = 300;
+				google_ad_height = 250;
+			//--></script>
+			<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
 		</section>
 	</div>
 </div>
