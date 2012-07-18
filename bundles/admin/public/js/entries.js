@@ -5,20 +5,28 @@
  *
  * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-MagicRainbowAdmin.Entries = function() {
+MagicRainbowAdventure.Admin.Entries = function() {
 
-	// Set the current page
-	var active_page = $('.pagination .active a');
+    // Set the current page
+    var active_page = $('.pagination .active a');
 
-	if (active_page.length > 0) {
-		MagicRainbowAdmin.API.setPage(parseInt(active_page[0].innerHTML));
-	}
+    if (active_page.length > 0) {
+        MagicRainbowAdventure.API.setPage(parseInt(active_page[0].innerHTML));
+    }
 
-    ko.applyBindings(new MagicRainbowAdmin.Models.EntryViewModel(), $('.entries')[0]);
+    var view_model = new MagicRainbowAdventure.Models.EntryViewModel();
+
+    ko.applyBindings(view_model, $('.entries')[0]);
 
     $('.entry-info, .user-info').modal({
         show: false,
         keyboard: false
     });
+
+    return {
+        getViewModel: function() {
+            return view_model;
+        }
+    };
 
 }();

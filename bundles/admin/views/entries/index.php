@@ -40,9 +40,11 @@
 	<?=$paginator->links()?>
 </section>
 
-<script type="text/javascript">
-	MagicRainbowAdmin_API_perPage = <?=$per_page?>;
-</script>
-
 <?=View::make('admin::partials/entry-info-modal')?>
 <?=View::make('admin::partials/user-info-modal')?>
+
+<script type="text/javascript">
+	MagicRainbowAdventure.Queue.onInit(function() {
+		MagicRainbowAdventure.API.setPerPage(<?=$per_page?>);
+	});
+</script>

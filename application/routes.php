@@ -91,7 +91,8 @@ Basset::scripts('default', function($basset)
 	{
 		$basset->add('jquery', 'jquery-1.7.2.min.js')
 			->add('css3-mediaqueries', 'css3-mediaqueries.js')
-			->add('bootstrap-alert', 'vendor/bootstrap/alert.js');
+			->add('bootstrap-alert', 'vendor/bootstrap/alert.js')
+			->add('magicrainbowadventure', 'magicrainbowadventure.js');
 	});
 });
 

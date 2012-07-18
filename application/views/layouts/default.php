@@ -81,7 +81,12 @@
 	<?=View::make('partials/login-required')?>
 
     <script src="<?=URL::base();?>/basset/default.js"></script>
+
 	<?=Basset::inline('assets')->scripts();?>
+
+	<script type="text/javascript">
+		MagicRainbowAdventure.Queue.init();
+	</script>
 
 </body>
 </html>

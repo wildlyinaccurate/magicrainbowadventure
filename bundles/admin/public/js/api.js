@@ -5,13 +5,11 @@
  *
  * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-
-MagicRainbowAdmin.API = function() {
+MagicRainbowAdventure.API = function() {
 
     var self = this;
 
-    // Little bit hacky - perPage can be set in this global variable
-    self.perPage = (typeof MagicRainbowAdmin_API_perPage === undefined) ? null : MagicRainbowAdmin_API_perPage;
+    self.perPage = 10;
     self.page = 1;
     self.baseURL = '/api';
 

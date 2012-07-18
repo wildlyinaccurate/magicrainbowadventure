@@ -1,35 +1,34 @@
 /**
- * Magic Rainbow Adventure Admin Interface
- *
  * User Model
  *
  * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-$.extend(MagicRainbowAdmin.Models, {
+MagicRainbowAdventure.Models.User = function(data) {
+    var self = this;
+    var edit_container = $('.user-info');
 
-    User: function(data) {
-        var self = this;
-        var edit_container = $('.user-info');
+    for (property in data) {
+        self[property] = ko.observable(data[property]);
+    }
 
-        for (property in data) {
-            self[property] = ko.observable(data[property]);
-        }
+    // Open the edit modal
+    self.edit = function() {
+        ko.applyBindings(self, edit_container[0]);
+        edit_container.modal('show');
+    }
 
-        // Open the edit modal
-        self.edit = function() {
-            ko.applyBindings(self, edit_container[0]);
-            edit_container.modal('show');
-        }
+    self.getDisplayName = function() {
+        return self.display_name() || self.username();
+    }
+};
 
-        self.getDisplayName = function() {
-            return self.display_name() || self.username();
-        }
-    },
-
-    UserViewModel: function() {
+/**
+ * User View Model
+ *
+ * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+ */
+MagicRainbowAdventure.Models.UserViewModel = function() {
         var self = this;
 
         self.users = ko.observableArray([]);
-    }
-
-});
+};

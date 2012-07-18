@@ -21,56 +21,58 @@
 
 <body class="admin">
 
-<header>
-	<div class="container" id="heading">
+	<header>
+		<div class="container" id="heading">
+			<div class="row">
+				<h1 class="fivecol">
+					<?=HTML::link('/', 'Magic Rainbow Adventure!')?>
+					<span class="label label-info">beta</span>
+				</h1>
+
+				<nav id="main-navigation" class="threecol"><?=$navigation?></nav>
+				<nav id="account-navigation" class="fourcol last"><?=$account_menu?></nav>
+			</div>
+		</div>
+	</header>
+
+	<div id="content" class="container">
 		<div class="row">
-			<h1 class="fivecol">
-				<?=HTML::link('/', 'Magic Rainbow Adventure!')?>
-				<span class="label label-info">beta</span>
-			</h1>
-
-			<nav id="main-navigation" class="threecol"><?=$navigation?></nav>
-			<nav id="account-navigation" class="fourcol last"><?=$account_menu?></nav>
+			<div class="twelvecol">
+				<h2><?=$title?></h2>
+			</div>
 		</div>
-	</div>
-</header>
 
-<div id="content" class="container">
-	<div class="row">
-		<div class="twelvecol">
-			<h2><?=$title?></h2>
+		<script src="<?=URL::base();?>/basset/default.js"></script>
+
+		<div class="row">
+			<div id="main" class="twelvecol">
+				<?=$content?>
+			</div> <!-- #main -->
 		</div>
-	</div>
 
-	<script src="<?=URL::base();?>/basset/default.js"></script>
+	</div> <!-- #content -->
 
-	<div class="row">
-		<div id="main" class="twelvecol">
-			<?=$content?>
-		</div> <!-- #main -->
-	</div>
+	<footer class="container">
+		<div class="row">
+			<div class="eightcol">
+				<p>
+					Magic Rainbow Adventure Admin Interface<br />
+					<strong>You are <?=Request::ip()?>, <?=$_SERVER['HTTP_USER_AGENT']?></strong>
+				</p>
 
-</div> <!-- #content -->
-
-<footer class="container">
-	<div class="row">
-		<div class="eightcol">
-			<p>
-				Magic Rainbow Adventure Admin Interface<br />
-				<strong>You are <?=Request::ip()?>, <?=$_SERVER['HTTP_USER_AGENT']?></strong>
-			</p>
-
-			<p><?=IoC::resolve('doctrine::manager')->getConfiguration()->getSqlLogger()->queries?> queries executed.</p>
+				<p><?=IoC::resolve('doctrine::manager')->getConfiguration()->getSqlLogger()->queries?> queries executed.</p>
+			</div>
 		</div>
-	</div>
-</footer>
+	</footer>
 
-<script src="<?=URL::base();?>/basset/admin.js"></script>
-<?=Basset::inline('assets')->scripts();?>
+	<script src="<?=URL::base();?>/basset/admin.js"></script>
 
-<script type="text/javascript">
-	MagicRainbowAdmin.setUser(<?=Auth::user()->getId()?>);
-</script>
+	<?=Basset::inline('assets')->scripts();?>
+
+	<script type="text/javascript">
+		MagicRainbowAdventure.setUser(<?=Auth::user()->getId()?>);
+		MagicRainbowAdventure.Queue.init();
+	</script>
 
 </body>
 </html>
