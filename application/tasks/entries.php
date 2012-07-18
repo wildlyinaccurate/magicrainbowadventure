@@ -5,36 +5,48 @@ use MagicRainbowAdventure\Task\EntryTask,
 	MagicRainbowAdventure\Helpers\ImageHelper;
 
 /**
- * Generate Thumbnails Task
+ * Entries Task
  *
- * Usage:
- * 	generate-thumbnails
- * 		(Re-)generate the thumbnails for ALL entries
- *
- * 	generate-thumbnails ID [ID ...]
- * 		(Re-)generate the thumbnails for specific entries
- *
- *
- * 	generate-thumbnails:detect-gifs
- * 		Loop through ALL entries and identify any animated GIFs
- *
- * 	generate-thumbnails:detect-gifs	ID [ID ...]
- * 		For all specified entries, identify any animated GIFs
- *
+ * Provides various tasks for managing entries
  *
  * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class Generate_Thumbnails_Task extends EntryTask
+class Entries_Task extends EntryTask
 {
 
 	/**
-	 * Run the generate-thumbnails task
+	 * Default entries task
+	 *
+	 * @return	void
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	public function run()
+	{
+		echo <<<EOL
+
+Usage:
+	entries:generate_thumbnails
+		(Re-)generate the thumbnails for ALL entries
+
+	entries:generate_thumbnails ID [ID ...]
+		(Re-)generate the thumbnails for specific entries
+
+	entries:detect_gifs
+		Loop through ALL entries and identify any animated GIFs
+
+	entries:detect_gifs ID [ID ...]
+		For all specified entries, identify any animated GIFs
+EOL;
+	}
+
+	/**
+	 * Run the entries:generate_thumbnails task
 	 *
 	 * @param	array	$entry_ids
 	 * @return	void
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function run($entry_ids)
+	public function generate_thumbnails($entry_ids)
 	{
 		Bundle::start('resizer');
 		$thumbnail_sizes = Config::get('magicrainbowadventure.entry_thumbnails');
@@ -52,7 +64,7 @@ class Generate_Thumbnails_Task extends EntryTask
 
 
 	/**
-	 * Run the generate-thumbnails:detect_gifs task
+	 * Run the entries:detect_gifs task
 	 *
 	 * @param	array	$entry_ids
 	 * @return	void
