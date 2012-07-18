@@ -40,7 +40,7 @@
 					by <a href="#" class="text-overflow" data-bind="text: user().getDisplayName(), click: user().edit"></a>
 				</li>
 
-				<li>
+				<li data-bind="if: modified_date() !== null">
 					Last modified: <span data-bind="text: modified_date().date"></span>
 				</li>
 			</ul>
