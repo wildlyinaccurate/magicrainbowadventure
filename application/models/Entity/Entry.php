@@ -368,7 +368,7 @@ class Entry extends TimestampedModel
 	 */
 	public function getApproved()
 	{
-		return $this->approved;
+		return (bool) $this->approved;
 	}
 
 	/**
