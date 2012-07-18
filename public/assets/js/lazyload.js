@@ -15,7 +15,7 @@ var MRA_Lazyload = function() {
                 length: 3.5,
                 space: 1.6,
                 speed: 1.6,
-                padding: 300
+                padding: (load_more.width() / 2) - 60
             });
         },
         loadComplete: function() {
@@ -32,9 +32,9 @@ var MRA_Lazyload = function() {
             entries.appendTo(entries_container);
         },
         noResults: function() {
-            this.lazyloader.disable();
-            load_more.hide();
-            no_more_entries.css('display', 'block');
+            // this.lazyloader.disable();
+            // load_more.hide();
+            // no_more_entries.css('display', 'block');
 
         }
     });
