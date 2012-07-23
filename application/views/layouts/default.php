@@ -35,7 +35,6 @@
 			<div class="row">
 				<h1 class="fivecol">
 					<?=HTML::link('/', 'Magic Rainbow Adventure!')?>
-					<span class="label label-info">beta</span>
 				</h1>
 
 				<nav id="main-navigation" class="threecol"><?=$navigation?></nav>
