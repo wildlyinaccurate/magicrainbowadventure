@@ -32,10 +32,9 @@ var MRA_Lazyload = function() {
             entries.appendTo(entries_container);
         },
         noResults: function() {
-            // this.lazyloader.disable();
-            // load_more.hide();
-            // no_more_entries.css('display', 'block');
-
+            this.lazyloader.disable();
+            load_more.hide();
+            no_more_entries.css('display', 'block');
         }
     });
 
