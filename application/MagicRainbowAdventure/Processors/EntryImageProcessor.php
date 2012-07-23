@@ -202,7 +202,10 @@ class EntryImageProcessor
 	private function checkDuplicate()
 	{
 		$em = \Laravel\IoC::resolve('doctrine::manager');
-		$duplicate = $em->getRepository('Entity\Entry')->findOneByHash($this->file_hash);
+		$duplicate = $em->getRepository('Entity\Entry')->findOneBy(array(
+			'hash' => $this->file_hash,
+			'approved' => true,
+		));
 
 		if ($duplicate !== null)
 		{
