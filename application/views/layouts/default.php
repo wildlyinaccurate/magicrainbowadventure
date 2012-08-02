@@ -11,6 +11,7 @@
     <meta name="description" content="">
 	<meta name="viewport" content="width=device-width">
 
+	<link rel="author" href="humans.txt" />
 	<link href='http://fonts.googleapis.com/css?family=Coustard|Open+Sans:400,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" media="all" href="<?=URL::base();?>/basset/magicrainbowadventure.css">
 
