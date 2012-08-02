@@ -6,9 +6,8 @@ Magic Rainbow Adventure is a microblog powered by user-submitted content.
 * PHP 5.3.1+
 * PHP Extensions:
 	* PDO
-	* cURL
-	* Mcrypt
-	* Memcached
+	* Memcached (unless you change the cache and session drivers - see below)
+    * GD
 
 ## Installation
 
@@ -25,8 +24,12 @@ Create an empty database and configure the connection settings in `application/c
 
     chmod 777 storage/cache
     chmod 777 storage/logs
-    chmod 777 public/uploads/MagicRainbowAdventure
+    chmod 777 public/entry
     chmod -R 777 application/models/Proxies
+
+**4. Create an admin account**
+
+To create an admin account, sign up as a regular user and change the user's `type` value in the database to `administrator`.
 
 ## Configuration
 
@@ -36,7 +39,16 @@ You can configure the database connection settings in `application/config/databa
 
 ### Caching
 
-If you would like to use a caching mechanism other than Memcached, you can change this in the following files:
+By default, Magic Rainbow Adventure uses Memcached for caching. If you would like to change this, you can do so in `application/config/cache.php`
 
-* `application/config/cache.php`
-* `application/config/session.php`
+### Sessions
+
+By default, Magic Rainbow Adventure stores session data in Memcached. If you like, you can change this in `application/config/session.php`
+
+## Tests
+
+To run the unit and functional tests, run `php artisan test`
+
+## Administration
+
+The administration dashboard can be found at yoursite.com/admin.
