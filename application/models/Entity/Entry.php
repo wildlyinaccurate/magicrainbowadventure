@@ -57,7 +57,7 @@ class Entry extends TimestampedModel
 	protected $hash;
 
 	/**
-	 * @Column(type="text", length=2000, nullable=true)
+	 * @Column(type="text", length=1000, nullable=true)
 	 */
 	protected $description;
 
@@ -79,8 +79,8 @@ class Entry extends TimestampedModel
 	/**
 	 * @ManyToMany(targetEntity="User", inversedBy="favourites", fetch="EXTRA_LAZY")
 	 * @JoinTable(name="entry_favourites",
-	 *      joinColumns={@JoinColumn(name="entry_id", referencedColumnName="id")},
-	 *      inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="id")}
+	 *	  joinColumns={@JoinColumn(name="entry_id", referencedColumnName="id")},
+	 *	  inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="id")}
 	 * )
 	 */
 	protected $favourited_by;
@@ -88,8 +88,8 @@ class Entry extends TimestampedModel
 	/**
 	 * @ManyToMany(targetEntity="Tag", inversedBy="entries")
 	 * @JoinTable(name="entry_tags",
-	 *      joinColumns={@JoinColumn(name="entry_id", referencedColumnName="id")},
-	 *      inverseJoinColumns={@JoinColumn(name="tag_id", referencedColumnName="id")}
+	 *	  joinColumns={@JoinColumn(name="entry_id", referencedColumnName="id")},
+	 *	  inverseJoinColumns={@JoinColumn(name="tag_id", referencedColumnName="id")}
 	 * )
 	 */
 	protected $tags;
@@ -432,26 +432,43 @@ class Entry extends TimestampedModel
 		return $this->moderated_by;
 	}
 
-    /**
-     * Add tags
-     *
-     * @param Entity\Tag $tags
-     * @return Entry
-     */
-    public function addTag(\Entity\Tag $tags)
-    {
-        $this->tags[] = $tags;
-        return $this;
-    }
+	/**
+	 * Add tags
+	 *
+	 * @param Entity\Tag $tags
+	 * @return Entry
+	 */
+	public function addTag(\Entity\Tag $tags)
+	{
+		$this->tags[] = $tags;
+		return $this;
+	}
 
-    /**
-     * Get tags
-     *
-     * @return Doctrine\Common\Collections\Collection
-     */
-    public function getTags()
-    {
-        return $this->tags;
-    }
+	/**
+	 * Get tags
+	 *
+	 * @return Doctrine\Common\Collections\Collection
+	 */
+	public function getTags()
+	{
+		return $this->tags;
+	}
+
+	/**
+	 * Set series
+	 *
+	 * @param	\Entity\EntrySeries
+	 * @return	void
+	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	public function setSeries(\Entity\EntrySeries $series)
+	{
+		$this->series = $series;
+
+		if ( ! $series->getEntries()->contains($this))
+		{
+			$series->addEntry($this);
+		}
+	}
 
 }
