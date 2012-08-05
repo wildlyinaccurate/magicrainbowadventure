@@ -6,6 +6,7 @@ return array(
 	'my_entries' => 'My Entries',
 	'settings' => 'Account Settings',
 	'change_password' => 'Change Password',
+	'admin_dashboard' => 'Admin Dashboard',
 
     // Messages
 	'dont_have_account' => "Don't have an account?",
@@ -22,7 +23,7 @@ return array(
 	'label_email' => 'Enter your email address',
 	'label_display_name' => 'Choose a display name',
 	'label_current_password' => 'Enter your current password',
-	
+
 	// Form validation
 	'validation_password_same' => "The passwords you entered don't match",
 	'validation_current_password' => 'Your current password is incorrect',
