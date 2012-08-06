@@ -10,3 +10,6 @@
 [submodule "vendor/monolog"]
 	path = vendor/monolog
 	url = git://github.com/Seldaek/monolog.git
+[submodule "bundles/api/vendor/doctrine-rest"]
+	path = bundles/api/vendor/doctrine-rest
+	url = git@github.com:wildlyinaccurate/rest.git
