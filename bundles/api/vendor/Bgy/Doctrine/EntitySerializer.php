@@ -43,10 +43,9 @@ class EntitySerializer
      */
     protected $_maxRecursionDepth = 0;
 
-    public function __construct($em, $maxRecursionDepth = 0)
+    public function __construct($em)
     {
         $this->setEntityManager($em);
-        $this->_maxRecursionDepth = $maxRecursionDepth;
     }
 
     /**
@@ -153,4 +152,28 @@ class EntitySerializer
     {
         throw new Exception('Not yet implemented');
     }
+
+    /**
+     * Set the maximum recursion depth
+     *
+     * @param   int     $maxRecursionDepth
+     * @return  void
+     * @author  Joseph Wynn <joseph@wildlyianccurate.com>
+     */
+    public function setMaxRecursionDepth($maxRecursionDepth)
+    {
+        $this->_maxRecursionDepth = $maxRecursionDepth;
+    }
+
+    /**
+     * Get the maximum recursion depth
+     *
+     * @return  int
+     * @author  Joseph Wynn <joseph@wildlyianccurate.com>
+     */
+    public function getMaxRecursionDepth()
+    {
+        return $this->_maxRecursionDepth;
+    }
+
 }
