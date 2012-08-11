@@ -9,5 +9,7 @@
  */
 
 Autoloader::namespaces(array(
-	'Bgy' => Bundle::path('api') . 'Bgy',
+	'MagicRainbowAdventure\API' => Bundle::path('api') . 'MagicRainbowAdventure/API',
+	'Bgy' => Bundle::path('api') . 'vendor/Bgy',
+	'Doctrine\REST' => Bundle::path('api') . 'vendor/doctrine-rest/lib/Doctrine/REST',
 ));
