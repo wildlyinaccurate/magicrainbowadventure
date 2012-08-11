@@ -1,6 +1,7 @@
 <?php
 
-use Bgy\Doctrine\EntitySerializer,
+use MagicRainbowAdventure\API\RequestHandler,
+	Bgy\Doctrine\EntitySerializer,
 	Monolog\Logger,
 	Monolog\Handler\RotatingFileHandler;
 
@@ -13,7 +14,9 @@ use Bgy\Doctrine\EntitySerializer,
  */
 
 $logger = IoC::resolve('magicrainbowadventure.logger');
-$entity_manager = IoC::resolve('doctrine::manager');
+$em = IoC::resolve('doctrine::manager');
+$serializer = new EntitySerializer($em);
+$serializer->setMaxRecursionDepth(1);
 
 /**
  * Add a log handler for every api call
@@ -28,14 +31,12 @@ Route::filter('pattern: api/*', 'push_api_logger');
 /**
  * Retrieve one or many entries
  */
-Route::get('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manager, $logger)
+Route::get('(:bundle)/entries/(:num?)', function($id = null) use ($em, $serializer, $logger)
 {
-	$entity_serializer = new EntitySerializer($entity_manager, 1);
-
 	if ($id !== null)
 	{
 		// Retrieve only one entry
-		$entry = $entity_manager->find('Entity\Entry', $id);
+		$entry = $em->find('Entity\Entry', $id);
 
 		if ($entry === null)
 		{
@@ -44,7 +45,7 @@ Route::get('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manage
 			), 404);
 		}
 
-		return Response::json($entity_serializer->toArray($entry));
+		return Response::json($serializer->toArray($entry));
 	}
 
 	// Retrieve an array of entries
@@ -52,17 +53,17 @@ Route::get('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manage
 	$per_page = min(Config::get('api::api.max_items_per_page'), Input::get('per_page', Config::get('api::api.default_items_per_page')));
 	$offset = $per_page * ($page - 1);
 
-	$entries = $entity_manager->getRepository('Entity\Entry')->getAllEntries($offset, $per_page);
+	$entries = $em->getRepository('Entity\Entry')->getAllEntries($offset, $per_page);
 	$return_json = array();
 
 	foreach ($entries as $entry)
 	{
-		$entry_array = $entity_serializer->toArray($entry);
+		$entry_array = $serializer->toArray($entry);
 
 		// Manually include the moderator data because EntitySerializer doesn't include it
 		if ($entry->getModeratedBy() !== null)
 		{
-			$entry_array['moderated_by'] = $entity_serializer->toArray($entry->getModeratedBy());
+			$entry_array['moderated_by'] = $serializer->toArray($entry->getModeratedBy());
 		}
 
 		// Retrieve all of the thumbnail URLs
@@ -84,10 +85,8 @@ Route::get('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manage
 /**
  * Create or update an entry
  */
-Route::post('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manager, $logger)
+Route::post('(:bundle)/entries/(:num?)', function($id = null) use ($em, $serializer, $logger)
 {
-	$entity_serializer = new EntitySerializer($entity_manager, 1);
-
 	if ($id === null)
 	{
 		// Create a new Entry
@@ -96,7 +95,7 @@ Route::post('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manag
 	}
 
 	// Update an existing entry
-	$entry = $entity_manager->find('Entity\Entry', $id);
+	$entry = $em->find('Entity\Entry', $id);
 
 	if ($entry === null)
 	{
@@ -107,29 +106,29 @@ Route::post('(:bundle)/entries/(:num?)', function($id = null) use ($entity_manag
 
 	$entry_data = json_decode(Input::get('entry'));
 
-	$moderated_by = $entity_manager->find('Entity\User', $entry_data->moderated_by->id);
+	$moderated_by = $em->find('Entity\User', $entry_data->moderated_by->id);
 
 	$entry->setTitle($entry_data->title)
 		->setDescription($entry_data->description)
 		->setApproved($entry_data->approved)
 		->setModeratedBy($moderated_by);
 
-	$entity_manager->persist($entry);
-	$entity_manager->flush();
+	$em->persist($entry);
+	$em->flush();
 
-	return Response::json($entity_serializer->toArray($entry));
+	return Response::json($serializer->toArray($entry));
 });
 
 /**
  * Retrieve one or many users
  */
-Route::get('(:bundle)/users/(:num?)', function($id = null) use ($entity_manager, $logger)
+Route::get('(:bundle)/users/(:num?)', function($id = null) use ($em, $serializer, $logger)
 {
-	$entity_serializer = new EntitySerializer($entity_manager, 0);
+	$serializer->setMaxRecursionDepth(0);
 
 	if ($id !== null)
 	{
-		$user = $entity_manager->find('Entity\User', $id);
+		$user = $em->find('Entity\User', $id);
 
 		if ($user === null)
 		{
@@ -138,19 +137,19 @@ Route::get('(:bundle)/users/(:num?)', function($id = null) use ($entity_manager,
 			), 404);
 		}
 
-		return Response::json($entity_serializer->toArray($user));
+		return Response::json($serializer->toArray($user));
 	}
 
 	$page = max(Input::get('page'), 1);
 	$per_page = min(Config::get('api::api.max_items_per_page'), Input::get('per_page', Config::get('api::api.default_items_per_page')));
 	$offset = $per_page * ($page - 1);
 
-	$users = $entity_manager->getRepository('Entity\User')->getAllUsers($offset, $per_page);
+	$users = $em->getRepository('Entity\User')->getAllUsers($offset, $per_page);
 	$return_json = array();
 
 	foreach ($users as $user)
 	{
-		$return_json[] = $entity_serializer->toArray($user);
+		$return_json[] = $serializer->toArray($user);
 	}
 
 	$logger->addDebug('Returning ' . count($return_json) . ' results.');
