@@ -144,7 +144,7 @@ header {
 }
 
 // Navigation
-header nav ul {
+#account-navigation {
   float: right;
 }
 
@@ -157,10 +157,14 @@ header nav a, header nav a:visited {
   height: 16px;
   font-weight: bold;
   line-height: 16px;
-  padding: 13px 18px 13px 44px;
+  padding: 13px 18px;
   text-decoration: none;
   color: @nav-colour;
   .transition-duration(0.4s);
+}
+
+header nav .upload a {
+  padding-left: 43px;
 }
 
 header nav a:hover {
@@ -184,12 +188,12 @@ header nav .upload:hover {
 }
 
 #account-navigation .display-name {
-  max-width: 200px;
+  max-width: 160px;
 }
 
 // Content
 #content {
-  margin-top: 60px;
+  margin-top: 70px;
 }
 
 #main section, .entry, #sidebar section {
@@ -233,6 +237,7 @@ footer {
 // Entries
 .entry {
   margin-bottom: 16px;
+  position: relative;
 }
 
 .entry .description {
@@ -255,9 +260,11 @@ footer {
 }
 
 .entry .buttons {
-  float: right;
-  text-align: center;
+  position: absolute;
   padding: 12px;
+  text-align: center;
+  top: 0px;
+  right: 0px;
 }
 
 .entry .buttons a {

@@ -27,8 +27,10 @@
 					<?=HTML::link('/', 'Magic Rainbow Adventure!')?>
 				</h1>
 
-				<nav id="main-navigation" class="threecol"><?=$navigation?></nav>
-				<nav id="account-navigation" class="fourcol last"><?=$account_menu?></nav>
+				<div class="sevencol last">
+					<nav id="main-navigation"><?=$navigation?></nav>
+					<nav id="account-navigation"><?=$account_menu?></nav>
+				</div>
 			</div>
 		</div>
 	</header>
