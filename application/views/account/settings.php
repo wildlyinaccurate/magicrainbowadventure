@@ -1,8 +1,4 @@
 <section class="account-settings">
-	<?php if (Session::has('success_message')): ?>
-		<p class="success"><?=Session::get('success_message')?></p>
-	<?php endif; ?>
-
 	<?=Form::open('account/settings', 'POST', array('class' => 'form-horizontal'))?>
 
 		<div class="control-group">
@@ -29,15 +25,6 @@
 			<div class="controls">
 				<?=Form::text('display_name', Input::old('display_name', $user->getDisplayName(false)), array('maxlength' => 40))?>
 				<?=$errors->first('display_name', '<span class="error">:message</span>')?>
-			</div>
-		</div>
-
-		<div class="control-group">
-			<?=Form::label('current_password', Lang::line('account.label_current_password'), array('class' => 'control-label'))?>
-
-			<div class="controls">
-				<?=Form::password('current_password')?>
-				<?=$errors->first('current_password', '<span class="error">:message</span>')?>
 			</div>
 		</div>
 
