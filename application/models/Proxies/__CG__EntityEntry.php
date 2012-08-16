@@ -219,6 +219,12 @@ class Entry extends \Entity\Entry implements \Doctrine\ORM\Proxy\Proxy
         return parent::getTags();
     }
 
+    public function setSeries(\Entity\Series $series)
+    {
+        $this->__load();
+        return parent::setSeries($series);
+    }
+
     public function setCreatedDate()
     {
         $this->__load();
