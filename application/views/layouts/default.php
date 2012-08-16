@@ -1,14 +1,14 @@
 <!doctype html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if IE 7]>	<html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>	<html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
 	<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-	<title><?=$title?> &ndash; Magic Rainbow Adventure!</title>
-    <meta name="description" content="">
+	<title><?=$title?> &ndash; Magic Rainbow Adventure</title>
+	<meta name="description" content="Begin an adventure into the land of cute and funny pictures!">
 	<meta name="viewport" content="width=device-width">
 
 	<link rel="author" href="humans.txt" />
@@ -20,7 +20,7 @@
 
 <body class="<?=(Auth::check()) ? 'logged-in' : 'guest'?>">
 
-    <header>
+	<header>
 		<div class="container" id="heading">
 			<div class="row">
 				<h1 class="fivecol">
@@ -35,12 +35,12 @@
 		</div>
 	</header>
 
-    <div id="content" class="container">
+	<div id="content" class="container">
 
 		<div class="row">
 			<div class="twelvecol">
 				<?php foreach ($alerts as $alert): ?>
-					<div class="alert alert-<?php echo $alert['level']; ?>">
+					<div class="alert alert-<?=$alert['level']?>">
 						<button type="button" class="close" data-dismiss="alert">×</button>
 						<?php echo $alert['message']; ?>
 					</div>
@@ -71,17 +71,17 @@
 
 	<?=View::make('partials/login-required')?>
 
-    <script src="<?=URL::base();?>/basset/default.js"></script>
+	<script src="<?=URL::base();?>/basset/default.js"></script>
 
 	<?=Basset::inline('assets')->scripts();?>
 
 	<script type="text/javascript">
 		MagicRainbowAdventure.Queue.init();
 
-        var _gaq=[['_setAccount','UA-25125418-2'],['_trackPageview']];
-        (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-        g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-        s.parentNode.insertBefore(g,s)}(document,'script'));
+		var _gaq=[['_setAccount','UA-25125418-2'],['_trackPageview']];
+		(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+		g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+		s.parentNode.insertBefore(g,s)}(document,'script'));
 	</script>
 
 </body>
