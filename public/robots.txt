@@ -1,2 +1,6 @@
+# robots.txt for magicrainbowadventure.com
+
 User-agent: *
-Disallow: /rate/
+Disallow: /admin
+Disallow: /api
+Disallow: /*/*/favourite
