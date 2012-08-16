@@ -3,10 +3,13 @@
 namespace Entity;
 
 /**
+ * Series Model
+ *
  * @Entity
+ * @Table(name="series")
  * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class EntrySeries extends TimestampedModel
+class Series extends TimestampedModel
 {
 
 	/**
@@ -58,7 +61,7 @@ class EntrySeries extends TimestampedModel
 	 * Set title
 	 *
 	 * @param string $title
-	 * @return EntrySeries
+	 * @return Series
 	 */
 	public function setTitle($title)
 	{
@@ -80,7 +83,7 @@ class EntrySeries extends TimestampedModel
 	 * Set url_title
 	 *
 	 * @param string $urlTitle
-	 * @return EntrySeries
+	 * @return Series
 	 */
 	public function setUrlTitle($urlTitle)
 	{
@@ -102,7 +105,7 @@ class EntrySeries extends TimestampedModel
 	 * Add entries
 	 *
 	 * @param Entity\Entry $entries
-	 * @return EntrySeries
+	 * @return Series
 	 */
 	public function addEntry(\Entity\Entry $entry)
 	{

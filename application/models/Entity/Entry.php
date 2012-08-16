@@ -457,11 +457,11 @@ class Entry extends TimestampedModel
 	/**
 	 * Set series
 	 *
-	 * @param	\Entity\EntrySeries
+	 * @param	\Entity\Series
 	 * @return	void
 	 * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function setSeries(\Entity\EntrySeries $series)
+	public function setSeries(\Entity\Series $series)
 	{
 		$this->series = $series;
 
