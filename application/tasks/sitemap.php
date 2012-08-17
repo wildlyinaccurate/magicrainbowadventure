@@ -15,8 +15,13 @@ class Sitemap_Task
 	 *
 	 * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
 	 */
-	public function run()
+	public function run($options)
 	{
+		$base_url = array_shift($options) ?: 'http://magicrainbowadventure.com';
+		echo "Generating sitemap with base URL {$base_url}... ";
+
+		Config::set('application.url', $base_url);
+
 		$em = IoC::resolve('doctrine::manager');
 		$entries = $em->getRepository('Entity\Entry')->findAll();
 		$sitemap_path = path('public') . 'sitemap.txt';
@@ -27,6 +32,8 @@ class Sitemap_Task
 		{
 			File::append($sitemap_path, URL::to("{$entry->getId()}/{$entry->getUrlTitle()}") . "\n");
 		}
+
+		echo "Done.\n";
 	}
 
 }
