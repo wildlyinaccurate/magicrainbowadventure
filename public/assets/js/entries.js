@@ -3,7 +3,7 @@ var MRA_Entries = function() {
     var close_popover = function(element) {
         setTimeout(function() {
             element.popover('hide');
-        }, 5000);
+        }, 3500);
     };
 
     $('body.guest').on('click', '.entry .favourite', function(event) {
