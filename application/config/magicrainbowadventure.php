@@ -50,12 +50,12 @@ return array(
 			'gif' => true,
 		),
 		'medium' => array(
-			'width' => 640,
-			'height' => 1920,
+			'width' => 717,
+			'height' => 1400,
 		),
 		'large' => array(
-			'width' => 1010,
-			'height' => 3030 ,
+			'width' => 1112,
+			'height' => 6000,
 			'quality' => 92,
 		),
 	),

@@ -4,13 +4,7 @@
 	<article class="entry">
 		<h3><?=HTML::link("{$entry->getId()}/{$entry->getUrlTitle()}", $entry->getTitle())?></h3>
 
-		<div class="buttons">
-			<?php $active = (Auth::check() && Auth::user()->getFavourites()->contains($entry)); ?>
-			<?=HTML::link("{$entry->getId()}/{$entry->getUrlTitle()}/favourite?favourite=" . (int) ! $active, $entry->getFavouritedBy()->count(), array(
-				'class' => ($active) ? 'favourite active' : 'favourite',
-				'title' => Lang::line('entries.button_favourite'),
-			))?>
-		</div>
+		<?=View::make('entries/_buttons', array('entry' => $entry))?>
 
 		<a href="<?=URL::to("{$entry->getId()}/{$entry->getUrlTitle()}")?>">
 			<?=HTML::image($entry->getThumbnailUrl('medium'), $entry->getTitle())?>
