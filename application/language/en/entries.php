@@ -7,6 +7,10 @@ return array(
 	'button_favourite' => 'Add as Favourite',
 	'button_comments' => 'View Comments',
 
+	// favourited_by is constructed using favourited_by_subject as the second param
+	'favourited_by' => 'Favourited by %s %s',
+	'favourited_by_subject' => 'user',
+
 	// Form labels
 	'label_title' => 'Give your entry a title',
 	'label_description' => 'Write a description (optional)',
