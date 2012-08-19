@@ -65,9 +65,26 @@ abstract class ControllerTestCase extends FunctionalTestCase
 	 */
 	public function post($destination, $post_data, $parameters = array())
 	{
+		$this->clean_request();
 		\Laravel\Request::foundation()->request->add($post_data);
 
 		return $this->call($destination, $parameters, 'POST');
+	}
+
+	/**
+	 * Ensure the ParameterBag is clean before calling the controller
+	 *
+	 * @return	void
+	 * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
+	 */
+	private function clean_request()
+	{
+		$request = \Laravel\Request::foundation()->request;
+
+		foreach ($request->keys() as $key)
+		{
+			$request->remove($key);
+		}
 	}
 
 }
