@@ -255,9 +255,9 @@ class Entries_Controller extends Base_Controller
 		}
 		elseif ($entry->isApproved() || $this->user->isAdmin())
 		{
-			Basset::inline('assets')->add('bootstrap-transition', 'assets/js/bootstrap/bootstrap-transition.js')
-				->add('bootstrap-tooltip', 'assets/js/bootstrap/bootstrap-tooltip.js')
-				->add('bootstrap-popover', 'assets/js/bootstrap/bootstrap-popover.js')
+			Basset::inline('assets')->add('bootstrap-transition', 'assets/js/vendor/bootstrap/transition.js')
+				->add('bootstrap-tooltip', 'assets/js/vendor/bootstrap/popover.js')
+				->add('bootstrap-popover', 'assets/js/vendor/bootstrap/popover.js')
 				->add('entries', 'assets/js/entries.js');
 
 			$this->layout->title = $entry->getTitle();
